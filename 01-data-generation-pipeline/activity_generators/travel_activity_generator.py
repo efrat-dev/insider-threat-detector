@@ -134,8 +134,11 @@ class TravelActivityGenerator:
             elif rand_val < 0.035:  # 0.5% chance for level 1 (most hostile)
                 return np.random.choice(Config.HOSTILE_COUNTRIES[1])
             else:  # 96.5% chance for regular countries
-                return np.random.choice(Config.TRAVEL_COUNTRIES)
-    
+                return np.random.choice(
+                                Config.TRAVEL_COUNTRIES,
+                                p=Config.TRAVEL_COUNTRY_WEIGHTS
+                            )  
+              
     def _get_hostility_level(self, country: str) -> int:
         """Get hostility level for a country (0 = not hostile, 1-3 = hostile levels)"""
         for level, countries in Config.HOSTILE_COUNTRIES.items():
