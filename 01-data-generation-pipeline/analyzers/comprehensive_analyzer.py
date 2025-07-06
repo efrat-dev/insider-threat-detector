@@ -59,17 +59,20 @@ class ComprehensiveAnalyzer(BaseAnalyzer):
         
         patterns['daily_activity'] = daily_activity
         
-        # Weekly patterns
+        # Weekly patterns - using temporary DataFrame
         try:
-            df['weekday'] = pd.to_datetime(df['date']).dt.day_name()
+            # יצירת עותק זמני של הדאטה
+            df_temp = df.copy()
+            df_temp['weekday'] = pd.to_datetime(df_temp['date']).dt.day_name()
+            
             weekly_patterns = {}
             
             if 'num_entries' in df.columns:
-                weekly_patterns['work_by_weekday'] = df[df['num_entries'] > 0]['weekday'].value_counts().to_dict()
+                weekly_patterns['work_by_weekday'] = df_temp[df_temp['num_entries'] > 0]['weekday'].value_counts().to_dict()
             if 'total_printed_pages' in df.columns:
-                weekly_patterns['print_by_weekday'] = df[df['total_printed_pages'] > 0]['weekday'].value_counts().to_dict()
+                weekly_patterns['print_by_weekday'] = df_temp[df_temp['total_printed_pages'] > 0]['weekday'].value_counts().to_dict()
             if 'num_burn_requests' in df.columns:
-                weekly_patterns['burn_by_weekday'] = df[df['num_burn_requests'] > 0]['weekday'].value_counts().to_dict()
+                weekly_patterns['burn_by_weekday'] = df_temp[df_temp['num_burn_requests'] > 0]['weekday'].value_counts().to_dict()
             
             patterns['weekly_patterns'] = weekly_patterns
         except Exception as e:
@@ -93,35 +96,38 @@ class ComprehensiveAnalyzer(BaseAnalyzer):
         temporal = {}
         
         try:
+            # יצירת עותק זמני של הדאטה
+            df_temp = df.copy()
+            
             # Monthly aggregation
-            df['month'] = pd.to_datetime(df['date']).dt.to_period('M')
+            df_temp['month'] = pd.to_datetime(df_temp['date']).dt.to_period('M')
             monthly_agg = {}
             
             if 'is_malicious' in df.columns:
-                monthly_agg['is_malicious'] = df.groupby('month')['is_malicious'].sum().to_dict()
+                monthly_agg['is_malicious'] = df_temp.groupby('month')['is_malicious'].sum().to_dict()
             if 'total_printed_pages' in df.columns:
-                monthly_agg['total_printed_pages'] = df.groupby('month')['total_printed_pages'].sum().to_dict()
+                monthly_agg['total_printed_pages'] = df_temp.groupby('month')['total_printed_pages'].sum().to_dict()
             if 'num_burn_requests' in df.columns:
-                monthly_agg['num_burn_requests'] = df.groupby('month')['num_burn_requests'].sum().to_dict()
+                monthly_agg['num_burn_requests'] = df_temp.groupby('month')['num_burn_requests'].sum().to_dict()
             if 'is_abroad' in df.columns:
-                monthly_agg['is_abroad'] = df.groupby('month')['is_abroad'].sum().to_dict()
+                monthly_agg['is_abroad'] = df_temp.groupby('month')['is_abroad'].sum().to_dict()
             
-            monthly_agg['employee_id'] = df.groupby('month')['employee_id'].nunique().to_dict()
+            monthly_agg['employee_id'] = df_temp.groupby('month')['employee_id'].nunique().to_dict()
             
             temporal['monthly_trends'] = monthly_agg
             
             # Weekly aggregation
-            df['week'] = pd.to_datetime(df['date']).dt.to_period('W')
+            df_temp['week'] = pd.to_datetime(df_temp['date']).dt.to_period('W')
             weekly_agg = {}
             
             if 'is_malicious' in df.columns:
-                weekly_agg['is_malicious'] = df.groupby('week')['is_malicious'].sum().to_dict()
+                weekly_agg['is_malicious'] = df_temp.groupby('week')['is_malicious'].sum().to_dict()
             if 'total_printed_pages' in df.columns:
-                weekly_agg['total_printed_pages'] = df.groupby('week')['total_printed_pages'].sum().to_dict()
+                weekly_agg['total_printed_pages'] = df_temp.groupby('week')['total_printed_pages'].sum().to_dict()
             if 'num_burn_requests' in df.columns:
-                weekly_agg['num_burn_requests'] = df.groupby('week')['num_burn_requests'].sum().to_dict()
+                weekly_agg['num_burn_requests'] = df_temp.groupby('week')['num_burn_requests'].sum().to_dict()
             if 'is_abroad' in df.columns:
-                weekly_agg['is_abroad'] = df.groupby('week')['is_abroad'].sum().to_dict()
+                weekly_agg['is_abroad'] = df_temp.groupby('week')['is_abroad'].sum().to_dict()
             
             temporal['weekly_trends'] = weekly_agg
             
