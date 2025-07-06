@@ -38,11 +38,26 @@ class PrintActivityGenerator:
         # Generate print activity
         multiplier = self._get_malicious_multiplier(is_malicious)
         
-        num_commands = max(1, int(np.random.poisson(
-            pattern['print_volume']['commands_mean']) * multiplier))
+        # Updated logic for more accurate distribution
+        base_commands = max(1, int(np.random.poisson(pattern['print_volume']['commands_mean'])))
         
-        total_pages = max(1, int(np.random.poisson(
-            pattern['print_volume']['pages_mean'] * num_commands) * multiplier))
+        # Use exponential distribution for page count to create right-skewed distribution
+        if is_malicious:
+            # Malicious users get 5x more pages
+            pages_base = pattern['print_volume']['pages_mean'] * 5
+        else:
+            pages_base = pattern['print_volume']['pages_mean']
+        
+        # Use gamma distribution for right-skewed distribution
+        shape = 1.2  # Controls skewness
+        scale = pages_base / shape
+        total_pages = max(1, int(np.random.gamma(shape, scale) * multiplier))
+        
+        # Adjust commands based on pages (more pages might mean more commands)
+        if total_pages > pages_base * 2:
+            num_commands = base_commands + np.random.poisson(1)
+        else:
+            num_commands = base_commands
         
         color_ratio = self._calculate_color_ratio(pattern['print_volume']['color_ratio'])
         
@@ -73,8 +88,9 @@ class PrintActivityGenerator:
     def _get_malicious_multiplier(self, is_malicious: bool) -> float:
         """Return multiplier for malicious employees"""
         if is_malicious:
-            return np.random.uniform(1.5, 3.0)
-        return np.random.uniform(0.8, 1.2)
+            # Reduced multiplier since we already multiply by 5 in main logic
+            return np.random.uniform(0.8, 1.2)
+        return np.random.uniform(0.7, 1.3)
     
     def _calculate_color_ratio(self, base_ratio: float) -> float:
         """Calculate color print ratio with noise"""
@@ -84,12 +100,23 @@ class PrintActivityGenerator:
                                     pattern: Dict[str, Any], is_malicious: bool) -> Tuple[int, int]:
         """Calculate off-hours printing"""
         off_hours_tendency = pattern.get('off_hours_tendency', 0.1)
-        if is_malicious:
-            off_hours_tendency *= 2
         
+        # Malicious users have higher tendency but not too extreme
+        if is_malicious:
+            off_hours_tendency = min(0.4, off_hours_tendency * 1.8)
+        
+        # Even non-malicious users can work off-hours sometimes
         if np.random.random() < off_hours_tendency:
-            off_hours_commands = max(0, int(num_commands * np.random.uniform(0.2, 0.8)))
-            off_hours_pages = max(0, int(total_pages * np.random.uniform(0.2, 0.8)))
+            # More varied distribution - some print very little, some more
+            if is_malicious:
+                # Malicious users tend to print more off-hours
+                off_hours_ratio = np.random.uniform(0.3, 0.7)
+            else:
+                # Non-malicious users print less off-hours
+                off_hours_ratio = np.random.uniform(0.1, 0.4)
+            
+            off_hours_commands = max(0, int(num_commands * off_hours_ratio))
+            off_hours_pages = max(0, int(total_pages * off_hours_ratio))
             return off_hours_commands, off_hours_pages
         
         return 0, 0
