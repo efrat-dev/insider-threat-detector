@@ -9,18 +9,35 @@ class GeographicData:
     
     # Origin countries and their distribution weights
     ORIGIN_COUNTRIES = [
-        'Israel', 'USA', 'Russia', 'China', 'India', 
-        'Germany', 'France', 'UK', 'Canada', 'Australia', 'Other'
+        'Israel', 'Russia', 'Ukraine', 'USA', 'France', 'Ethiopia', 'Morocco',
+        'Argentina', 'Germany', 'UK', 'India', 'China', 'South Africa',
+        'Brazil', 'Canada', 'Romania', 'Hungary', 'Poland', 'Turkey', 'Georgia'
     ]
-    
-    ORIGIN_COUNTRY_WEIGHTS = [0.05, 0.03, 0.02, 0.05, 0.05, 0.2, 0.15, 0.1, 0.1, 0.1, 0.15]
-    
+
+    ORIGIN_COUNTRY_WEIGHTS = [
+        0.475, 0.08, 0.07, 0.05, 0.05, 0.04, 0.03,
+        0.02, 0.02, 0.02, 0.02, 0.02, 0.02,
+        0.015, 0.015, 0.015, 0.01, 0.01, 0.01, 0.01
+    ]
+        
     # Travel destinations
     TRAVEL_COUNTRIES = [
-        'USA', 'Germany', 'France', 'UK', 'Canada', 'Australia', 
-        'Japan', 'South Korea', 'Singapore', 'India', 'China', 
-        'Russia', 'Turkey', 'UAE', 'Other'
-    ]
-    
+    'USA', 'UK', 'France', 'Germany', 'Italy', 'Spain', 'Netherlands',
+    'Cyprus', 'Greece', 'Turkey', 'UAE', 'Thailand', 'India',
+    'China', 'Japan', 'Georgia', 'Austria', 'Switzerland',
+    'Romania', 'Ukraine', 'South Korea', 'Belgium', 'Czech Republic'
+    ]   
+
     # Countries considered hostile for security purposes
-    HOSTILE_COUNTRIES = ['Iran', 'Russia', 'China', 'North Korea', 'Syria']
+    HOSTILE_COUNTRIES = {
+        1: [ 
+            'Iran', 'Syria', 'Lebanon', 'Iraq', 'Yemen'
+        ],
+        2: [  
+            'Libya', 'Afghanistan', 'Pakistan', 'Sudan', 'Qatar',
+            'Russia', 'North Korea'
+        ],
+        3: [  
+            'Algeria', 'Malaysia', 'Kuwait', 'Tunisia'
+        ]
+    }

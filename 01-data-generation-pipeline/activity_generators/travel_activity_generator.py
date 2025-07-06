@@ -42,9 +42,8 @@ class TravelActivityGenerator:
                 'is_abroad': 1,
                 'trip_day_number': days_since_start + 1,
                 'country_name': trip['country'],
-                'is_hostile_country_trip': 1 if trip['country'] in Config.HOSTILE_COUNTRIES else 0,
-                'is_official_trip': trip['is_official'],
-                'is_origin_country_trip': 1 if trip['country'] == trip['origin_country'] else 0
+                'is_hostile_country_trip': self._get_hostility_level(trip['country']),
+                'is_official_trip': trip['is_official']
             }
         else:
             # End trip
@@ -68,11 +67,8 @@ class TravelActivityGenerator:
         emp_id = employee['emp_id']
         origin_country = employee['origin_country']
         
-        # Choose destination
-        if is_malicious and np.random.random() < 0.3:
-            country = np.random.choice(Config.HOSTILE_COUNTRIES)
-        else:
-            country = np.random.choice(Config.TRAVEL_COUNTRIES)
+        # Choose destination based on malicious behavior
+        country = self._choose_destination(is_malicious)
         
         # Determine if official trip
         is_official = np.random.choice([0, 1], p=[0.3, 0.7])
@@ -82,6 +78,14 @@ class TravelActivityGenerator:
         
         if is_origin_trip and np.random.random() < 0.6:
             is_official = 0  # Origin country trips less official
+        
+        # For hostile countries, reduce official trip likelihood
+        hostility_level = self._get_hostility_level(country)
+        if hostility_level > 0:
+            # More hostile = less likely to be official
+            official_reduction = 0.8 ** hostility_level
+            if np.random.random() > official_reduction:
+                is_official = 0
         
         # Trip duration - add missing Config variables
         min_duration = getattr(Config, 'MIN_TRIP_DURATION', 1)
@@ -101,10 +105,43 @@ class TravelActivityGenerator:
             'is_abroad': 1,
             'trip_day_number': 1,
             'country_name': country,
-            'is_hostile_country_trip': 1 if country in Config.HOSTILE_COUNTRIES else 0,
-            'is_official_trip': is_official,
-            'is_origin_country_trip': is_origin_trip
+            'is_hostile_country_trip': hostility_level,
+            'is_official_trip': is_official
         }
+    
+    def _choose_destination(self, is_malicious: bool) -> str:
+        """Choose travel destination based on malicious behavior"""
+        if is_malicious:
+            # Malicious users more likely to visit hostile countries
+            rand_val = np.random.random()
+            
+            if rand_val < 0.15:  # 15% chance for level 1 (most hostile)
+                return np.random.choice(Config.HOSTILE_COUNTRIES[1])
+            elif rand_val < 0.25:  # 10% chance for level 2
+                return np.random.choice(Config.HOSTILE_COUNTRIES[2])
+            elif rand_val < 0.35:  # 10% chance for level 3
+                return np.random.choice(Config.HOSTILE_COUNTRIES[3])
+            else:  # 65% chance for regular countries
+                return np.random.choice(Config.TRAVEL_COUNTRIES)
+        else:
+            # Non-malicious users rarely visit hostile countries
+            rand_val = np.random.random()
+            
+            if rand_val < 0.02:  # 2% chance for level 3 (least hostile)
+                return np.random.choice(Config.HOSTILE_COUNTRIES[3])
+            elif rand_val < 0.03:  # 1% chance for level 2
+                return np.random.choice(Config.HOSTILE_COUNTRIES[2])
+            elif rand_val < 0.035:  # 0.5% chance for level 1 (most hostile)
+                return np.random.choice(Config.HOSTILE_COUNTRIES[1])
+            else:  # 96.5% chance for regular countries
+                return np.random.choice(Config.TRAVEL_COUNTRIES)
+    
+    def _get_hostility_level(self, country: str) -> int:
+        """Get hostility level for a country (0 = not hostile, 1-3 = hostile levels)"""
+        for level, countries in Config.HOSTILE_COUNTRIES.items():
+            if country in countries:
+                return level
+        return 0
     
     def _no_travel_activity(self) -> Dict[str, Any]:
         """Return empty travel activity"""
@@ -113,6 +150,5 @@ class TravelActivityGenerator:
             'trip_day_number': None,
             'country_name': None,
             'is_hostile_country_trip': 0,
-            'is_official_trip': 0,
-            'is_origin_country_trip': 0
+            'is_official_trip': 0
         }
