@@ -21,7 +21,7 @@ from pathlib import Path
 
 # Import our modules
 from config.config import Config
-from employee_generator import EmployeeGenerator
+from employee_generator.employee_manager import EmployeeManager
 from data_generator import DataGenerator
 from analyzers.comprehensive_analyzer import ComprehensiveAnalyzer as DataAnalyzer
 from data_exporter import DataExporter
@@ -306,8 +306,8 @@ def run_full_generation(args, logger):
     
     # Generate employee profiles
     logger.info("Generating employee profiles...")
-    employee_gen = EmployeeGenerator(args.employees)
-    employees = employee_gen.generate_employee_profiles()
+    employee_manager = EmployeeManager(args.employees)
+    employees = employee_manager.generate_employee_profiles()
         
     # Generate dataset
     logger.info("Generating behavioral dataset...")
