@@ -4,15 +4,14 @@ from datetime import datetime, timedelta
 import random
 from typing import Dict, List, Tuple, Any
 
-# Import your activity generators (make sure these are available)
+# Importfrom activity_generators.travel_activity_generator import TravelActivityGenerator
 from activity_generators import (
-    PrintActivityGenerator, 
-    BurnActivityGenerator, 
-    TravelActivityGenerator, 
-    AccessActivityGenerator, 
+    PrintActivityGenerator,
+    BurnActivityGenerator,
+    TravelActivityGenerator,
+    AccessActivityGenerator,
     RiskIndicatorGenerator
 )
-
 from config.config import Config
 
 class DataGenerator:
