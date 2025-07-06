@@ -95,12 +95,6 @@ class DataGeneratorCore:
         daily_record.update(travel_data)
         daily_record.update(access_data)
         
-        # Calculate additional risk indicators
-        additional_risks = self.risk_generator.calculate_additional_risk_indicators(
-            emp_info, daily_record
-        )
-        daily_record.update(additional_risks)
-        
         return daily_record
     
     def post_process_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
