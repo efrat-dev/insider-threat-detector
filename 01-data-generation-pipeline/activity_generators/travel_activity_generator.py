@@ -42,7 +42,7 @@ class TravelActivityGenerator:
                 'is_abroad': 1,
                 'trip_day_number': days_since_start + 1,
                 'country_name': trip['country'],
-                'is_hostile_country_trip': self._get_hostility_level(trip['country']),
+                'is_hostile_country_trip': 1 if self._get_hostility_level(trip['country']) > 0 else 0,
                 'is_official_trip': trip['is_official']
             }
         else:
@@ -105,7 +105,7 @@ class TravelActivityGenerator:
             'is_abroad': 1,
             'trip_day_number': 1,
             'country_name': country,
-            'is_hostile_country_trip': hostility_level,
+            'is_hostile_country_trip': 1 if hostility_level > 0 else 0,
             'is_official_trip': is_official
         }
     
