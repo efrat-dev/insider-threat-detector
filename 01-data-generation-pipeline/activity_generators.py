@@ -7,13 +7,13 @@ import numpy as np
 import random
 from datetime import datetime, timedelta
 from typing import Dict, Any, Tuple, Optional
-from config import Config, DepartmentConfig, BehavioralPatterns
+from config.config import Config
 
 
 class PrintActivityGenerator:
     """מחלקה ליצירת פעילויות הדפסה"""
     
-    def __init__(self, behavioral_patterns: BehavioralPatterns):
+    def __init__(self, behavioral_patterns: Dict[str, Any]):
         self.patterns = behavioral_patterns
     
     def generate_print_activity(self, employee: Dict[str, Any], date: datetime.date, 
@@ -29,7 +29,7 @@ class PrintActivityGenerator:
         
         # קבלת דפוס התנהגות לפי קבוצה
         group = employee['behavioral_group']
-        pattern = self.patterns.get_group_pattern(group)
+        pattern = self.patterns[group]  # שימוש ב-dictionary access במקום מתודה
         
         # בדיקה אם העובד מדפיס היום
         if np.random.random() > pattern['print_likelihood']:
@@ -127,7 +127,7 @@ class PrintActivityGenerator:
 class BurnActivityGenerator:
     """מחלקה ליצירת פעילויות שריפה"""
     
-    def __init__(self, behavioral_patterns: BehavioralPatterns):
+    def __init__(self, behavioral_patterns: Dict[str, Any]):
         self.patterns = behavioral_patterns
     
     def generate_burn_activity(self, employee: Dict[str, Any], date: datetime.date,
@@ -143,7 +143,7 @@ class BurnActivityGenerator:
         
         # קבלת דפוס התנהגות
         group = employee['behavioral_group']
-        pattern = self.patterns.get_group_pattern(group)
+        pattern = self.patterns[group]  # שימוש ב-dictionary access במקום מתודה
         
         # הסתברות שריפה - גבוהה יותר לעובדים זדוניים
         base_likelihood = pattern['burn_likelihood']
@@ -242,14 +242,14 @@ class BurnActivityGenerator:
 class TravelActivityGenerator:
     """מחלקה ליצירת פעילויות נסיעות"""
     
-    def __init__(self, behavioral_patterns: BehavioralPatterns):
+    def __init__(self, behavioral_patterns: Dict[str, Any]):
         self.patterns = behavioral_patterns
         self.employee_trips = {}  # מעקב אחר נסיעות פעילות
     
     def generate_travel_activity(self, employee: Dict[str, Any], date: datetime.date,
                                is_malicious: bool) -> Dict[str, Any]:
         """יוצר פעילות נסיעות יומית לעובד"""
-        emp_id = employee['id']
+        emp_id = employee['emp_id']
         
         # בדיקה אם עובד בנסיעה פעילה
         if emp_id in self.employee_trips:
@@ -283,7 +283,7 @@ class TravelActivityGenerator:
     def _should_start_new_trip(self, employee: Dict[str, Any], is_malicious: bool) -> bool:
         """בודק אם צריך להתחיל נסיעה חדשה"""
         group = employee['behavioral_group']
-        pattern = self.patterns.get_group_pattern(group)
+        pattern = self.patterns[group]  # שימוש ב-dictionary access במקום מתודה
         
         travel_likelihood = pattern['travel_likelihood']
         if is_malicious:
@@ -294,7 +294,7 @@ class TravelActivityGenerator:
     def _start_new_trip(self, employee: Dict[str, Any], date: datetime.date,
                        is_malicious: bool) -> Dict[str, Any]:
         """מתחיל נסיעה חדשה"""
-        emp_id = employee['id']
+        emp_id = employee['emp_id']  # שימוש ב-emp_id במקום id
         origin_country = employee['origin_country']
         
         # בחירת יעד
@@ -312,8 +312,10 @@ class TravelActivityGenerator:
         if is_origin_trip and np.random.random() < 0.6:
             is_official = 0  # נסיעות לארץ מוצא פחות רשמיות
         
-        # משך הנסיעה
-        duration = np.random.randint(Config.MIN_TRIP_DURATION, Config.MAX_TRIP_DURATION + 1)
+        # משך הנסיעה - הוספת משתני Config חסרים
+        min_duration = getattr(Config, 'MIN_TRIP_DURATION', 1)
+        max_duration = getattr(Config, 'MAX_TRIP_DURATION', 14)
+        duration = np.random.randint(min_duration, max_duration + 1)
         
         # שמירת הנסיעה
         self.employee_trips[emp_id] = {
@@ -348,7 +350,7 @@ class TravelActivityGenerator:
 class AccessActivityGenerator:
     """מחלקה ליצירת פעילויות גישה לבניין"""
     
-    def __init__(self, behavioral_patterns: BehavioralPatterns):
+    def __init__(self, behavioral_patterns: Dict[str, Any]):
         self.patterns = behavioral_patterns
     
     def generate_access_activity(self, employee: Dict[str, Any], date: datetime.date,
@@ -382,7 +384,7 @@ class AccessActivityGenerator:
                        is_malicious: bool) -> Tuple[float, float]:
         """מחשב שעות עבודה לפי דפוס התנהגות"""
         group = employee['behavioral_group']
-        pattern = self.patterns.get_group_pattern(group)
+        pattern = self.patterns[group]  # שימוש ב-dictionary access במקום מתודה
         
         # שעות עבודה בסיסיות
         start_hour = np.random.normal(
@@ -394,10 +396,14 @@ class AccessActivityGenerator:
             pattern['work_hours']['end_std']
         )
         
-        # הגבלת גבולות
-        start_hour = max(Config.MIN_WORK_HOUR, min(12, start_hour))
-        end_hour = max(start_hour + Config.MIN_WORK_DURATION, 
-                      min(Config.MAX_WORK_HOUR, end_hour))
+        # הגבלת גבולות - הוספת משתני Config חסרים
+        min_work_hour = getattr(Config, 'MIN_WORK_HOUR', 6)
+        max_work_hour = getattr(Config, 'MAX_WORK_HOUR', 22)
+        min_work_duration = getattr(Config, 'MIN_WORK_DURATION', 4)
+        
+        start_hour = max(min_work_hour, min(12, start_hour))
+        end_hour = max(start_hour + min_work_duration, 
+                      min(max_work_hour, end_hour))
         
         # עובדים זדוניים - שעות יותר חריגות
         if is_malicious and np.random.random() < 0.3:
@@ -415,7 +421,7 @@ class AccessActivityGenerator:
             return True
         
         group = employee['behavioral_group']
-        pattern = self.patterns.get_group_pattern(group)
+        pattern = self.patterns[group]  # שימוש ב-dictionary access במקום מתודה
         
         # אבטחה עובדת תמיד
         if group == 'E':

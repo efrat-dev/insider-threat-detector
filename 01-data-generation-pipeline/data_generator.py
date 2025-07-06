@@ -1,11 +1,20 @@
-# Add these imports at the top of your data_generator.py file
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 import random
 from typing import Dict, List, Tuple, Any
 
-# Option 1: Update the DataGenerator class to match main.py expectations
+# Import your activity generators (make sure these are available)
+from activity_generators import (
+    PrintActivityGenerator, 
+    BurnActivityGenerator, 
+    TravelActivityGenerator, 
+    AccessActivityGenerator, 
+    RiskIndicatorGenerator
+)
+
+from config.config import Config
+
 class DataGenerator:
     """Main data generation engine that orchestrates all activities"""
     
@@ -21,8 +30,13 @@ class DataGenerator:
             list(self.employees.keys()), self.malicious_employees
         ))
         
-        # Initialize trip tracking for travel generator
-        self.employee_trips = {}
+        # Initialize behavioral patterns and activity generators
+        self.behavioral_patterns = Config.GROUP_PATTERNS
+        self.print_generator = PrintActivityGenerator(self.behavioral_patterns)
+        self.burn_generator = BurnActivityGenerator(self.behavioral_patterns)
+        self.travel_generator = TravelActivityGenerator(self.behavioral_patterns)
+        self.access_generator = AccessActivityGenerator(self.behavioral_patterns)
+        self.risk_generator = RiskIndicatorGenerator()
         
         print(f"Using {len(self.employees)} employees")
         print(f"Malicious employees: {self.malicious_employees} ({self.malicious_ratio:.1%})")
@@ -83,11 +97,33 @@ class DataGenerator:
         # Employee static info
         emp_info = self.employees[emp_id]
         
-        # For now, create minimal records since activity_generators aren't available
-        # You'll need to add your activity generators here
+        # Generate travel activity first (affects other activities)
+        travel_data = self.travel_generator.generate_travel_activity(
+            emp_info, date, is_malicious
+        )
+        is_abroad = travel_data['is_abroad'] == 1
         
-        # Basic daily record structure
+        # Generate all activities
+        print_data = self.print_generator.generate_print_activity(
+            emp_info, date, is_malicious, is_abroad
+        )
+        
+        burn_data = self.burn_generator.generate_burn_activity(
+            emp_info, date, is_malicious, is_abroad
+        )
+        
+        access_data = self.access_generator.generate_access_activity(
+            emp_info, date, is_malicious, is_abroad
+        )
+        
+        # Calculate risk indicators
+        risk_travel_indicator = self.risk_generator.calculate_risk_travel_indicator(
+            travel_data, print_data, burn_data
+        )
+        
+        # Combine all activities into one record
         daily_record = {
+            # Employee info
             'employee_id': emp_id,
             'date': date,
             'employee_department': emp_info['department'],
@@ -103,37 +139,29 @@ class DataGenerator:
             'behavioral_group': emp_info.get('behavioral_group', 1),
             'is_malicious': 1 if is_malicious else 0,
             
-            # Placeholder activity data - replace with actual activity generators
-            'num_entries': random.randint(0, 3),
-            'num_exits': random.randint(0, 3),
-            'total_presence_minutes': random.randint(0, 600),
-            'num_print_commands': random.randint(0, 10),
-            'total_printed_pages': random.randint(0, 50),
-            'num_burn_requests': random.randint(0, 2),
-            'total_burn_volume_mb': random.randint(0, 100),
-            'total_files_burned': random.randint(0, 5),
-            'is_abroad': random.choice([0, 1]) if random.random() < 0.1 else 0,
-            'is_official_trip': random.choice([0, 1]),
-            'is_hostile_country_trip': random.choice([0, 1]) if random.random() < 0.05 else 0,
-            'trip_day_number': None,
-            'risk_travel_indicator': 0
+            # Risk indicators
+            'risk_travel_indicator': risk_travel_indicator,
         }
         
-        # Calculate risk travel indicator
-        daily_record['risk_travel_indicator'] = 1 if (
-            daily_record['is_abroad'] == 1 and
-            daily_record['is_official_trip'] == 0 and
-            daily_record['is_hostile_country_trip'] == 1 and
-            (daily_record['total_files_burned'] > 0 or 
-             daily_record['total_printed_pages'] > 0)
-        ) else 0
+        # Add all activity data
+        daily_record.update(print_data)
+        daily_record.update(burn_data)
+        daily_record.update(travel_data)
+        daily_record.update(access_data)
+        
+        # Calculate additional risk indicators
+        additional_risks = self.risk_generator.calculate_additional_risk_indicators(
+            emp_info, daily_record
+        )
+        daily_record.update(additional_risks)
         
         return daily_record
     
     def _post_process_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
         """Post-process the dataframe for better data types and consistency"""
         # Convert trip_day_number to nullable integer
-        df['trip_day_number'] = df['trip_day_number'].astype('Int64')
+        if 'trip_day_number' in df.columns:
+            df['trip_day_number'] = df['trip_day_number'].astype('Int64')
         
         # Ensure date is datetime
         df['date'] = pd.to_datetime(df['date'])
@@ -150,7 +178,8 @@ class DataGenerator:
         count_columns = [
             'num_entries', 'num_exits', 'total_presence_minutes',
             'num_print_commands', 'total_printed_pages', 'num_burn_requests',
-            'total_burn_volume_mb', 'total_files_burned'
+            'total_burn_volume_mb', 'total_files_burned', 'num_print_commands_off_hours',
+            'num_color_prints', 'num_bw_prints', 'num_burn_requests_off_hours'
         ]
         for col in count_columns:
             if col in df.columns:

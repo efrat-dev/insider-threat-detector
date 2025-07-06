@@ -5,7 +5,7 @@ Handles creation of realistic employee profiles with proper department-position 
 
 import numpy as np
 import random
-from config import Config
+from config.config import Config
 
 
 class EmployeeGenerator:
