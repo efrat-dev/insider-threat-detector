@@ -24,7 +24,7 @@ from config.config import Config
 from employee_generator import EmployeeGenerator
 from data_generator import DataGenerator
 from analyzers.comprehensive_analyzer import ComprehensiveAnalyzer as DataAnalyzer
-from exporter import DataExporter
+from data_exporter import DataExporter
 
 
 def parse_arguments():
