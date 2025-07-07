@@ -30,6 +30,24 @@ class DataExporter:
         else:
             self.behavioral_groups_mapping = behavioral_groups_mapping
     
+    def _remove_behavioral_group_column(self, df):
+        """
+        Remove behavioral group column from DataFrame for export
+        
+        Args:
+            df: DataFrame to clean
+            
+        Returns:
+            DataFrame: DataFrame without behavioral group column
+        """
+        df_export = df.copy()
+        
+        # Remove behavioral group column if it exists
+        if 'behavioral_group' in df_export.columns:
+            df_export = df_export.drop('behavioral_group', axis=1)
+        
+        return df_export
+    
     def export_dataset(self, df, output_path, filename_prefix, export_format='both', include_analysis=True):
         """
         Export dataset with specified format and options
@@ -50,13 +68,16 @@ class DataExporter:
         # Ensure output directory exists
         os.makedirs(output_path, exist_ok=True)
         
+        # Remove behavioral group column from data to export
+        df_export = self._remove_behavioral_group_column(df)
+        
         # Generate full file paths
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
         if export_format in ['csv', 'both']:
             csv_filename = f"{filename_prefix}_{timestamp}.csv"
             csv_path = os.path.join(output_path, csv_filename)
-            df.to_csv(csv_path, index=False)
+            df_export.to_csv(csv_path, index=False)
             exported_files['CSV'] = csv_path
             print(f"Dataset exported to {csv_path}")
         
@@ -66,14 +87,14 @@ class DataExporter:
             
             with pd.ExcelWriter(excel_path, engine='openpyxl') as writer:
                 # Full dataset
-                df.to_excel(writer, sheet_name='Full_Dataset', index=False)
+                df_export.to_excel(writer, sheet_name='Full_Dataset', index=False)
                 
                 # Malicious employees only
-                malicious_df = df[df['is_malicious'] == 1]
+                malicious_df = df_export[df_export['is_malicious'] == 1]
                 if len(malicious_df) > 0:
                     malicious_df.to_excel(writer, sheet_name='Malicious_Only', index=False)
                 
-                # Summary by behavioral group
+                # Summary by behavioral group (uses original df with behavioral groups for internal analysis)
                 if include_analysis:
                     from .summary_analyzer import SummaryAnalyzer
                     analyzer = SummaryAnalyzer(self.behavioral_groups_mapping)
@@ -81,9 +102,10 @@ class DataExporter:
                     summary_df = analyzer.create_group_summary(df)
                     summary_df.to_excel(writer, sheet_name='Group_Summary', index=False)
                     
-                    # Employee summary
+                    # Employee summary (remove behavioral group column)
                     employee_summary = analyzer.create_employee_summary(df)
-                    employee_summary.to_excel(writer, sheet_name='Employee_Summary', index=False)
+                    employee_summary_export = self._remove_behavioral_group_column(employee_summary)
+                    employee_summary_export.to_excel(writer, sheet_name='Employee_Summary', index=False)
                     
                     # Daily aggregations
                     daily_summary = analyzer.create_daily_summary(df)
@@ -125,7 +147,10 @@ class DataExporter:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         csv_filename = f"{filename_prefix}_{timestamp}.csv"
         
-        df.to_csv(csv_filename, index=False)
+        # Remove behavioral group column before export
+        df_export = self._remove_behavioral_group_column(df)
+        
+        df_export.to_csv(csv_filename, index=False)
         print(f"Dataset exported to {csv_filename}")
         
         return csv_filename
@@ -144,25 +169,29 @@ class DataExporter:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         excel_filename = f"{filename_prefix}_{timestamp}.xlsx"
         
+        # Remove behavioral group column before export
+        df_export = self._remove_behavioral_group_column(df)
+        
         with pd.ExcelWriter(excel_filename, engine='openpyxl') as writer:
             # Full dataset
-            df.to_excel(writer, sheet_name='Full_Dataset', index=False)
+            df_export.to_excel(writer, sheet_name='Full_Dataset', index=False)
             
             # Malicious employees only
-            malicious_df = df[df['is_malicious'] == 1]
+            malicious_df = df_export[df_export['is_malicious'] == 1]
             if len(malicious_df) > 0:
                 malicious_df.to_excel(writer, sheet_name='Malicious_Only', index=False)
             
-            # Summary by behavioral group
+            # Summary by behavioral group (uses original df with behavioral groups for internal analysis)
             from .summary_analyzer import SummaryAnalyzer
             analyzer = SummaryAnalyzer(self.behavioral_groups_mapping)
             
             summary_df = analyzer.create_group_summary(df)
             summary_df.to_excel(writer, sheet_name='Group_Summary', index=False)
             
-            # Employee summary
+            # Employee summary (remove behavioral group column)
             employee_summary = analyzer.create_employee_summary(df)
-            employee_summary.to_excel(writer, sheet_name='Employee_Summary', index=False)
+            employee_summary_export = self._remove_behavioral_group_column(employee_summary)
+            employee_summary_export.to_excel(writer, sheet_name='Employee_Summary', index=False)
             
             # Daily aggregations
             daily_summary = analyzer.create_daily_summary(df)
