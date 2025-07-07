@@ -69,12 +69,26 @@ class AccessActivityGenerator:
                       min(max_work_hour, end_hour))
         
         # Malicious employees - more unusual hours
-        if is_malicious and np.random.random() < 0.3:
+        # if is_malicious and np.random.random() < 0.3:
+        #     if np.random.random() < 0.5:
+        #         start_hour = np.random.uniform(5, 7)  # Very early
+        #     else:
+        #         end_hour = np.random.uniform(20, 23)  # Very late
+
+# זדוניים - 1% סיכוי לשעות לילה
+        if is_malicious and np.random.random() < 0.01:  # 1% במקום 30%
             if np.random.random() < 0.5:
                 start_hour = np.random.uniform(5, 7)  # Very early
             else:
                 end_hour = np.random.uniform(20, 23)  # Very late
-        
+
+        # רגילים - 0.8% סיכוי לשעות לילה (קרוב לזדוניים אבל קצת פחות)
+        elif not is_malicious and np.random.random() < 0.008:  # 0.8%
+            if np.random.random() < 0.5:
+                start_hour = np.random.uniform(5, 7)  # Very early
+            else:
+                end_hour = np.random.uniform(20, 23)  # Very late
+                
         return start_hour, end_hour
     
     def _should_work_weekend(self, employee: Dict[str, Any], date: datetime.date,
