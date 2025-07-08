@@ -24,8 +24,8 @@ class PreprocessingPipeline:
             df = self.data_cleaner.convert_data_types(df)
             
             # 3. יצירת כל התכונות הבסיסיות (מחליף את השלבים 3-7 הקודמים)
-            df = self.complete_feature_engineer.create_all_basic_features(df)
-            
+            df = self.complete_feature_engineer.apply_complete_feature_engineering(df)
+
             # 4. טיפול בחריגים
             df = self.data_cleaner.handle_outliers(df, method='cap')
             
