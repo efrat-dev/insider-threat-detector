@@ -1,8 +1,7 @@
 from pipeline.base_preprocessor import InsiderThreatPreprocessor
 from pipeline.data_cleaning import DataCleaner
-from pipeline.feature_engineering import FeatureEngineer
 from pipeline.data_transformation import DataTransformer
-from pipeline.advanced_feature_engineering import AdvancedFeatureEngineer
+from pipeline.feature_engineering.complete_feature_engineer import CompleteFeatureEngineer
 
 class PreprocessingPipeline:
     """Pipeline מלא לעיבוד מקדים"""
@@ -10,7 +9,7 @@ class PreprocessingPipeline:
     def __init__(self):
         self.base_preprocessor = InsiderThreatPreprocessor()
         self.data_cleaner = DataCleaner()
-        self.feature_engineer = FeatureEngineer()
+        self.complete_feature_engineer = CompleteFeatureEngineer()  # שימוש במהנדס התכונות המלא
         self.data_transformer = DataTransformer()
     
     def create_full_pipeline(self):
@@ -24,31 +23,22 @@ class PreprocessingPipeline:
             # 2. המרת טיפוסי נתונים
             df = self.data_cleaner.convert_data_types(df)
             
-            # 3. חילוץ תכונות זמן
-            df = self.feature_engineer.extract_time_features(df)
+            # 3. יצירת כל התכונות הבסיסיות (מחליף את השלבים 3-7 הקודמים)
+            df = self.complete_feature_engineer.create_all_basic_features(df)
             
-            # 4. יצירת תכונות אינטראקציה
-            df = self.feature_engineer.create_interaction_features(df)
-            
-            # 5. החלת טרנספורמציה לוגריתמית
-            df = self.feature_engineer.apply_log_transform(df)
-            
-            # 6. טיפול בחריגים
+            # 4. טיפול בחריגים
             df = self.data_cleaner.handle_outliers(df, method='cap')
             
-            # 7. קידוד משתנים קטגוריים
-            df = self.feature_engineer.encode_categorical_variables(df, encoding_method='label')
-            
-            # 8. סינון תכונות
+            # 5. סינון תכונות
             df = self.data_transformer.feature_filtering(df, method='correlation', threshold=0.95)
             
-            # 9. נורמליזציה
+            # 6. נורמליזציה
             df = self.data_transformer.normalize_features(df, method='standard')
             
-            # 10. בדיקות עקביות
+            # 7. בדיקות עקביות
             self.data_cleaner.consistency_checks(df)
-                        
+            
             print("Full preprocessing pipeline completed successfully!")
             return df
         
-        return full_preprocessing 
+        return full_preprocessing
