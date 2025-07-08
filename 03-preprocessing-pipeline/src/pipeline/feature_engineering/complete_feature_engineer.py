@@ -79,8 +79,6 @@ class CompleteFeatureEngineer(
         df = self.create_employee_features(df)
         df = self.create_access_features(df)
         df = self.create_interaction_features(df)
-        df = self.apply_statistical_transforms(df)
-        df = self.encode_categorical_variables(df)
         
         print(f"Basic feature engineering completed! Created {len(df.columns)} features")
         return df
@@ -123,7 +121,10 @@ class CompleteFeatureEngineer(
         # שלב 2: תכונות מתקדמות
         df = self.create_all_advanced_features(df)
         
-        # שלב 3: סטטיסטיקות חריגות
+            # שלב 3: קידוד אחיד לכל התכונות
+        df = self.encode_categorical_variables(df)
+        df = self.apply_statistical_transforms(df)        
+        # שלב 4: סטטיסטיקות חריגות
         df = self.create_statistical_anomalies(df)
         
         print(f"Complete feature engineering finished! Total features: {len(df.columns)}")
