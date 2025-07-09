@@ -1,7 +1,8 @@
 from pipeline.base_preprocessor import InsiderThreatPreprocessor
 from pipeline.data_cleaning import DataCleaner
 from pipeline.data_transformation import DataTransformer
-from pipeline.feature_engineering.complete_feature_engineer import CompleteFeatureEngineer
+# from pipeline.feature_engineering.complete_feature_engineer import CompleteFeatureEngineer
+from pipeline.feature_engineering.feature_engineer_manager.complete_feature_engineer import CompleteFeatureEngineer
 
 class PreprocessingPipeline:
     """Pipeline מלא לעיבוד מקדים"""
