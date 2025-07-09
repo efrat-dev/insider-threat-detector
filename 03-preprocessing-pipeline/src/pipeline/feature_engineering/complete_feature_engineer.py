@@ -1,11 +1,12 @@
 """
-Complete Advanced Feature Engineer for Insider Threat Detection
-מהנדס תכונות מתקדם מקיף לזיהוי איומים פנימיים
+Complete Advanced Feature Engineer for Insider Threat Detection - OPTIMIZED VERSION
+מהנדס תכונות מתקדם מקיף לזיהוי איומים פנימיים - גרסה מותאמת
 """
 
 import pandas as pd
 import numpy as np
 from typing import Dict, List
+from scipy import stats
 
 # ייבוא מחלקות הבסיס
 from .basic.time_features import TimeFeatureEngineer
@@ -22,63 +23,120 @@ from .advanced.anomaly_features import AnomalyFeatureEngineer
 from .advanced.advanced_interaction_features import AdvancedInteractionFeatureEngineer
 
 from pipeline.feature_engineering.advanced.feature_analysis import FeatureAnalyzer
+from pipeline.feature_engineering.basic.base_feature_engineer import BaseFeatureEngineer
 
 
-class CompleteFeatureEngineer(
-    # מחלקות בסיס
-    TimeFeatureEngineer,
-    PrintingFeatureEngineer,
-    BurningFeatureEngineer,
-    EmployeeFeatureEngineer,
-    AccessFeatureEngineer,
-    InteractionFeatureEngineer,
-    
-    # מחלקות מתקדמות
-    BehavioralFeatureEngineer,
-    TemporalFeatureEngineer,
-    RiskProfileFeatureEngineer,
-    AnomalyFeatureEngineer,
-    AdvancedInteractionFeatureEngineer,
-    FeatureAnalyzer
-):
+class CompleteFeatureEngineer(BaseFeatureEngineer):
     """מחלקה מקיפה להנדסת תכונות בסיסיות ומתקדמות לזיהוי איומים פנימיים"""
     
     def __init__(self):
         super().__init__()
-        self.feature_groups = {
-            'basic': [],
-            'behavioral': [],
-            'temporal': [],
-            'risk_profile': [],
-            'anomaly': [],
-            'interaction': [],
-            'polynomial': []
+        self._init_feature_engineers()
+        
+    def _init_feature_engineers(self):
+        """אתחול כל מהנדסי התכונות"""
+        self.engineers = {}
+        
+        # רשימת כל המהנדסים עם המתודות שלהם
+        self.engineer_config = {
+            'time': (TimeFeatureEngineer, 'extract_time_features'),
+            'printing': (PrintingFeatureEngineer, 'create_printing_features'),
+            'burning': (BurningFeatureEngineer, 'create_burning_features'),
+            'employee': (EmployeeFeatureEngineer, 'create_employee_features'),
+            'access': (AccessFeatureEngineer, 'create_access_features'),
+            'interaction': (InteractionFeatureEngineer, 'create_interaction_features'),
+            'behavioral': (BehavioralFeatureEngineer, 'create_behavioral_risk_features'),
+            'temporal': (TemporalFeatureEngineer, 'create_advanced_temporal_patterns'),
+            'risk_profile': (RiskProfileFeatureEngineer, 'create_risk_profile_features'),
+            'anomaly': (AnomalyFeatureEngineer, 'create_anomaly_detection_features'),
+            'advanced_interaction': (AdvancedInteractionFeatureEngineer, 'create_interaction_features_advanced'),
+            'analyzer': (FeatureAnalyzer, None)  # אנליזה בלבד
         }
+        
+        # יצירת מהנדסים עם error handling
+        for name, (engineer_class, _) in self.engineer_config.items():
+            try:
+                self.engineers[name] = engineer_class()
+            except Exception as e:
+                print(f"Warning: Could not initialize {name}: {e}")
+                self.engineers[name] = None
     
-            # אתחול מפורש של כל הרשימות הנדרשות מהמחלקות השונות
-        self.behavioral_features = []
-        self.temporal_features = []
-        self.risk_profile_features = []
-        self.risk_features = []  
-        self.anomaly_features = []
-        self.interaction_features = []
-        self.time_features = []
-        self.printing_features = []
-        self.burning_features = []
-        self.employee_features = []
-        self.access_features = []
-        self.polynomial_features = []
- 
+    def _safe_engineer_call(self, engineer_name: str, method_name: str, df: pd.DataFrame, *args, **kwargs) -> pd.DataFrame:
+        """קריאה בטוחה למהנדס עם fallback"""
+        engineer = self.engineers.get(engineer_name)
+        if engineer is None:
+            print(f"{engineer_name} not available")
+            return df
+        
+        try:
+            method = getattr(engineer, method_name)
+            return method(df, *args, **kwargs)
+        except Exception as e:
+            print(f"Error in {engineer_name}.{method_name}: {e}")
+            return df
+    
+    # Generic Feature Creation Method - מחליף את כל הפונקציות הבסיסיות
+    def create_features_by_type(self, df: pd.DataFrame, feature_type: str) -> pd.DataFrame:
+        """יצירת תכונות לפי סוג - גנרי"""
+        if feature_type not in self.engineer_config:
+            print(f"Unknown feature type: {feature_type}")
+            return df
+        
+        _, method_name = self.engineer_config[feature_type]
+        if method_name:
+            return self._safe_engineer_call(feature_type, method_name, df)
+        return df
+    
+    # Specialized Advanced Methods - רק לפונקציות מיוחדות
+    def create_polynomial_features(self, df: pd.DataFrame, degree: int = 2, selected_features: List[str] = None) -> pd.DataFrame:
+        """יצירת תכונות פולינומיות"""
+        return self._safe_engineer_call('advanced_interaction', 'create_polynomial_features', df, degree, selected_features)
+    
+    def create_ratio_features(self, df: pd.DataFrame) -> pd.DataFrame:
+        """יצירת תכונות יחס"""
+        return self._safe_engineer_call('advanced_interaction', 'create_ratio_features', df)
+    
+    def create_statistical_anomalies(self, df: pd.DataFrame, threshold: float = 2.5) -> pd.DataFrame:
+        """יצירת תכונות אנומליות סטטיסטיות"""
+        return self._safe_engineer_call('anomaly', 'create_statistical_anomalies', df, threshold)
+    
+    # Analysis Methods - מאוחד
+    def _get_analyzer_result(self, method_name: str, df: pd.DataFrame, *args, **kwargs):
+        """קריאה אחודה לאנליזה"""
+        analyzer = self.engineers.get('analyzer')
+        if analyzer:
+            try:
+                method = getattr(analyzer, method_name)
+                return method(df, *args, **kwargs)
+            except Exception as e:
+                print(f"Error in {method_name}: {e}")
+        return None
+    
+    def analyze_feature_quality(self, df: pd.DataFrame, target_col: str) -> Dict:
+        result = self._get_analyzer_result('analyze_feature_quality', df, target_col)
+        return result if result else {'status': 'FeatureAnalyzer not available'}
+    
+    def get_recommended_features(self, df: pd.DataFrame, target_col: str) -> List[str]:
+        result = self._get_analyzer_result('get_recommended_features', df, target_col)
+        return result if result else []
+    
+    def identify_redundant_features(self, df: pd.DataFrame) -> List[str]:
+        result = self._get_analyzer_result('identify_redundant_features', df)
+        return result if result else []
+    
+    # Pipeline Methods - משופרים
     def create_all_basic_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """יצירת כל התכונות הבסיסיות"""
         print("Starting comprehensive basic feature engineering...")
         
-        df = self.extract_time_features(df)
-        df = self.create_printing_features(df)
-        df = self.create_burning_features(df)
-        df = self.create_employee_features(df)
-        df = self.create_access_features(df)
-        df = self.create_interaction_features(df)
+        basic_types = ['time', 'printing', 'burning', 'employee', 'access', 'interaction']
+        
+        for feature_type in basic_types:
+            try:
+                df = self.create_features_by_type(df, feature_type)
+                print(f"{feature_type} features created successfully")
+            except Exception as e:
+                print(f"Error in {feature_type} features: {e}")
         
         print(f"Basic feature engineering completed! Created {len(df.columns)} features")
         return df
@@ -87,31 +145,33 @@ class CompleteFeatureEngineer(
         """יצירת כל התכונות המתקדמות"""
         print("Starting advanced feature engineering...")
         
-        print("Creating behavioral risk features...")
-        df = self.create_behavioral_risk_features(df)
+        # תכונות מתקדמות בסיסיות
+        advanced_types = ['behavioral', 'temporal', 'risk_profile', 'anomaly', 'advanced_interaction']
         
-        print("Creating advanced temporal patterns...")
-        df = self.create_advanced_temporal_patterns(df)
+        for feature_type in advanced_types:
+            try:
+                print(f"Creating {feature_type} features...")
+                df = self.create_features_by_type(df, feature_type)
+            except Exception as e:
+                print(f"Error in {feature_type} features: {e}")
         
-        print("Creating risk profile features...")
-        df = self.create_risk_profile_features(df)
+        # תכונות מתקדמות מיוחדות
+        specialized_methods = [
+            ('ratio', self.create_ratio_features),
+            ('polynomial', self.create_polynomial_features)
+        ]
         
-        print("Creating anomaly detection features...")
-        df = self.create_anomaly_detection_features(df)
-        
-        print("Creating advanced interaction features...")
-        df = self.create_interaction_features_advanced(df)
-        
-        print("Creating ratio features...")
-        df = self.create_ratio_features(df)
-        
-        print("Creating polynomial features...")
-        df = self.create_polynomial_features(df)
+        for name, method in specialized_methods:
+            try:
+                print(f"Creating {name} features...")
+                df = method(df)
+            except Exception as e:
+                print(f"Error in {name} features: {e}")
         
         print("Advanced feature engineering completed!")
         return df
     
-    def apply_complete_feature_engineering(self, df: pd.DataFrame) -> pd.DataFrame:
+    def apply_complete_feature_engineering(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
         """החלת הנדסת תכונות מקיפה"""
         print("Starting complete feature engineering pipeline...")
         
@@ -121,113 +181,83 @@ class CompleteFeatureEngineer(
         # שלב 2: תכונות מתקדמות
         df = self.create_all_advanced_features(df)
         
-            # שלב 3: קידוד אחיד לכל התכונות
-        df = self.encode_categorical_variables(df)
-        df = self.apply_statistical_transforms(df)        
+        # שלב 3: קידוד מקיף - using BaseFeatureEngineer's methods
+        df = self.encode_categorical_variables(df, target_col)
+        df = self.handle_special_text_columns(df)
+        df = self.apply_statistical_transforms(df)
+        
         # שלב 4: סטטיסטיקות חריגות
         df = self.create_statistical_anomalies(df)
         
         print(f"Complete feature engineering finished! Total features: {len(df.columns)}")
         return df
     
-    def get_complete_feature_summary(self, df: pd.DataFrame) -> Dict:
-        """סיכום מקיף של כל התכונות"""
-        
-        # קבוצות תכונות
-        feature_groups = {
-            'basic_time': [col for col in df.columns if any(x in col for x in ['hour', 'day', 'week', 'month'])],
-            'basic_printing': [col for col in df.columns if any(x in col for x in ['print', 'color', 'page'])],
-            'basic_burning': [col for col in df.columns if any(x in col for x in ['burn', 'cd', 'dvd'])],
-            'basic_employee': [col for col in df.columns if any(x in col for x in ['employee', 'seniority', 'department'])],
-            'basic_access': [col for col in df.columns if any(x in col for x in ['access', 'entry', 'exit'])],
-            'behavioral_risk': [col for col in df.columns if any(x in col for x in ['weighted_suspicious', 'unusual_work', 'digital_footprint'])],
-            'temporal_advanced': [col for col in df.columns if any(x in col for x in ['time_consistency', 'schedule_stability', 'night_shift'])],
-            'risk_profile': [col for col in df.columns if any(x in col for x in ['combined_risk', 'access_risk', 'intelligence_risk'])],
-            'anomaly_detection': [col for col in df.columns if 'anomaly' in col.lower()],
-            'interaction_advanced': [col for col in df.columns if any(x in col for x in ['_interaction', '_risk', '_ratio'])],
-            'polynomial': [col for col in df.columns if col.startswith('poly_')],
-            'statistical': [col for col in df.columns if col.endswith('_z_anomaly')]
-        }
-        
-        summary = {}
-        total_features = 0
-        
-        for group, features in feature_groups.items():
-            actual_features = [f for f in features if f in df.columns]
-            summary[group] = {
-                'count': len(actual_features),
-                'features': actual_features[:10],  # רק 10 הראשונות לתצוגה
-                'total_features': len(actual_features)
-            }
-            total_features += len(actual_features)
-        
-        summary['total_engineered_features'] = total_features
-        summary['original_features'] = len(df.columns) - total_features
-        
-        return summary
-    
-    def analyze_feature_quality(self, df: pd.DataFrame, 
-                              target_col: str = 'is_malicious') -> Dict:
-        """ניתוח איכות התכונות"""
-        print("Analyzing feature quality...")
-        
-        # ניתוח חשיבות תכונות
-        importance_analysis = self.get_feature_importance_analysis(df, target_col)
-        
-        # ניתוח קורלציות
-        correlation_analysis = self.analyze_feature_correlations(df)
-        
-        # זיהוי תכונות מיותרות
-        redundant_features = self.identify_redundant_features(df)
-        
-        # ניתוח התפלגות
-        distribution_analysis = self.get_feature_distribution_analysis(df, target_col)
-        
-        return {
-            'importance_analysis': importance_analysis,
-            'correlation_analysis': correlation_analysis,
-            'redundant_features': redundant_features,
-            'distribution_analysis': distribution_analysis,
-            'feature_quality_score': len(importance_analysis.get('top_features_mi', [])) / max(len(df.columns), 1)
-        }
-    
-    def get_recommended_features(self, df: pd.DataFrame, 
-                               target_col: str = 'is_malicious',
-                               top_k: int = 50) -> List[str]:
-        """קבלת תכונות מומלצות"""
-        
-        # ניתוח חשיבות
-        importance_analysis = self.get_feature_importance_analysis(df, target_col)
-        
-        if not importance_analysis:
-            return []
-        
-        # בחירת תכונות מומלצות
-        top_mi_features = importance_analysis.get('top_features_mi', [])[:top_k//2]
-        top_f_features = importance_analysis.get('top_features_f', [])[:top_k//2]
-        
-        # איחוד והסרת כפילויות
-        recommended_features = list(set(top_mi_features + top_f_features))[:top_k]
-        
-        return recommended_features
-    
-    def optimize_feature_set(self, df: pd.DataFrame, 
-                           target_col: str = 'is_malicious') -> pd.DataFrame:
+    def optimize_feature_set(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
         """אופטימיזציה של סט התכונות"""
-        print("Optimizing feature set...")
+        print("Starting feature set optimization...")
         
         # הסרת תכונות מיותרות
         redundant_features = self.identify_redundant_features(df)
         df_optimized = df.drop(columns=redundant_features, errors='ignore')
         
-        # קבלת תכונות מומלצות
-        recommended_features = self.get_recommended_features(df_optimized, target_col)
+        # הסרת עמודות עם ערך אחיד
+        constant_features = [col for col in df_optimized.columns if df_optimized[col].nunique() <= 1]
+        df_optimized = df_optimized.drop(columns=constant_features, errors='ignore')
         
-        # שמירת עמודות חשובות
-        important_cols = [target_col] + [col for col in df_optimized.columns 
-                                       if col in recommended_features or col == target_col]
+        print(f"Optimization completed!")
+        print(f"Original features: {len(df.columns)}")
+        print(f"Optimized features: {len(df_optimized.columns)}")
+        print(f"Removed: {len(redundant_features)} redundant + {len(constant_features)} constant")
         
-        df_final = df_optimized[important_cols]
+        return df_optimized
+    
+    def get_feature_summary(self, df: pd.DataFrame) -> Dict:
+        """סיכום התכונות - משופר"""
+        feature_patterns = {
+            'basic_time': ['hour', 'day', 'week', 'month'],
+            'basic_printing': ['print', 'color', 'page'],
+            'basic_burning': ['burn', 'cd', 'dvd'],
+            'behavioral_risk': ['weighted_suspicious', 'unusual_work'],
+            'anomaly_detection': ['anomaly'],
+            'polynomial': ['poly_'],
+            'ratio_features': ['ratio'],
+            'interaction_features': ['interaction'],
+            'encoded_categorical': ['_label', '_binary', '_freq'],
+            'text_analysis': ['_length', '_word_count', '_has_'],
+            'statistical_transforms': ['_log', '_sqrt', '_zscore']
+        }
         
-        print(f"Feature optimization completed! Reduced from {len(df.columns)} to {len(df_final.columns)} features")
-        return df_final
+        summary = {}
+        for group, patterns in feature_patterns.items():
+            matching_features = [
+                col for col in df.columns 
+                if any(pattern in col.lower() for pattern in patterns)
+            ]
+            
+            summary[group] = {
+                'count': len(matching_features),
+                'features': matching_features[:5]  # רק 5 הראשונות
+            }
+        
+        summary['total_features'] = len(df.columns)
+        summary['available_engineers'] = [name for name, eng in self.engineers.items() if eng is not None]
+        
+        return summary
+    
+    # Delegated Summary Methods - קיצור
+    def get_interaction_feature_summary(self, df: pd.DataFrame) -> Dict:
+        """סיכום תכונות אינטראקציה"""
+        return self._safe_engineer_call('advanced_interaction', 'get_interaction_feature_summary', df)
+    
+    def get_anomaly_feature_summary(self, df: pd.DataFrame) -> Dict:
+        """סיכום תכונות חריגות"""
+        return self._safe_engineer_call('anomaly', 'get_anomaly_feature_summary', df)
+    
+    # Utility Methods
+    def get_available_feature_types(self) -> List[str]:
+        """קבלת רשימת סוגי התכונות הזמינים"""
+        return [name for name, eng in self.engineers.items() if eng is not None]
+    
+    def get_engineer_status(self) -> Dict[str, bool]:
+        """בדיקת סטטוס המהנדסים"""
+        return {name: eng is not None for name, eng in self.engineers.items()}
