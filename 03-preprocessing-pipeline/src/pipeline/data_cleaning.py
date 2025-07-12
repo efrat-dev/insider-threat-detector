@@ -136,6 +136,23 @@ class DataCleaner:
         return df_processed
     
     @staticmethod
+    def remove_columns(df, columns_to_remove=None):
+        """הסרת עמודות מהנתונים"""
+        if columns_to_remove is None:
+            columns_to_remove = ['employee_origin_country', 'country_name', 'date', 'first_entry_time', 'last_exit_time']
+        
+        df_processed = df.copy()
+        existing_columns = [col for col in columns_to_remove if col in df_processed.columns]
+        
+        if existing_columns:
+            df_processed = df_processed.drop(columns=existing_columns)
+            print(f"Removed columns: {existing_columns}")
+        else:
+            print("No specified columns found to remove")
+        
+        return df_processed
+
+    @staticmethod
     def consistency_checks(df):
         """בדיקות עקביות"""
         issues = []
