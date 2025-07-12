@@ -383,3 +383,738 @@
 2025-07-06 15:13:18,849 - core.config_manager - INFO -   Group E: 27 employees
 2025-07-06 15:13:18,850 - core.config_manager - INFO -   Group F: 127 employees
 2025-07-06 15:13:18,851 - core.config_manager - INFO - Execution completed in 0:07:03.697327
+2025-07-06 15:34:25,009 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 15:34:25.009769
+2025-07-06 15:34:25,012 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 15:34:25,012 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 15:34:25,511 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 15:34:52,289 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 15:34:53,861 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 15:41:06,766 - core.config_manager - INFO - Export completed:
+2025-07-06 15:41:06,767 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250706_153453.csv
+2025-07-06 15:41:06,768 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250706_153453.xlsx
+2025-07-06 15:41:06,768 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250706_153453.txt
+2025-07-06 15:41:06,769 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250706_153453.txt
+2025-07-06 15:41:06,773 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-06 15:41:06,774 - core.config_manager - INFO - Total records: 180,000
+2025-07-06 15:41:06,787 - core.config_manager - INFO - Total employees: 1,000
+2025-07-06 15:41:06,792 - core.config_manager - INFO - Date range: 2025-01-07 00:00:00 to 2025-07-05 00:00:00
+2025-07-06 15:41:06,800 - core.config_manager - INFO - Malicious employees: 50
+2025-07-06 15:41:06,801 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-06 15:41:06,802 - core.config_manager - INFO - Department distribution:
+2025-07-06 15:41:06,844 - core.config_manager - INFO -   R&D Department: 265 employees
+2025-07-06 15:41:06,844 - core.config_manager - INFO -   Engineering Department: 191 employees
+2025-07-06 15:41:06,845 - core.config_manager - INFO -   Information Technology: 134 employees
+2025-07-06 15:41:06,845 - core.config_manager - INFO -   Operations and Manufacturing: 131 employees
+2025-07-06 15:41:06,846 - core.config_manager - INFO -   Project Management: 87 employees
+2025-07-06 15:41:06,846 - core.config_manager - INFO -   Marketing and Business Development: 70 employees
+2025-07-06 15:41:06,847 - core.config_manager - INFO -   Finance: 43 employees
+2025-07-06 15:41:06,848 - core.config_manager - INFO -   Human Resources: 38 employees
+2025-07-06 15:41:06,848 - core.config_manager - INFO -   Security and Information Security: 24 employees
+2025-07-06 15:41:06,849 - core.config_manager - INFO -   Legal and Regulation: 13 employees
+2025-07-06 15:41:06,849 - core.config_manager - INFO -   Executive Management: 4 employees
+2025-07-06 15:41:06,850 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-06 15:41:06,879 - core.config_manager - INFO -   Group A: 4 employees
+2025-07-06 15:41:06,879 - core.config_manager - INFO -   Group B: 456 employees
+2025-07-06 15:41:06,880 - core.config_manager - INFO -   Group C: 312 employees
+2025-07-06 15:41:06,880 - core.config_manager - INFO -   Group D: 70 employees
+2025-07-06 15:41:06,881 - core.config_manager - INFO -   Group E: 24 employees
+2025-07-06 15:41:06,881 - core.config_manager - INFO -   Group F: 134 employees
+2025-07-06 15:41:06,882 - core.config_manager - INFO - Execution completed in 0:06:41.872568
+2025-07-06 19:12:17,622 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 19:12:17.622106
+2025-07-06 19:12:17,623 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 19:12:17,623 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 19:12:17,878 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 19:12:37,389 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 19:12:39,122 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 19:19:28,172 - core.config_manager - INFO - Export completed:
+2025-07-06 19:19:28,173 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250706_191239.csv
+2025-07-06 19:19:28,173 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250706_191239.xlsx
+2025-07-06 19:19:28,174 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250706_191239.txt
+2025-07-06 19:19:28,174 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250706_191239.txt
+2025-07-06 19:19:28,180 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-06 19:19:28,181 - core.config_manager - INFO - Total records: 180,000
+2025-07-06 19:19:28,194 - core.config_manager - INFO - Total employees: 1,000
+2025-07-06 19:19:28,197 - core.config_manager - INFO - Date range: 2025-01-07 00:00:00 to 2025-07-05 00:00:00
+2025-07-06 19:19:28,207 - core.config_manager - INFO - Malicious employees: 50
+2025-07-06 19:19:28,209 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-06 19:19:28,210 - core.config_manager - INFO - Department distribution:
+2025-07-06 19:19:28,258 - core.config_manager - INFO -   R&D Department: 263 employees
+2025-07-06 19:19:28,259 - core.config_manager - INFO -   Engineering Department: 183 employees
+2025-07-06 19:19:28,259 - core.config_manager - INFO -   Operations and Manufacturing: 156 employees
+2025-07-06 19:19:28,260 - core.config_manager - INFO -   Information Technology: 112 employees
+2025-07-06 19:19:28,260 - core.config_manager - INFO -   Project Management: 86 employees
+2025-07-06 19:19:28,260 - core.config_manager - INFO -   Marketing and Business Development: 85 employees
+2025-07-06 19:19:28,261 - core.config_manager - INFO -   Finance: 45 employees
+2025-07-06 19:19:28,261 - core.config_manager - INFO -   Human Resources: 29 employees
+2025-07-06 19:19:28,262 - core.config_manager - INFO -   Security and Information Security: 21 employees
+2025-07-06 19:19:28,262 - core.config_manager - INFO -   Legal and Regulation: 13 employees
+2025-07-06 19:19:28,263 - core.config_manager - INFO -   Executive Management: 7 employees
+2025-07-06 19:19:28,263 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-06 19:19:28,294 - core.config_manager - INFO -   Group A: 7 employees
+2025-07-06 19:19:28,295 - core.config_manager - INFO -   Group B: 446 employees
+2025-07-06 19:19:28,295 - core.config_manager - INFO -   Group C: 329 employees
+2025-07-06 19:19:28,296 - core.config_manager - INFO -   Group D: 85 employees
+2025-07-06 19:19:28,296 - core.config_manager - INFO -   Group E: 21 employees
+2025-07-06 19:19:28,296 - core.config_manager - INFO -   Group F: 112 employees
+2025-07-06 19:19:28,297 - core.config_manager - INFO - Execution completed in 0:07:10.675361
+2025-07-06 19:25:17,241 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 19:25:17.241706
+2025-07-06 19:25:17,242 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 19:25:17,243 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 19:25:17,514 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 19:25:45,560 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 19:25:45.560518
+2025-07-06 19:25:45,561 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 19:25:45,562 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 19:25:45,852 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 19:26:05,292 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 19:26:06,894 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 19:31:47,130 - core.config_manager - INFO - Export completed:
+2025-07-06 19:31:47,131 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250706_192606.csv
+2025-07-06 19:31:47,132 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250706_192606.xlsx
+2025-07-06 19:31:47,132 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250706_192606.txt
+2025-07-06 19:31:47,133 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250706_192606.txt
+2025-07-06 19:31:47,136 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-06 19:31:47,137 - core.config_manager - INFO - Total records: 180,000
+2025-07-06 19:31:47,149 - core.config_manager - INFO - Total employees: 1,000
+2025-07-06 19:31:47,151 - core.config_manager - INFO - Date range: 2025-01-07 00:00:00 to 2025-07-05 00:00:00
+2025-07-06 19:31:47,158 - core.config_manager - INFO - Malicious employees: 50
+2025-07-06 19:31:47,159 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-06 19:31:47,160 - core.config_manager - INFO - Department distribution:
+2025-07-06 19:31:47,203 - core.config_manager - INFO -   R&D Department: 251 employees
+2025-07-06 19:31:47,204 - core.config_manager - INFO -   Engineering Department: 216 employees
+2025-07-06 19:31:47,205 - core.config_manager - INFO -   Operations and Manufacturing: 159 employees
+2025-07-06 19:31:47,205 - core.config_manager - INFO -   Information Technology: 116 employees
+2025-07-06 19:31:47,206 - core.config_manager - INFO -   Marketing and Business Development: 79 employees
+2025-07-06 19:31:47,206 - core.config_manager - INFO -   Project Management: 71 employees
+2025-07-06 19:31:47,207 - core.config_manager - INFO -   Finance: 38 employees
+2025-07-06 19:31:47,207 - core.config_manager - INFO -   Human Resources: 26 employees
+2025-07-06 19:31:47,208 - core.config_manager - INFO -   Security and Information Security: 24 employees
+2025-07-06 19:31:47,208 - core.config_manager - INFO -   Legal and Regulation: 16 employees
+2025-07-06 19:31:47,209 - core.config_manager - INFO -   Executive Management: 4 employees
+2025-07-06 19:31:47,209 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-06 19:31:47,240 - core.config_manager - INFO -   Group A: 4 employees
+2025-07-06 19:31:47,240 - core.config_manager - INFO -   Group B: 467 employees
+2025-07-06 19:31:47,241 - core.config_manager - INFO -   Group C: 310 employees
+2025-07-06 19:31:47,241 - core.config_manager - INFO -   Group D: 79 employees
+2025-07-06 19:31:47,242 - core.config_manager - INFO -   Group E: 24 employees
+2025-07-06 19:31:47,242 - core.config_manager - INFO -   Group F: 116 employees
+2025-07-06 19:31:47,243 - core.config_manager - INFO - Execution completed in 0:06:01.682815
+2025-07-06 19:57:45,249 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 19:57:45.249285
+2025-07-06 19:57:45,250 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 19:57:45,250 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 19:57:45,510 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 19:58:02,986 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 19:58:04,554 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 20:03:48,411 - core.config_manager - INFO - Export completed:
+2025-07-06 20:03:48,413 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250706_195804.csv
+2025-07-06 20:03:48,414 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250706_195804.xlsx
+2025-07-06 20:03:48,414 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250706_195804.txt
+2025-07-06 20:03:48,415 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250706_195804.txt
+2025-07-06 20:03:48,418 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-06 20:03:48,418 - core.config_manager - INFO - Total records: 180,000
+2025-07-06 20:03:48,431 - core.config_manager - INFO - Total employees: 1,000
+2025-07-06 20:03:48,433 - core.config_manager - INFO - Date range: 2025-01-07 00:00:00 to 2025-07-05 00:00:00
+2025-07-06 20:03:48,440 - core.config_manager - INFO - Malicious employees: 50
+2025-07-06 20:03:48,441 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-06 20:03:48,442 - core.config_manager - INFO - Department distribution:
+2025-07-06 20:03:48,484 - core.config_manager - INFO -   R&D Department: 256 employees
+2025-07-06 20:03:48,485 - core.config_manager - INFO -   Engineering Department: 222 employees
+2025-07-06 20:03:48,486 - core.config_manager - INFO -   Operations and Manufacturing: 150 employees
+2025-07-06 20:03:48,486 - core.config_manager - INFO -   Information Technology: 98 employees
+2025-07-06 20:03:48,487 - core.config_manager - INFO -   Marketing and Business Development: 86 employees
+2025-07-06 20:03:48,488 - core.config_manager - INFO -   Project Management: 83 employees
+2025-07-06 20:03:48,488 - core.config_manager - INFO -   Finance: 37 employees
+2025-07-06 20:03:48,489 - core.config_manager - INFO -   Human Resources: 26 employees
+2025-07-06 20:03:48,489 - core.config_manager - INFO -   Security and Information Security: 22 employees
+2025-07-06 20:03:48,490 - core.config_manager - INFO -   Legal and Regulation: 18 employees
+2025-07-06 20:03:48,490 - core.config_manager - INFO -   Executive Management: 2 employees
+2025-07-06 20:03:48,491 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-06 20:03:48,519 - core.config_manager - INFO -   Group A: 2 employees
+2025-07-06 20:03:48,520 - core.config_manager - INFO -   Group B: 478 employees
+2025-07-06 20:03:48,521 - core.config_manager - INFO -   Group C: 314 employees
+2025-07-06 20:03:48,521 - core.config_manager - INFO -   Group D: 86 employees
+2025-07-06 20:03:48,522 - core.config_manager - INFO -   Group E: 22 employees
+2025-07-06 20:03:48,522 - core.config_manager - INFO -   Group F: 98 employees
+2025-07-06 20:03:48,523 - core.config_manager - INFO - Execution completed in 0:06:03.273819
+2025-07-06 20:38:32,790 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:38:32.789972
+2025-07-06 20:38:32,791 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:38:32,792 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:40:03,704 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:40:03.704826
+2025-07-06 20:40:03,705 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:40:03,717 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:40:22,687 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:40:22.687615
+2025-07-06 20:40:22,688 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:40:22,689 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:41:32,857 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:41:32.857205
+2025-07-06 20:41:32,858 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:41:32,858 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:41:38,243 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:41:38.243307
+2025-07-06 20:41:38,243 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:41:38,244 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:41:56,960 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:41:56.960520
+2025-07-06 20:41:56,961 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:41:56,961 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:43:34,192 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:43:34.192170
+2025-07-06 20:43:34,193 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:43:34,193 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:44:06,241 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:44:06.240896
+2025-07-06 20:44:06,241 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:44:06,242 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:45:59,049 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:45:59.049090
+2025-07-06 20:45:59,050 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:45:59,051 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:47:34,185 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:47:34.184944
+2025-07-06 20:47:34,185 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:47:34,186 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:48:19,140 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:48:19.140215
+2025-07-06 20:48:19,141 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:48:19,141 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:48:19,424 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 20:50:17,712 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:50:17.712578
+2025-07-06 20:50:17,713 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:50:17,714 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:51:48,934 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:51:48.934697
+2025-07-06 20:51:48,935 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:51:48,935 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:52:00,781 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:52:00.781287
+2025-07-06 20:52:00,782 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:52:00,782 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:53:59,317 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 20:53:59.317407
+2025-07-06 20:53:59,318 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 20:53:59,318 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 20:53:59,571 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 20:54:17,801 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 20:54:19,542 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 21:00:45,924 - core.config_manager - INFO - Export completed:
+2025-07-06 21:00:45,925 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250706_205419.csv
+2025-07-06 21:00:45,926 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250706_205419.xlsx
+2025-07-06 21:00:45,926 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250706_205419.txt
+2025-07-06 21:00:45,927 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250706_205419.txt
+2025-07-06 21:00:45,931 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-06 21:00:45,931 - core.config_manager - INFO - Total records: 180,000
+2025-07-06 21:00:45,948 - core.config_manager - INFO - Total employees: 1,000
+2025-07-06 21:00:45,951 - core.config_manager - INFO - Date range: 2025-01-07 00:00:00 to 2025-07-05 00:00:00
+2025-07-06 21:00:45,958 - core.config_manager - INFO - Malicious employees: 50
+2025-07-06 21:00:45,960 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-06 21:00:45,961 - core.config_manager - INFO - Department distribution:
+2025-07-06 21:00:46,021 - core.config_manager - INFO -   R&D Department: 237 employees
+2025-07-06 21:00:46,021 - core.config_manager - INFO -   Engineering Department: 230 employees
+2025-07-06 21:00:46,022 - core.config_manager - INFO -   Operations and Manufacturing: 124 employees
+2025-07-06 21:00:46,022 - core.config_manager - INFO -   Information Technology: 123 employees
+2025-07-06 21:00:46,023 - core.config_manager - INFO -   Marketing and Business Development: 83 employees
+2025-07-06 21:00:46,023 - core.config_manager - INFO -   Project Management: 83 employees
+2025-07-06 21:00:46,024 - core.config_manager - INFO -   Finance: 48 employees
+2025-07-06 21:00:46,024 - core.config_manager - INFO -   Human Resources: 36 employees
+2025-07-06 21:00:46,025 - core.config_manager - INFO -   Security and Information Security: 22 employees
+2025-07-06 21:00:46,025 - core.config_manager - INFO -   Legal and Regulation: 9 employees
+2025-07-06 21:00:46,026 - core.config_manager - INFO -   Executive Management: 5 employees
+2025-07-06 21:00:46,027 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-06 21:00:46,070 - core.config_manager - INFO -   Group A: 5 employees
+2025-07-06 21:00:46,071 - core.config_manager - INFO -   Group B: 467 employees
+2025-07-06 21:00:46,072 - core.config_manager - INFO -   Group C: 300 employees
+2025-07-06 21:00:46,073 - core.config_manager - INFO -   Group D: 83 employees
+2025-07-06 21:00:46,073 - core.config_manager - INFO -   Group E: 22 employees
+2025-07-06 21:00:46,074 - core.config_manager - INFO -   Group F: 123 employees
+2025-07-06 21:00:46,076 - core.config_manager - INFO - Execution completed in 0:06:46.758160
+2025-07-06 21:17:44,203 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 21:17:44.203594
+2025-07-06 21:17:44,204 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 21:17:44,205 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 21:19:19,598 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 21:19:19.598391
+2025-07-06 21:19:19,599 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 21:19:19,599 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 21:24:28,425 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 21:24:28.425148
+2025-07-06 21:24:28,426 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 21:24:28,426 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 21:28:52,562 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 21:28:52.562255
+2025-07-06 21:28:52,563 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 21:28:52,563 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 21:28:52,865 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 21:29:10,944 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 21:29:12,536 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 21:35:03,843 - core.config_manager - INFO - Export completed:
+2025-07-06 21:35:03,844 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250706_212912.csv
+2025-07-06 21:35:03,844 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250706_212912.xlsx
+2025-07-06 21:35:03,845 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250706_212912.txt
+2025-07-06 21:35:03,846 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250706_212912.txt
+2025-07-06 21:35:03,852 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-06 21:35:03,853 - core.config_manager - INFO - Total records: 180,000
+2025-07-06 21:35:03,867 - core.config_manager - INFO - Total employees: 1,000
+2025-07-06 21:35:03,871 - core.config_manager - INFO - Date range: 2025-01-07 00:00:00 to 2025-07-05 00:00:00
+2025-07-06 21:35:03,882 - core.config_manager - INFO - Malicious employees: 50
+2025-07-06 21:35:03,883 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-06 21:35:03,884 - core.config_manager - INFO - Department distribution:
+2025-07-06 21:35:03,943 - core.config_manager - INFO -   R&D Department: 264 employees
+2025-07-06 21:35:03,944 - core.config_manager - INFO -   Engineering Department: 197 employees
+2025-07-06 21:35:03,944 - core.config_manager - INFO -   Operations and Manufacturing: 153 employees
+2025-07-06 21:35:03,945 - core.config_manager - INFO -   Information Technology: 119 employees
+2025-07-06 21:35:03,946 - core.config_manager - INFO -   Project Management: 86 employees
+2025-07-06 21:35:03,947 - core.config_manager - INFO -   Marketing and Business Development: 69 employees
+2025-07-06 21:35:03,947 - core.config_manager - INFO -   Finance: 32 employees
+2025-07-06 21:35:03,948 - core.config_manager - INFO -   Security and Information Security: 32 employees
+2025-07-06 21:35:03,949 - core.config_manager - INFO -   Human Resources: 26 employees
+2025-07-06 21:35:03,950 - core.config_manager - INFO -   Legal and Regulation: 18 employees
+2025-07-06 21:35:03,950 - core.config_manager - INFO -   Executive Management: 4 employees
+2025-07-06 21:35:03,951 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-06 21:35:03,999 - core.config_manager - INFO -   Group A: 4 employees
+2025-07-06 21:35:04,000 - core.config_manager - INFO -   Group B: 461 employees
+2025-07-06 21:35:04,001 - core.config_manager - INFO -   Group C: 315 employees
+2025-07-06 21:35:04,001 - core.config_manager - INFO -   Group D: 69 employees
+2025-07-06 21:35:04,002 - core.config_manager - INFO -   Group E: 32 employees
+2025-07-06 21:35:04,003 - core.config_manager - INFO -   Group F: 119 employees
+2025-07-06 21:35:04,005 - core.config_manager - INFO - Execution completed in 0:06:11.442099
+2025-07-06 21:40:10,408 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 21:40:10.408358
+2025-07-06 21:40:10,409 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 21:40:10,409 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 21:40:10,650 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 21:40:25,717 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 21:40:27,173 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 21:49:07,885 - core.config_manager - INFO - Export completed:
+2025-07-06 21:49:07,886 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250706_214027.csv
+2025-07-06 21:49:07,886 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250706_214027.xlsx
+2025-07-06 21:49:07,886 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250706_214027.txt
+2025-07-06 21:49:07,887 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250706_214027.txt
+2025-07-06 21:49:07,887 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-06 21:49:07,888 - core.config_manager - INFO - Total records: 180,000
+2025-07-06 21:49:07,901 - core.config_manager - INFO - Total employees: 1,000
+2025-07-06 21:49:07,903 - core.config_manager - INFO - Date range: 2025-01-07 00:00:00 to 2025-07-05 00:00:00
+2025-07-06 21:49:07,911 - core.config_manager - INFO - Malicious employees: 50
+2025-07-06 21:49:07,912 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-06 21:49:07,913 - core.config_manager - INFO - Department distribution:
+2025-07-06 21:49:07,945 - core.config_manager - INFO -   R&D Department: 251 employees
+2025-07-06 21:49:07,962 - core.config_manager - INFO -   Engineering Department: 211 employees
+2025-07-06 21:49:07,962 - core.config_manager - INFO -   Operations and Manufacturing: 143 employees
+2025-07-06 21:49:07,963 - core.config_manager - INFO -   Information Technology: 106 employees
+2025-07-06 21:49:07,963 - core.config_manager - INFO -   Marketing and Business Development: 98 employees
+2025-07-06 21:49:07,964 - core.config_manager - INFO -   Project Management: 86 employees
+2025-07-06 21:49:07,965 - core.config_manager - INFO -   Finance: 41 employees
+2025-07-06 21:49:07,966 - core.config_manager - INFO -   Security and Information Security: 27 employees
+2025-07-06 21:49:07,966 - core.config_manager - INFO -   Human Resources: 17 employees
+2025-07-06 21:49:07,967 - core.config_manager - INFO -   Legal and Regulation: 13 employees
+2025-07-06 21:49:07,968 - core.config_manager - INFO -   Executive Management: 7 employees
+2025-07-06 21:49:07,969 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-06 21:49:07,996 - core.config_manager - INFO -   Group A: 7 employees
+2025-07-06 21:49:07,996 - core.config_manager - INFO -   Group B: 462 employees
+2025-07-06 21:49:07,997 - core.config_manager - INFO -   Group C: 300 employees
+2025-07-06 21:49:07,997 - core.config_manager - INFO -   Group D: 98 employees
+2025-07-06 21:49:07,997 - core.config_manager - INFO -   Group E: 27 employees
+2025-07-06 21:49:07,998 - core.config_manager - INFO -   Group F: 106 employees
+2025-07-06 21:49:07,998 - core.config_manager - INFO - Execution completed in 0:08:57.589928
+2025-07-06 23:26:01,277 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 23:26:01.277574
+2025-07-06 23:26:01,297 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 23:26:01,297 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 23:26:01,513 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 23:26:16,243 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 23:26:17,716 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 23:35:28,773 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 23:35:28.772831
+2025-07-06 23:35:28,773 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 23:35:28,774 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 23:35:29,043 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 23:35:45,894 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 23:35:48,769 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 23:45:05,351 - core.config_manager - INFO - Export completed:
+2025-07-06 23:45:05,352 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250706_233548.csv
+2025-07-06 23:45:05,352 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250706_233548.xlsx
+2025-07-06 23:45:05,353 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250706_233548.txt
+2025-07-06 23:45:05,354 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250706_233548.txt
+2025-07-06 23:45:05,363 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-06 23:45:05,364 - core.config_manager - INFO - Total records: 180,000
+2025-07-06 23:45:05,390 - core.config_manager - INFO - Total employees: 1,000
+2025-07-06 23:45:05,395 - core.config_manager - INFO - Date range: 2025-01-07 00:00:00 to 2025-07-05 00:00:00
+2025-07-06 23:45:05,410 - core.config_manager - INFO - Malicious employees: 50
+2025-07-06 23:45:05,413 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-06 23:45:05,414 - core.config_manager - INFO - Department distribution:
+2025-07-06 23:45:05,491 - core.config_manager - INFO -   R&D Department: 236 employees
+2025-07-06 23:45:05,491 - core.config_manager - INFO -   Engineering Department: 212 employees
+2025-07-06 23:45:05,492 - core.config_manager - INFO -   Operations and Manufacturing: 141 employees
+2025-07-06 23:45:05,493 - core.config_manager - INFO -   Information Technology: 125 employees
+2025-07-06 23:45:05,493 - core.config_manager - INFO -   Project Management: 93 employees
+2025-07-06 23:45:05,494 - core.config_manager - INFO -   Marketing and Business Development: 82 employees
+2025-07-06 23:45:05,495 - core.config_manager - INFO -   Security and Information Security: 32 employees
+2025-07-06 23:45:05,495 - core.config_manager - INFO -   Human Resources: 29 employees
+2025-07-06 23:45:05,496 - core.config_manager - INFO -   Finance: 29 employees
+2025-07-06 23:45:05,497 - core.config_manager - INFO -   Legal and Regulation: 17 employees
+2025-07-06 23:45:05,498 - core.config_manager - INFO -   Executive Management: 4 employees
+2025-07-06 23:45:05,498 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-06 23:45:05,553 - core.config_manager - INFO -   Group A: 4 employees
+2025-07-06 23:45:05,554 - core.config_manager - INFO -   Group B: 448 employees
+2025-07-06 23:45:05,555 - core.config_manager - INFO -   Group C: 309 employees
+2025-07-06 23:45:05,556 - core.config_manager - INFO -   Group D: 82 employees
+2025-07-06 23:45:05,557 - core.config_manager - INFO -   Group E: 32 employees
+2025-07-06 23:45:05,557 - core.config_manager - INFO -   Group F: 125 employees
+2025-07-06 23:45:05,558 - core.config_manager - INFO - Execution completed in 0:09:36.785585
+2025-07-06 23:53:25,809 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 23:53:25.808928
+2025-07-06 23:53:25,809 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 23:53:25,809 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 23:53:26,106 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 23:53:41,812 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 23:53:43,197 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 23:54:31,384 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 23:54:31.384183
+2025-07-06 23:54:31,385 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 23:54:31,385 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 23:54:31,645 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 23:54:47,128 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 23:54:48,651 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 23:55:33,901 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 23:55:33.901710
+2025-07-06 23:55:33,902 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 23:55:33,902 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 23:55:34,186 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 23:55:50,141 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 23:55:51,603 - core.config_manager - INFO - Exporting dataset...
+2025-07-06 23:57:07,292 - core.config_manager - INFO - Starting dataset generation at 2025-07-06 23:57:07.292253
+2025-07-06 23:57:07,292 - core.config_manager - INFO - Starting full dataset generation
+2025-07-06 23:57:07,292 - core.config_manager - INFO - Generating employee profiles...
+2025-07-06 23:57:07,565 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-06 23:57:23,894 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-06 23:57:25,372 - core.config_manager - INFO - Exporting dataset...
+2025-07-07 00:02:54,016 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 00:02:54.016546
+2025-07-07 00:02:54,017 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 00:02:54,017 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 00:02:54,329 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 00:03:10,438 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-07 00:03:12,117 - core.config_manager - INFO - Exporting dataset...
+2025-07-07 00:09:12,815 - core.config_manager - INFO - Export completed:
+2025-07-07 00:09:12,816 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250707_000312.csv
+2025-07-07 00:09:12,816 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250707_000312.xlsx
+2025-07-07 00:09:12,816 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250707_000312.txt
+2025-07-07 00:09:12,816 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250707_000312.txt
+2025-07-07 00:09:12,819 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-07 00:09:12,819 - core.config_manager - INFO - Total records: 180,000
+2025-07-07 00:09:12,827 - core.config_manager - INFO - Total employees: 1,000
+2025-07-07 00:09:12,829 - core.config_manager - INFO - Date range: 2025-01-08 00:00:00 to 2025-07-06 00:00:00
+2025-07-07 00:09:12,834 - core.config_manager - INFO - Malicious employees: 50
+2025-07-07 00:09:12,835 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-07 00:09:12,836 - core.config_manager - INFO - Department distribution:
+2025-07-07 00:09:12,865 - core.config_manager - INFO -   R&D Department: 246 employees
+2025-07-07 00:09:12,865 - core.config_manager - INFO -   Engineering Department: 211 employees
+2025-07-07 00:09:12,866 - core.config_manager - INFO -   Operations and Manufacturing: 148 employees
+2025-07-07 00:09:12,866 - core.config_manager - INFO -   Information Technology: 115 employees
+2025-07-07 00:09:12,866 - core.config_manager - INFO -   Marketing and Business Development: 86 employees
+2025-07-07 00:09:12,867 - core.config_manager - INFO -   Project Management: 71 employees
+2025-07-07 00:09:12,867 - core.config_manager - INFO -   Finance: 33 employees
+2025-07-07 00:09:12,867 - core.config_manager - INFO -   Security and Information Security: 31 employees
+2025-07-07 00:09:12,867 - core.config_manager - INFO -   Human Resources: 31 employees
+2025-07-07 00:09:12,868 - core.config_manager - INFO -   Legal and Regulation: 21 employees
+2025-07-07 00:09:12,868 - core.config_manager - INFO -   Executive Management: 7 employees
+2025-07-07 00:09:12,868 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-07 00:09:12,886 - core.config_manager - INFO -   Group A: 7 employees
+2025-07-07 00:09:12,886 - core.config_manager - INFO -   Group B: 457 employees
+2025-07-07 00:09:12,887 - core.config_manager - INFO -   Group C: 304 employees
+2025-07-07 00:09:12,887 - core.config_manager - INFO -   Group D: 86 employees
+2025-07-07 00:09:12,887 - core.config_manager - INFO -   Group E: 31 employees
+2025-07-07 00:09:12,887 - core.config_manager - INFO -   Group F: 115 employees
+2025-07-07 00:09:12,888 - core.config_manager - INFO - Execution completed in 0:06:18.871510
+2025-07-07 00:21:48,912 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 00:21:48.911998
+2025-07-07 00:21:48,913 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 00:21:48,914 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 00:21:49,084 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 00:22:13,340 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-07 00:22:16,127 - core.config_manager - INFO - Exporting dataset...
+2025-07-07 00:28:06,208 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 00:28:06.208828
+2025-07-07 00:28:06,209 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 00:28:06,209 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 00:28:06,468 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 00:28:31,036 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-07 00:28:33,444 - core.config_manager - INFO - Exporting dataset...
+2025-07-07 00:33:51,758 - core.config_manager - INFO - Export completed:
+2025-07-07 00:33:51,759 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250707_002833.csv
+2025-07-07 00:33:51,759 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250707_002833.xlsx
+2025-07-07 00:33:51,760 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250707_002833.txt
+2025-07-07 00:33:51,761 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250707_002833.txt
+2025-07-07 00:33:51,763 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-07 00:33:51,764 - core.config_manager - INFO - Total records: 180,000
+2025-07-07 00:33:51,777 - core.config_manager - INFO - Total employees: 1,000
+2025-07-07 00:33:51,780 - core.config_manager - INFO - Date range: 2025-01-08 00:00:00 to 2025-07-06 00:00:00
+2025-07-07 00:33:51,788 - core.config_manager - INFO - Malicious employees: 50
+2025-07-07 00:33:51,789 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-07 00:33:51,790 - core.config_manager - INFO - Department distribution:
+2025-07-07 00:33:51,835 - core.config_manager - INFO -   R&D Department: 252 employees
+2025-07-07 00:33:51,835 - core.config_manager - INFO -   Engineering Department: 178 employees
+2025-07-07 00:33:51,836 - core.config_manager - INFO -   Information Technology: 142 employees
+2025-07-07 00:33:51,836 - core.config_manager - INFO -   Operations and Manufacturing: 132 employees
+2025-07-07 00:33:51,837 - core.config_manager - INFO -   Project Management: 98 employees
+2025-07-07 00:33:51,837 - core.config_manager - INFO -   Marketing and Business Development: 88 employees
+2025-07-07 00:33:51,838 - core.config_manager - INFO -   Finance: 38 employees
+2025-07-07 00:33:51,838 - core.config_manager - INFO -   Security and Information Security: 32 employees
+2025-07-07 00:33:51,838 - core.config_manager - INFO -   Human Resources: 28 employees
+2025-07-07 00:33:51,839 - core.config_manager - INFO -   Legal and Regulation: 8 employees
+2025-07-07 00:33:51,839 - core.config_manager - INFO -   Executive Management: 4 employees
+2025-07-07 00:33:51,839 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-07 00:33:51,870 - core.config_manager - INFO -   Group A: 4 employees
+2025-07-07 00:33:51,870 - core.config_manager - INFO -   Group B: 430 employees
+2025-07-07 00:33:51,871 - core.config_manager - INFO -   Group C: 304 employees
+2025-07-07 00:33:51,871 - core.config_manager - INFO -   Group D: 88 employees
+2025-07-07 00:33:51,872 - core.config_manager - INFO -   Group E: 32 employees
+2025-07-07 00:33:51,872 - core.config_manager - INFO -   Group F: 142 employees
+2025-07-07 00:33:51,873 - core.config_manager - INFO - Execution completed in 0:05:45.664042
+2025-07-07 00:47:56,107 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 00:47:56.107251
+2025-07-07 00:47:56,107 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 00:47:56,108 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 00:47:56,375 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 00:48:16,539 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-07 00:48:18,267 - core.config_manager - INFO - Exporting dataset...
+2025-07-07 00:54:15,842 - core.config_manager - INFO - Export completed:
+2025-07-07 00:54:15,843 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250707_004818.csv
+2025-07-07 00:54:15,843 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250707_004818.xlsx
+2025-07-07 00:54:15,844 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250707_004818.txt
+2025-07-07 00:54:15,844 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250707_004818.txt
+2025-07-07 00:54:15,848 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-07 00:54:15,849 - core.config_manager - INFO - Total records: 180,000
+2025-07-07 00:54:15,860 - core.config_manager - INFO - Total employees: 1,000
+2025-07-07 00:54:15,863 - core.config_manager - INFO - Date range: 2025-01-08 00:00:00 to 2025-07-06 00:00:00
+2025-07-07 00:54:15,871 - core.config_manager - INFO - Malicious employees: 50
+2025-07-07 00:54:15,873 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-07 00:54:15,873 - core.config_manager - INFO - Department distribution:
+2025-07-07 00:54:15,913 - core.config_manager - INFO -   R&D Department: 257 employees
+2025-07-07 00:54:15,914 - core.config_manager - INFO -   Engineering Department: 207 employees
+2025-07-07 00:54:15,914 - core.config_manager - INFO -   Operations and Manufacturing: 137 employees
+2025-07-07 00:54:15,914 - core.config_manager - INFO -   Information Technology: 112 employees
+2025-07-07 00:54:15,915 - core.config_manager - INFO -   Marketing and Business Development: 79 employees
+2025-07-07 00:54:15,915 - core.config_manager - INFO -   Project Management: 79 employees
+2025-07-07 00:54:15,916 - core.config_manager - INFO -   Finance: 41 employees
+2025-07-07 00:54:15,916 - core.config_manager - INFO -   Security and Information Security: 36 employees
+2025-07-07 00:54:15,917 - core.config_manager - INFO -   Human Resources: 32 employees
+2025-07-07 00:54:15,917 - core.config_manager - INFO -   Legal and Regulation: 16 employees
+2025-07-07 00:54:15,918 - core.config_manager - INFO -   Executive Management: 4 employees
+2025-07-07 00:54:15,918 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-07 00:54:15,949 - core.config_manager - INFO -   Group A: 4 employees
+2025-07-07 00:54:15,950 - core.config_manager - INFO -   Group B: 464 employees
+2025-07-07 00:54:15,950 - core.config_manager - INFO -   Group C: 305 employees
+2025-07-07 00:54:15,951 - core.config_manager - INFO -   Group D: 79 employees
+2025-07-07 00:54:15,951 - core.config_manager - INFO -   Group E: 36 employees
+2025-07-07 00:54:15,952 - core.config_manager - INFO -   Group F: 112 employees
+2025-07-07 00:54:15,953 - core.config_manager - INFO - Execution completed in 0:06:19.845367
+2025-07-07 00:58:32,345 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 00:58:32.344894
+2025-07-07 00:58:32,345 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 00:58:32,346 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 00:58:32,686 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 00:58:50,826 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-07 00:58:52,554 - core.config_manager - INFO - Exporting dataset...
+2025-07-07 01:05:57,750 - core.config_manager - INFO - Export completed:
+2025-07-07 01:05:57,752 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250707_005852.csv
+2025-07-07 01:05:57,752 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250707_005852.xlsx
+2025-07-07 01:05:57,752 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250707_005852.txt
+2025-07-07 01:05:57,753 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250707_005852.txt
+2025-07-07 01:05:57,758 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-07 01:05:57,759 - core.config_manager - INFO - Total records: 180,000
+2025-07-07 01:05:57,772 - core.config_manager - INFO - Total employees: 1,000
+2025-07-07 01:05:57,774 - core.config_manager - INFO - Date range: 2025-01-08 00:00:00 to 2025-07-06 00:00:00
+2025-07-07 01:05:57,785 - core.config_manager - INFO - Malicious employees: 50
+2025-07-07 01:05:57,786 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-07 01:05:57,786 - core.config_manager - INFO - Department distribution:
+2025-07-07 01:05:57,832 - core.config_manager - INFO -   R&D Department: 257 employees
+2025-07-07 01:05:57,832 - core.config_manager - INFO -   Engineering Department: 200 employees
+2025-07-07 01:05:57,833 - core.config_manager - INFO -   Operations and Manufacturing: 152 employees
+2025-07-07 01:05:57,833 - core.config_manager - INFO -   Information Technology: 120 employees
+2025-07-07 01:05:57,834 - core.config_manager - INFO -   Project Management: 89 employees
+2025-07-07 01:05:57,834 - core.config_manager - INFO -   Marketing and Business Development: 75 employees
+2025-07-07 01:05:57,835 - core.config_manager - INFO -   Finance: 34 employees
+2025-07-07 01:05:57,835 - core.config_manager - INFO -   Human Resources: 33 employees
+2025-07-07 01:05:57,835 - core.config_manager - INFO -   Security and Information Security: 22 employees
+2025-07-07 01:05:57,836 - core.config_manager - INFO -   Legal and Regulation: 15 employees
+2025-07-07 01:05:57,836 - core.config_manager - INFO -   Executive Management: 3 employees
+2025-07-07 01:05:57,837 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-07 01:05:57,869 - core.config_manager - INFO -   Group A: 3 employees
+2025-07-07 01:05:57,870 - core.config_manager - INFO -   Group B: 457 employees
+2025-07-07 01:05:57,870 - core.config_manager - INFO -   Group C: 323 employees
+2025-07-07 01:05:57,871 - core.config_manager - INFO -   Group D: 75 employees
+2025-07-07 01:05:57,871 - core.config_manager - INFO -   Group E: 22 employees
+2025-07-07 01:05:57,871 - core.config_manager - INFO -   Group F: 120 employees
+2025-07-07 01:05:57,872 - core.config_manager - INFO - Execution completed in 0:07:25.527140
+2025-07-07 01:08:36,284 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 01:08:36.284054
+2025-07-07 01:08:36,284 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 01:08:36,285 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 01:08:36,739 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 01:09:10,183 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 01:09:10.182902
+2025-07-07 01:09:10,184 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 01:09:10,184 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 01:09:10,474 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 01:11:15,781 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 01:11:15.781737
+2025-07-07 01:11:15,782 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 01:11:15,783 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 01:11:16,094 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 01:11:38,559 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-07 01:11:40,501 - core.config_manager - INFO - Exporting dataset...
+2025-07-07 01:18:06,425 - core.config_manager - INFO - Export completed:
+2025-07-07 01:18:06,426 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250707_011140.csv
+2025-07-07 01:18:06,427 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250707_011140.xlsx
+2025-07-07 01:18:06,427 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250707_011140.txt
+2025-07-07 01:18:06,428 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250707_011140.txt
+2025-07-07 01:18:06,438 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-07 01:18:06,439 - core.config_manager - INFO - Total records: 180,000
+2025-07-07 01:18:06,456 - core.config_manager - INFO - Total employees: 1,000
+2025-07-07 01:18:06,459 - core.config_manager - INFO - Date range: 2025-01-08 00:00:00 to 2025-07-06 00:00:00
+2025-07-07 01:18:06,477 - core.config_manager - INFO - Malicious employees: 50
+2025-07-07 01:18:06,485 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-07 01:18:06,485 - core.config_manager - INFO - Department distribution:
+2025-07-07 01:18:06,535 - core.config_manager - INFO -   R&D Department: 248 employees
+2025-07-07 01:18:06,536 - core.config_manager - INFO -   Engineering Department: 215 employees
+2025-07-07 01:18:06,536 - core.config_manager - INFO -   Operations and Manufacturing: 141 employees
+2025-07-07 01:18:06,537 - core.config_manager - INFO -   Information Technology: 131 employees
+2025-07-07 01:18:06,537 - core.config_manager - INFO -   Marketing and Business Development: 81 employees
+2025-07-07 01:18:06,537 - core.config_manager - INFO -   Project Management: 70 employees
+2025-07-07 01:18:06,538 - core.config_manager - INFO -   Finance: 40 employees
+2025-07-07 01:18:06,538 - core.config_manager - INFO -   Human Resources: 31 employees
+2025-07-07 01:18:06,538 - core.config_manager - INFO -   Security and Information Security: 26 employees
+2025-07-07 01:18:06,539 - core.config_manager - INFO -   Legal and Regulation: 10 employees
+2025-07-07 01:18:06,539 - core.config_manager - INFO -   Executive Management: 7 employees
+2025-07-07 01:18:06,540 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-07 01:18:06,571 - core.config_manager - INFO -   Group A: 7 employees
+2025-07-07 01:18:06,572 - core.config_manager - INFO -   Group B: 463 employees
+2025-07-07 01:18:06,572 - core.config_manager - INFO -   Group C: 292 employees
+2025-07-07 01:18:06,573 - core.config_manager - INFO -   Group D: 81 employees
+2025-07-07 01:18:06,573 - core.config_manager - INFO -   Group E: 26 employees
+2025-07-07 01:18:06,573 - core.config_manager - INFO -   Group F: 131 employees
+2025-07-07 01:18:06,574 - core.config_manager - INFO - Execution completed in 0:06:50.792514
+2025-07-07 01:22:41,042 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 01:22:41.042026
+2025-07-07 01:22:41,042 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 01:22:41,043 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 01:22:41,304 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 01:23:01,515 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-07 01:23:03,176 - core.config_manager - INFO - Exporting dataset...
+2025-07-07 01:29:21,985 - core.config_manager - INFO - Export completed:
+2025-07-07 01:29:21,986 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250707_012303.csv
+2025-07-07 01:29:21,987 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250707_012303.xlsx
+2025-07-07 01:29:21,987 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250707_012303.txt
+2025-07-07 01:29:21,988 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250707_012303.txt
+2025-07-07 01:29:21,993 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-07 01:29:21,994 - core.config_manager - INFO - Total records: 180,000
+2025-07-07 01:29:22,008 - core.config_manager - INFO - Total employees: 1,000
+2025-07-07 01:29:22,012 - core.config_manager - INFO - Date range: 2025-01-08 00:00:00 to 2025-07-06 00:00:00
+2025-07-07 01:29:22,023 - core.config_manager - INFO - Malicious employees: 50
+2025-07-07 01:29:22,025 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-07 01:29:22,026 - core.config_manager - INFO - Department distribution:
+2025-07-07 01:29:22,081 - core.config_manager - INFO -   R&D Department: 243 employees
+2025-07-07 01:29:22,082 - core.config_manager - INFO -   Engineering Department: 202 employees
+2025-07-07 01:29:22,083 - core.config_manager - INFO -   Operations and Manufacturing: 158 employees
+2025-07-07 01:29:22,083 - core.config_manager - INFO -   Information Technology: 125 employees
+2025-07-07 01:29:22,084 - core.config_manager - INFO -   Marketing and Business Development: 86 employees
+2025-07-07 01:29:22,084 - core.config_manager - INFO -   Project Management: 78 employees
+2025-07-07 01:29:22,085 - core.config_manager - INFO -   Finance: 36 employees
+2025-07-07 01:29:22,085 - core.config_manager - INFO -   Security and Information Security: 31 employees
+2025-07-07 01:29:22,086 - core.config_manager - INFO -   Human Resources: 26 employees
+2025-07-07 01:29:22,086 - core.config_manager - INFO -   Legal and Regulation: 13 employees
+2025-07-07 01:29:22,087 - core.config_manager - INFO -   Executive Management: 2 employees
+2025-07-07 01:29:22,087 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-07 01:29:22,130 - core.config_manager - INFO -   Group A: 2 employees
+2025-07-07 01:29:22,131 - core.config_manager - INFO -   Group B: 445 employees
+2025-07-07 01:29:22,132 - core.config_manager - INFO -   Group C: 311 employees
+2025-07-07 01:29:22,132 - core.config_manager - INFO -   Group D: 86 employees
+2025-07-07 01:29:22,133 - core.config_manager - INFO -   Group E: 31 employees
+2025-07-07 01:29:22,134 - core.config_manager - INFO -   Group F: 125 employees
+2025-07-07 01:29:22,134 - core.config_manager - INFO - Execution completed in 0:06:41.092414
+2025-07-07 10:50:17,330 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 10:50:17.330627
+2025-07-07 10:50:17,372 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 10:50:17,372 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 10:50:17,667 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 10:50:33,332 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-07 10:50:34,816 - core.config_manager - INFO - Exporting dataset...
+2025-07-07 10:53:35,046 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 10:53:35.046532
+2025-07-07 10:53:35,047 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 10:53:35,047 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 10:53:35,315 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 10:53:56,865 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-07 10:53:59,471 - core.config_manager - INFO - Exporting dataset...
+2025-07-07 10:58:34,519 - core.config_manager - INFO - Export completed:
+2025-07-07 10:58:34,521 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250707_105359.csv
+2025-07-07 10:58:34,521 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250707_105359.xlsx
+2025-07-07 10:58:34,522 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250707_105359.txt
+2025-07-07 10:58:34,522 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250707_105359.txt
+2025-07-07 10:58:34,529 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-07 10:58:34,529 - core.config_manager - INFO - Total records: 180,000
+2025-07-07 10:58:34,542 - core.config_manager - INFO - Total employees: 1,000
+2025-07-07 10:58:34,544 - core.config_manager - INFO - Date range: 2025-01-08 00:00:00 to 2025-07-06 00:00:00
+2025-07-07 10:58:34,550 - core.config_manager - INFO - Malicious employees: 50
+2025-07-07 10:58:34,552 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-07 10:58:34,552 - core.config_manager - INFO - Department distribution:
+2025-07-07 10:58:34,599 - core.config_manager - INFO -   R&D Department: 257 employees
+2025-07-07 10:58:34,600 - core.config_manager - INFO -   Engineering Department: 198 employees
+2025-07-07 10:58:34,600 - core.config_manager - INFO -   Operations and Manufacturing: 143 employees
+2025-07-07 10:58:34,601 - core.config_manager - INFO -   Information Technology: 114 employees
+2025-07-07 10:58:34,602 - core.config_manager - INFO -   Marketing and Business Development: 82 employees
+2025-07-07 10:58:34,603 - core.config_manager - INFO -   Project Management: 78 employees
+2025-07-07 10:58:34,603 - core.config_manager - INFO -   Human Resources: 42 employees
+2025-07-07 10:58:34,604 - core.config_manager - INFO -   Finance: 36 employees
+2025-07-07 10:58:34,604 - core.config_manager - INFO -   Security and Information Security: 29 employees
+2025-07-07 10:58:34,605 - core.config_manager - INFO -   Legal and Regulation: 17 employees
+2025-07-07 10:58:34,606 - core.config_manager - INFO -   Executive Management: 4 employees
+2025-07-07 10:58:34,606 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-07 10:58:34,640 - core.config_manager - INFO -   Group A: 4 employees
+2025-07-07 10:58:34,641 - core.config_manager - INFO -   Group B: 455 employees
+2025-07-07 10:58:34,641 - core.config_manager - INFO -   Group C: 316 employees
+2025-07-07 10:58:34,641 - core.config_manager - INFO -   Group D: 82 employees
+2025-07-07 10:58:34,642 - core.config_manager - INFO -   Group E: 29 employees
+2025-07-07 10:58:34,642 - core.config_manager - INFO -   Group F: 114 employees
+2025-07-07 10:58:34,642 - core.config_manager - INFO - Execution completed in 0:04:59.596173
+2025-07-07 13:26:25,173 - core.config_manager - INFO - Starting dataset generation at 2025-07-07 13:26:25.173452
+2025-07-07 13:26:25,175 - core.config_manager - INFO - Starting full dataset generation
+2025-07-07 13:26:25,175 - core.config_manager - INFO - Generating employee profiles...
+2025-07-07 13:26:25,486 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-07 13:26:47,624 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-07 13:26:49,843 - core.config_manager - INFO - Exporting dataset...
+2025-07-07 13:33:37,964 - core.config_manager - INFO - Export completed:
+2025-07-07 13:33:37,965 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250707_132649.csv
+2025-07-07 13:33:37,965 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250707_132649.xlsx
+2025-07-07 13:33:37,966 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250707_132649.txt
+2025-07-07 13:33:37,966 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250707_132649.txt
+2025-07-07 13:33:37,972 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-07 13:33:37,973 - core.config_manager - INFO - Total records: 180,000
+2025-07-07 13:33:37,988 - core.config_manager - INFO - Total employees: 1,000
+2025-07-07 13:33:37,991 - core.config_manager - INFO - Date range: 2025-01-08 00:00:00 to 2025-07-06 00:00:00
+2025-07-07 13:33:38,000 - core.config_manager - INFO - Malicious employees: 50
+2025-07-07 13:33:38,002 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-07 13:33:38,003 - core.config_manager - INFO - Department distribution:
+2025-07-07 13:33:38,061 - core.config_manager - INFO -   R&D Department: 259 employees
+2025-07-07 13:33:38,062 - core.config_manager - INFO -   Engineering Department: 209 employees
+2025-07-07 13:33:38,062 - core.config_manager - INFO -   Operations and Manufacturing: 140 employees
+2025-07-07 13:33:38,063 - core.config_manager - INFO -   Information Technology: 120 employees
+2025-07-07 13:33:38,063 - core.config_manager - INFO -   Marketing and Business Development: 76 employees
+2025-07-07 13:33:38,063 - core.config_manager - INFO -   Project Management: 73 employees
+2025-07-07 13:33:38,064 - core.config_manager - INFO -   Security and Information Security: 41 employees
+2025-07-07 13:33:38,064 - core.config_manager - INFO -   Finance: 36 employees
+2025-07-07 13:33:38,064 - core.config_manager - INFO -   Human Resources: 27 employees
+2025-07-07 13:33:38,065 - core.config_manager - INFO -   Legal and Regulation: 12 employees
+2025-07-07 13:33:38,065 - core.config_manager - INFO -   Executive Management: 7 employees
+2025-07-07 13:33:38,065 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-07 13:33:38,109 - core.config_manager - INFO -   Group A: 7 employees
+2025-07-07 13:33:38,109 - core.config_manager - INFO -   Group B: 468 employees
+2025-07-07 13:33:38,110 - core.config_manager - INFO -   Group C: 288 employees
+2025-07-07 13:33:38,111 - core.config_manager - INFO -   Group D: 76 employees
+2025-07-07 13:33:38,111 - core.config_manager - INFO -   Group E: 41 employees
+2025-07-07 13:33:38,111 - core.config_manager - INFO -   Group F: 120 employees
+2025-07-07 13:33:38,112 - core.config_manager - INFO - Execution completed in 0:07:12.938797
+2025-07-12 23:51:44,137 - core.config_manager - INFO - Starting dataset generation at 2025-07-12 23:51:44.136991
+2025-07-12 23:51:44,137 - core.config_manager - INFO - Starting full dataset generation
+2025-07-12 23:51:44,137 - core.config_manager - INFO - Generating employee profiles...
+2025-07-12 23:51:44,421 - core.config_manager - INFO - Generating behavioral dataset...
+2025-07-12 23:52:02,510 - core.config_manager - INFO - Running behavioral analysis...
+2025-07-12 23:52:04,099 - core.config_manager - INFO - Exporting dataset...
+2025-07-12 23:57:58,758 - core.config_manager - INFO - Export completed:
+2025-07-12 23:57:58,759 - core.config_manager - INFO -   CSV: output\insider_threat_advanced_20250712_235204.csv
+2025-07-12 23:57:58,760 - core.config_manager - INFO -   Excel: output\insider_threat_advanced_20250712_235204.xlsx
+2025-07-12 23:57:58,760 - core.config_manager - INFO -   Data_Dictionary: output\data_dictionary_20250712_235204.txt
+2025-07-12 23:57:58,760 - core.config_manager - INFO -   Analysis_Report: output\analysis_report_20250712_235204.txt
+2025-07-12 23:57:58,765 - core.config_manager - INFO - === FINAL DATASET STATISTICS ===
+2025-07-12 23:57:58,766 - core.config_manager - INFO - Total records: 180,000
+2025-07-12 23:57:58,779 - core.config_manager - INFO - Total employees: 1,000
+2025-07-12 23:57:58,781 - core.config_manager - INFO - Date range: 2025-01-13 00:00:00 to 2025-07-11 00:00:00
+2025-07-12 23:57:58,790 - core.config_manager - INFO - Malicious employees: 50
+2025-07-12 23:57:58,792 - core.config_manager - INFO - Malicious records: 9,000 (5.0%)
+2025-07-12 23:57:58,792 - core.config_manager - INFO - Department distribution:
+2025-07-12 23:57:58,844 - core.config_manager - INFO -   R&D Department: 270 employees
+2025-07-12 23:57:58,845 - core.config_manager - INFO -   Engineering Department: 183 employees
+2025-07-12 23:57:58,845 - core.config_manager - INFO -   Operations and Manufacturing: 150 employees
+2025-07-12 23:57:58,845 - core.config_manager - INFO -   Information Technology: 125 employees
+2025-07-12 23:57:58,846 - core.config_manager - INFO -   Marketing and Business Development: 89 employees
+2025-07-12 23:57:58,846 - core.config_manager - INFO -   Project Management: 69 employees
+2025-07-12 23:57:58,846 - core.config_manager - INFO -   Finance: 37 employees
+2025-07-12 23:57:58,847 - core.config_manager - INFO -   Security and Information Security: 30 employees
+2025-07-12 23:57:58,847 - core.config_manager - INFO -   Human Resources: 24 employees
+2025-07-12 23:57:58,847 - core.config_manager - INFO -   Legal and Regulation: 17 employees
+2025-07-12 23:57:58,848 - core.config_manager - INFO -   Executive Management: 6 employees
+2025-07-12 23:57:58,848 - core.config_manager - INFO - Behavioral group distribution:
+2025-07-12 23:57:58,884 - core.config_manager - INFO -   Group A: 6 employees
+2025-07-12 23:57:58,886 - core.config_manager - INFO -   Group B: 453 employees
+2025-07-12 23:57:58,886 - core.config_manager - INFO -   Group C: 297 employees
+2025-07-12 23:57:58,888 - core.config_manager - INFO -   Group D: 89 employees
+2025-07-12 23:57:58,889 - core.config_manager - INFO -   Group E: 30 employees
+2025-07-12 23:57:58,889 - core.config_manager - INFO -   Group F: 125 employees
+2025-07-12 23:57:58,890 - core.config_manager - INFO - Execution completed in 0:06:14.753294

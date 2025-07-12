@@ -57,14 +57,14 @@ class GeographicData:
 
     # Countries considered hostile for security purposes
     HOSTILE_COUNTRIES = {
-        1: [ 
+        3: [ 
             'Iran', 'Syria', 'Lebanon', 'Iraq', 'Yemen'
         ],
         2: [  
             'Libya', 'Afghanistan', 'Pakistan', 'Sudan', 'Qatar',
             'Russia', 'North Korea'
         ],
-        3: [  
+        1: [  
             'Algeria', 'Malaysia', 'Kuwait', 'Tunisia'
         ]
     }

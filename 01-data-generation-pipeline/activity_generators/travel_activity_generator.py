@@ -118,24 +118,24 @@ class TravelActivityGenerator:
             # Malicious users more likely to visit hostile countries
             rand_val = np.random.random()
             
-            if rand_val < 0.15:  # 15% chance for level 1 (most hostile)
-                return np.random.choice(Config.HOSTILE_COUNTRIES[1])
+            if rand_val < 0.15:  # 15% chance for level 3 (most hostile)
+                return np.random.choice(Config.HOSTILE_COUNTRIES[3])
             elif rand_val < 0.25:  # 10% chance for level 2
                 return np.random.choice(Config.HOSTILE_COUNTRIES[2])
-            elif rand_val < 0.35:  # 10% chance for level 3
-                return np.random.choice(Config.HOSTILE_COUNTRIES[3])
+            elif rand_val < 0.35:  # 10% chance for level 1 (least hostile)
+                return np.random.choice(Config.HOSTILE_COUNTRIES[1])
             else:  # 65% chance for regular countries
                 return np.random.choice(Config.TRAVEL_COUNTRIES)
         else:
             # Non-malicious users rarely visit hostile countries
             rand_val = np.random.random()
             
-            if rand_val < 0.02:  # 2% chance for level 3 (least hostile)
-                return np.random.choice(Config.HOSTILE_COUNTRIES[3])
+            if rand_val < 0.02:  # 2% chance for level 1 (least hostile)
+                return np.random.choice(Config.HOSTILE_COUNTRIES[1])
             elif rand_val < 0.03:  # 1% chance for level 2
                 return np.random.choice(Config.HOSTILE_COUNTRIES[2])
-            elif rand_val < 0.035:  # 0.5% chance for level 1 (most hostile)
-                return np.random.choice(Config.HOSTILE_COUNTRIES[1])
+            elif rand_val < 0.035:  # 0.5% chance for level 3 (most hostile)
+                return np.random.choice(Config.HOSTILE_COUNTRIES[3])
             else:  # 96.5% chance for regular countries
                 return np.random.choice(
                                 Config.TRAVEL_COUNTRIES,
