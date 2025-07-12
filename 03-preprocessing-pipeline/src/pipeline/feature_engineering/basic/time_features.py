@@ -81,5 +81,6 @@ class TimeFeatureEngineer(BaseFeatureEngineer):
                 bins=[0, 4, 8, 12, 24],
                 labels=['short', 'normal', 'long', 'very_long']
             )
+            df_processed = df_processed.drop(columns=['date', 'first_entry_time', 'last_exit_time'])
         
         return df_processed
