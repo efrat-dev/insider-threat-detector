@@ -9,6 +9,11 @@ class EmployeeFeatureEngineer(BaseFeatureEngineer):
         """יצירת תכונות עובד מקיפות"""
         df_processed = df.copy()
         
+        df_processed['is_origin_country_trip'] = (
+            df_processed['is_abroad'] & 
+            (df_processed['country_name'] == df_processed['employee_origin_country'])
+        ).astype(int)
+        
         # תכונות ותק
         df_processed['seniority_category'] = pd.cut(
             df_processed['employee_seniority_years'],
