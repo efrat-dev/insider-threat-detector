@@ -32,9 +32,6 @@ class CompleteFeatureEngineer(BaseFeatureEngineer):
     def create_statistical_anomalies(self, df: pd.DataFrame, threshold: float = 2.5) -> pd.DataFrame:
         return self.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df, threshold)
         
-    def identify_redundant_features(self, df: pd.DataFrame) -> List[str]:
-        return self.factory.get_analyzer_result('identify_redundant_features', df)
-    
     def optimize_feature_set(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
         return self.optimizer.optimize_feature_set(df, target_col)
     

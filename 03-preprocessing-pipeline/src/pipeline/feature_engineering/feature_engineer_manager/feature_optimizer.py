@@ -13,11 +13,6 @@ class FeatureOptimizer:
         """אופטימיזציה של סט התכונות"""
         print("Starting feature set optimization...")
         
-        # הסרת תכונות מיותרות
-        redundant_features = self.factory.get_analyzer_result('identify_redundant_features', df)
-        if redundant_features:
-            df = df.drop(columns=redundant_features, errors='ignore')
-        
         # הסרת עמודות עם ערך אחיד
         constant_features = [col for col in df.columns if df[col].nunique() <= 1]
         if constant_features:

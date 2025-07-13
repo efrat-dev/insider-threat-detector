@@ -119,11 +119,7 @@ class CompleteFeatureEngineer(BaseFeatureEngineer):
     def get_recommended_features(self, df: pd.DataFrame, target_col: str) -> List[str]:
         result = self._get_analyzer_result('get_recommended_features', df, target_col)
         return result if result else []
-    
-    def identify_redundant_features(self, df: pd.DataFrame) -> List[str]:
-        result = self._get_analyzer_result('identify_redundant_features', df)
-        return result if result else []
-    
+        
     # Pipeline Methods - משופרים
     def create_all_basic_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """יצירת כל התכונות הבסיסיות"""
