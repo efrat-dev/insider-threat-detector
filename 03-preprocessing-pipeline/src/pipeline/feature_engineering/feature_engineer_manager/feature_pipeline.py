@@ -64,20 +64,7 @@ class FeaturePipeline:
         
         # שלב 4: חריגות
         df = self.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df)
-        
-        # שלב 5: ניתוח ופינוי תכונות מיותרות
-        print("Analyzing redundant features...")
-        try:
-            redundant_features = self.factory.get_analyzer_result('identify_redundant_features', df)
-            if redundant_features:
-                print(f"Found {len(redundant_features)} redundant features: {redundant_features}")
-                df = df.drop(columns=redundant_features)
-                print(f"Removed redundant features. Remaining features: {len(df.columns)}")
-            else:
-                print("No redundant features found")
-        except Exception as e:
-            print(f"Error in redundant features analysis: {e}")
-        
+                    
         # שלב 6: אופטימיזציה של סט התכונות
         if self.complete_engineer:
             print("Optimizing feature set...")

@@ -126,29 +126,6 @@ class FeatureAnalyzer:
         
         return stats_dict
     
-    def identify_redundant_features(self, df: pd.DataFrame, 
-                                  correlation_threshold: float = 0.95) -> List[str]:
-        """זיהוי תכונות מיותרות"""
-        numerical_features = df.select_dtypes(include=[np.number]).columns
-        correlation_matrix = df[numerical_features].corr()
-        
-        # מציאת תכונות עם קורלציה גבוהה מאוד
-        redundant_features = set()
-        
-        for i in range(len(correlation_matrix.columns)):
-            for j in range(i + 1, len(correlation_matrix.columns)):
-                if abs(correlation_matrix.iloc[i, j]) > correlation_threshold:
-                    # השאר את התכונה עם השם הקצר יותר
-                    col1 = correlation_matrix.columns[i]
-                    col2 = correlation_matrix.columns[j]
-                    
-                    if len(col1) > len(col2):
-                        redundant_features.add(col1)
-                    else:
-                        redundant_features.add(col2)
-        
-        return list(redundant_features)
-    
     def get_feature_distribution_analysis(self, df: pd.DataFrame, 
                                         target_col: str = 'is_malicious') -> Dict:
         """ניתוח התפלגות תכונות"""

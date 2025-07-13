@@ -1,7 +1,6 @@
 from pipeline.base_preprocessor import InsiderThreatPreprocessor
 from pipeline.data_cleaning import DataCleaner
 from pipeline.data_transformation import DataTransformer
-# from pipeline.feature_engineering.complete_feature_engineer import CompleteFeatureEngineer
 from pipeline.feature_engineering.feature_engineer_manager.complete_feature_engineer import CompleteFeatureEngineer
 
 class PreprocessingPipeline:
@@ -32,14 +31,22 @@ class PreprocessingPipeline:
 
             # 4. טיפול בחריגים
             df = self.data_cleaner.handle_outliers(df, method='cap')
-                        
-            # 5. נורמליזציה
+            
+            # 5. סינון תכונות
+            # שלב 1: הסרת correlation גבוה
+            df = self.data_transformer.feature_filtering(df, method='correlation', threshold=0.95)
+            
+            # שלב 2: הסרת variance נמוך - סף מתון יותר
+            df = self.data_transformer.feature_filtering(df, method='variance', threshold=0.0001)  # במקום 0.95!
+            
+            # 6. נורמליזציה
             df = self.data_transformer.normalize_features(df, method='standard')
             
-            # 6. בדיקות עקביות
+            # 7. בדיקות עקביות
             self.data_cleaner.consistency_checks(df)
             
             print("Full preprocessing pipeline completed successfully!")
+            print(f"Final DataFrame shape: {df.shape}")
             return df
         
         return full_preprocessing
