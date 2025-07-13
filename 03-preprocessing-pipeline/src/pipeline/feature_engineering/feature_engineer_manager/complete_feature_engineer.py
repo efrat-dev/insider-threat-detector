@@ -32,7 +32,6 @@ class CompleteFeatureEngineer(BaseFeatureEngineer):
     def create_statistical_anomalies(self, df: pd.DataFrame, threshold: float = 2.5) -> pd.DataFrame:
         return self.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df, threshold)
         
-        ###########למה זה לא נקרא בשום מקום??? - אנליזה
     def identify_redundant_features(self, df: pd.DataFrame) -> List[str]:
         return self.factory.get_analyzer_result('identify_redundant_features', df)
     
