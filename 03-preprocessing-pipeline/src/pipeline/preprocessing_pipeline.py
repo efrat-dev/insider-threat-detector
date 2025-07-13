@@ -32,14 +32,11 @@ class PreprocessingPipeline:
 
             # 4. טיפול בחריגים
             df = self.data_cleaner.handle_outliers(df, method='cap')
-            
-            # 5. סינון תכונות
-            df = self.data_transformer.feature_filtering(df, method='correlation', threshold=0.95)
-            
-            # 6. נורמליזציה
+                        
+            # 5. נורמליזציה
             df = self.data_transformer.normalize_features(df, method='standard')
             
-            # 7. בדיקות עקביות
+            # 6. בדיקות עקביות
             self.data_cleaner.consistency_checks(df)
             
             print("Full preprocessing pipeline completed successfully!")

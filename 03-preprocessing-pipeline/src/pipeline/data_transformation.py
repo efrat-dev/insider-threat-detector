@@ -9,30 +9,7 @@ class DataTransformer:
     def __init__(self):
         self.scalers = {}
         self.pca = None
-    
-    def feature_filtering(self, df, method='correlation', threshold=0.95):
-        """סינון תכונות"""
-        df_processed = df.copy()
-        numeric_columns = df_processed.select_dtypes(include=[np.number]).columns
         
-        if method == 'correlation':
-            # הסרת תכונות עם מתאם גבוה
-            corr_matrix = df_processed[numeric_columns].corr().abs()
-            upper_triangle = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
-            
-            to_drop = [column for column in upper_triangle.columns if any(upper_triangle[column] > threshold)]
-            df_processed = df_processed.drop(columns=to_drop)
-            print(f"Dropped {len(to_drop)} highly correlated features")
-        
-        elif method == 'variance':
-            # הסרת תכונות עם שונות נמוכה
-            variances = df_processed[numeric_columns].var()
-            low_variance_cols = variances[variances < threshold].index.tolist()
-            df_processed = df_processed.drop(columns=low_variance_cols)
-            print(f"Dropped {len(low_variance_cols)} low variance features")
-        
-        return df_processed
-    
     def normalize_features(self, df, method='standard'):
         """נורמליזציה/סטנדרטיזציה של תכונות"""
         df_processed = df.copy()
