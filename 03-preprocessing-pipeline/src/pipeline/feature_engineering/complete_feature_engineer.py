@@ -195,11 +195,7 @@ class CompleteFeatureEngineer(BaseFeatureEngineer):
     def optimize_feature_set(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
         """אופטימיזציה של סט התכונות"""
         print("Starting feature set optimization...")
-        
-        # הסרת תכונות מיותרות
-        redundant_features = self.identify_redundant_features(df)
-        df_optimized = df.drop(columns=redundant_features, errors='ignore')
-        
+                
         # הסרת עמודות עם ערך אחיד
         constant_features = [col for col in df_optimized.columns if df_optimized[col].nunique() <= 1]
         df_optimized = df_optimized.drop(columns=constant_features, errors='ignore')
@@ -207,7 +203,7 @@ class CompleteFeatureEngineer(BaseFeatureEngineer):
         print(f"Optimization completed!")
         print(f"Original features: {len(df.columns)}")
         print(f"Optimized features: {len(df_optimized.columns)}")
-        print(f"Removed: {len(redundant_features)} redundant + {len(constant_features)} constant")
+        print(f"Removed: {len(constant_features)} constant")
         
         return df_optimized
     
