@@ -28,6 +28,7 @@ Examples:
   python main.py --analysis-only          # Only run analysis on existing data
   python main.py --export-format excel    # Export only to Excel
   python main.py --seed 42                # Use specific random seed
+  python main.py --add-noise              # Add synthetic noise to dataset
         """
     )
     
@@ -126,6 +127,37 @@ Examples:
         help='Profile performance and memory usage'
     )
     
+    # Noise injection options
+    noise_group = parser.add_argument_group('Noise injection options')
+    noise_group.add_argument(
+        '--add-noise',
+        action='store_true',
+        help='Add synthetic noise to the generated dataset'
+    )
+    noise_group.add_argument(
+        '--burn-noise-rate',
+        type=float,
+        default=0.05,
+        help='Percentage of rows to add burning noise to (default: 0.05)'
+    )
+    noise_group.add_argument(
+        '--print-noise-rate',
+        type=float,
+        default=0.05,
+        help='Percentage of rows to add printing noise to (default: 0.05)'
+    )
+    noise_group.add_argument(
+        '--entry-time-noise-rate',
+        type=float,
+        default=0.10,
+        help='Percentage of rows to add entry time noise to (default: 0.10)'
+    )
+    noise_group.add_argument(
+        '--use-gaussian',
+        action='store_true',
+        help='Use Gaussian noise distribution for certain fields'
+    )
+    
     return parser.parse_args()
 
 
@@ -160,6 +192,15 @@ def validate_arguments(args):
     # Validate conflicting options
     if args.verbose and args.quiet:
         errors.append("Cannot specify both --verbose and --quiet")
+    
+    # Validate noise parameters
+    if args.add_noise:
+        if not (0 <= args.burn_noise_rate <= 1):
+            errors.append("Burn noise rate must be between 0 and 1")
+        if not (0 <= args.print_noise_rate <= 1):
+            errors.append("Print noise rate must be between 0 and 1")
+        if not (0 <= args.entry_time_noise_rate <= 1):
+            errors.append("Entry time noise rate must be between 0 and 1")
     
     if errors:
         print("ERROR: Invalid arguments:")

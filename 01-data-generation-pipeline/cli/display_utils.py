@@ -33,6 +33,17 @@ def print_configuration(args):
     print(f"  Output directory: {args.output_dir}")
     if args.seed:
         print(f"  Random seed: {args.seed}")
+    
+    # הצגת הגדרות רעש
+    if args.add_noise:
+        print(f"  Noise injection: ENABLED")
+        print(f"    - Burn noise rate: {args.burn_noise_rate:.1%}")
+        print(f"    - Print noise rate: {args.print_noise_rate:.1%}")
+        print(f"    - Entry time noise rate: {args.entry_time_noise_rate:.1%}")
+        print(f"    - Use Gaussian distribution: {args.use_gaussian}")
+    else:
+        print(f"  Noise injection: DISABLED")
+    
     print()
 
 
@@ -44,6 +55,11 @@ def print_final_statistics(df, logger):
     logger.info(f"Date range: {df['date'].min()} to {df['date'].max()}")
     logger.info(f"Malicious employees: {df[df['is_malicious']==1]['employee_id'].nunique()}")
     logger.info(f"Malicious records: {df['is_malicious'].sum():,} ({df['is_malicious'].mean():.1%})")
+    
+    # הצגת סטטיסטיקות רעש אם קיימות
+    if 'row_modified' in df.columns:
+        modified_count = df['row_modified'].sum()
+        logger.info(f"Records with noise: {modified_count:,} ({modified_count/len(df):.1%})")
     
     # Department distribution
     logger.info("Department distribution:")

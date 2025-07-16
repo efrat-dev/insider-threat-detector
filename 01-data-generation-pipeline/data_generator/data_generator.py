@@ -1,18 +1,53 @@
 import pandas as pd
 from datetime import datetime, timedelta
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from .data_generator_core import DataGeneratorCore
+from core.date_noise_injector import DataNoiseInjector
 
 
 class DataGenerator(DataGeneratorCore):
     """Main data generation engine that orchestrates all activities"""
     
-    def __init__(self, employees: dict, days_range: int = 180, malicious_ratio: float = 0.05):
+    def __init__(self, employees: dict, days_range: int = 180, malicious_ratio: float = 0.05,
+                 add_noise: bool = False, noise_config: Optional[Dict[str, Any]] = None):
         super().__init__(employees, days_range, malicious_ratio)
+        
+        # Initialize noise injection if requested
+        self.add_noise = add_noise
+        self.noise_injector = None
+        if add_noise:
+            # מיפוי שמות פרמטרים מה-config לשמות הנכונים במחלקה
+            if noise_config:
+                mapped_config = {}
+                # מיפוי שמות פרמטרים
+                param_mapping = {
+                    'burn_rate': 'burn_noise_rate',
+                    'print_rate': 'print_noise_rate', 
+                    'entry_time_rate': 'entry_time_noise_rate',
+                    'gaussian': 'use_gaussian',
+                    'seed': 'random_seed'
+                }
+                
+                for old_name, new_name in param_mapping.items():
+                    if old_name in noise_config:
+                        mapped_config[new_name] = noise_config[old_name]
+                
+                # הוספת פרמטרים נוספים שעלולים להיות בשמות הנכונים
+                for param in ['burn_noise_rate', 'print_noise_rate', 'entry_time_noise_rate', 'use_gaussian', 'random_seed']:
+                    if param in noise_config:
+                        mapped_config[param] = noise_config[param]
+                
+                self.noise_injector = DataNoiseInjector(**mapped_config)
+            else:
+                self.noise_injector = DataNoiseInjector()
         
         print(f"Using {len(self.employees)} employees")
         print(f"Malicious employees: {self.malicious_employees} ({self.malicious_ratio:.1%})")
+        if add_noise:
+            print(f"Noise injection: ENABLED")
+        else:
+            print(f"Noise injection: DISABLED")
         self._print_department_distribution()
     
     def _print_department_distribution(self):
@@ -59,6 +94,17 @@ class DataGenerator(DataGeneratorCore):
         # Post-process the dataframe
         df = self.post_process_dataframe(df)
         
+        # Apply noise injection if enabled
+        if self.add_noise and self.noise_injector:
+            print("Applying noise injection...")
+            # תיקון: שינוי מ-inject_noise ל-add_noise_to_dataframe
+            df = self.noise_injector.add_noise_to_dataframe(df)
+            
+            # Log noise statistics
+            if 'row_modified' in df.columns:
+                modified_count = df['row_modified'].sum()
+                print(f"Noise applied to {modified_count:,} records ({modified_count/len(df):.1%})")
+        
         print(f"Dataset generated: {len(df)} records")
         print(f"Malicious records: {df['is_malicious'].sum()}")
         
@@ -74,12 +120,19 @@ class DataGenerator(DataGeneratorCore):
     
     def get_dataset_metadata(self) -> Dict[str, Any]:
         """Get metadata about the generated dataset"""
-        return {
+        metadata = {
             'num_employees': self.num_employees,
             'days_range': self.days_range,
             'malicious_ratio': self.malicious_ratio,
             'malicious_employees': self.malicious_employees,
             'start_date': (datetime.now() - timedelta(days=self.days_range)).date(),
             'end_date': datetime.now().date(),
-            'total_expected_records': self.num_employees * self.days_range
+            'total_expected_records': self.num_employees * self.days_range,
+            'noise_injection_enabled': self.add_noise
         }
+        
+        # Add noise configuration to metadata if enabled
+        if self.add_noise and self.noise_injector:
+            metadata['noise_config'] = self.noise_injector.get_statistics()
+        
+        return metadata

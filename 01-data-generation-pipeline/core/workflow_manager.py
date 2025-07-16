@@ -55,6 +55,14 @@ def run_full_generation(args, logger):
     """Run full dataset generation process"""
     logger.info("Starting full dataset generation")
     
+    # Log noise configuration
+    if args.add_noise:
+        logger.info("Noise injection configuration:")
+        logger.info(f"  - Burn noise rate: {args.burn_noise_rate:.1%}")
+        logger.info(f"  - Print noise rate: {args.print_noise_rate:.1%}")
+        logger.info(f"  - Entry time noise rate: {args.entry_time_noise_rate:.1%}")
+        logger.info(f"  - Gaussian distribution: {args.use_gaussian}")
+    
     # Profile initial memory usage
     if args.profile_performance:
         initial_memory = profile_memory_usage()
@@ -65,15 +73,27 @@ def run_full_generation(args, logger):
     employee_manager = EmployeeManager(args.employees)
     employees = employee_manager.generate_employee_profiles()
         
-    # Generate dataset
+    # Generate dataset with noise parameters
     logger.info("Generating behavioral dataset...")
     data_gen = DataGenerator(
         employees=employees,
         days_range=args.days,
-        malicious_ratio=args.malicious_ratio
+        malicious_ratio=args.malicious_ratio,
+        add_noise=args.add_noise,
+        noise_config={
+            'burn_rate': args.burn_noise_rate,
+            'print_rate': args.print_noise_rate,
+            'entry_time_rate': args.entry_time_noise_rate,
+            'use_gaussian': args.use_gaussian
+        }
     )
     
     df = data_gen.generate_dataset()
+    
+    # Log noise statistics if applied
+    if args.add_noise and 'row_modified' in df.columns:
+        modified_count = df['row_modified'].sum()
+        logger.info(f"Noise applied to {modified_count:,} records ({modified_count/len(df):.1%})")
     
     # Profile memory usage after generation
     if args.profile_performance:
