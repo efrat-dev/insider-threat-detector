@@ -5,45 +5,6 @@ class DataCleaner:
     """מחלקה לניקוי נתונים"""
     
     @staticmethod
-    def handle_missing_values(df):
-        """טיפול בערכים חסרים"""
-        df_processed = df.copy()
-        
-        # עמודות עם ערכים חסרים רבים (לפי הנתונים שלך)
-        travel_columns = ['trip_day_number', 'country_name']
-        time_columns = ['first_entry_time', 'last_exit_time']
-        
-        # טיפול בעמודות נסיעות
-        for col in travel_columns:
-            if col in df_processed.columns:
-                if col == 'trip_day_number':
-                    df_processed[col] = df_processed[col].fillna(0)
-                elif col == 'country_name':
-                    df_processed[col] = df_processed[col].fillna('No_Travel')
-        
-        # טיפול בעמודות זמן
-        for col in time_columns:
-            if col in df_processed.columns:
-                df_processed[col] = df_processed[col].fillna('No_Entry_Exit')
-        
-        # טיפול בערכים חסרים נוספים
-        numeric_columns = df_processed.select_dtypes(include=[np.number]).columns
-        categorical_columns = df_processed.select_dtypes(include=['object']).columns
-        
-        for col in numeric_columns:
-            if df_processed[col].isnull().sum() > 0:
-                median_val = df_processed[col].median()
-                df_processed[col] = df_processed[col].fillna(median_val)
-        
-        for col in categorical_columns:
-            if df_processed[col].isnull().sum() > 0:
-                mode_val = df_processed[col].mode()[0] if not df_processed[col].mode().empty else 'Unknown'
-                df_processed[col] = df_processed[col].fillna(mode_val)
-        
-        print("Missing values handled successfully")
-        return df_processed
-    
-    @staticmethod
     def detect_outliers(df, columns=None):
         """זיהוי חריגים באמצעות IQR"""
         if columns is None:
@@ -139,7 +100,7 @@ class DataCleaner:
     def remove_columns(df, columns_to_remove=None):
         """הסרת עמודות מהנתונים"""
         if columns_to_remove is None:
-            columns_to_remove = ['employee_origin_country', 'country_name', 'date', 'first_entry_time', 'last_exit_time']
+            columns_to_remove = ['employee_origin_country', 'country_name', 'first_entry_time', 'last_exit_time']
         
         df_processed = df.copy()
         existing_columns = [col for col in columns_to_remove if col in df_processed.columns]
