@@ -4,6 +4,7 @@ from pipeline.preprocessing_pipeline import PreprocessingPipeline  # ודאי ש
 def main():
     # טען את הדאטה
     df = pd.read_csv('insider_threat_dataset.csv')  # שנה לנתיב הקובץ שלך
+    df = df.astype({col: 'float32' for col in df.select_dtypes(include=['float64']).columns})
 
     # צור את הפייפליין
     pipeline = PreprocessingPipeline()
