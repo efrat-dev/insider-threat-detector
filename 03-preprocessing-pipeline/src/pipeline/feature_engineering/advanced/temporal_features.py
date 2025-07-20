@@ -58,21 +58,3 @@ class TemporalFeatureEngineer:
         ])
         
         return df
-    
-    def get_temporal_feature_summary(self, df: pd.DataFrame) -> Dict:
-        """סיכום תכונות זמן מתקדמות"""
-        temporal_cols = [col for col in df.columns if any(x in col for x in 
-                        ['time_consistency', 'schedule_stability', 'holiday_activity', 
-                         'night_shift', 'weekend_work', 'time_anomaly'])]
-        
-        summary = {}
-        for col in temporal_cols:
-            if col in df.columns:
-                summary[col] = {
-                    'mean': df[col].mean(),
-                    'std': df[col].std(),
-                    'max': df[col].max(),
-                    'min': df[col].min()
-                }
-        
-        return summary

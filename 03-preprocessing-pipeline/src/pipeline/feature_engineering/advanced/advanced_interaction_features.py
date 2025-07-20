@@ -141,21 +141,3 @@ class AdvancedInteractionFeatureEngineer:
         )
         
         return df
-    
-    def get_interaction_feature_summary(self, df: pd.DataFrame) -> Dict:
-        """סיכום תכונות אינטראקציה"""
-        interaction_cols = [col for col in df.columns if any(x in col for x in 
-                           ['_interaction', '_risk', 'poly_', '_ratio'])]
-        
-        summary = {}
-        for col in interaction_cols:
-            if col in df.columns:
-                summary[col] = {
-                    'mean': df[col].mean(),
-                    'std': df[col].std(),
-                    'max': df[col].max(),
-                    'min': df[col].min(),
-                    'non_zero_count': (df[col] != 0).sum()
-                }
-        
-        return summary

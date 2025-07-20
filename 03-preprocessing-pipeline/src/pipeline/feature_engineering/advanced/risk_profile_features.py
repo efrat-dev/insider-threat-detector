@@ -68,21 +68,3 @@ class RiskProfileFeatureEngineer:
         ])
         
         return df
-    
-    def get_risk_profile_summary(self, df: pd.DataFrame) -> Dict:
-        """סיכום תכונות פרופיל סיכון"""
-        risk_cols = [col for col in df.columns if any(x in col for x in 
-                    ['combined_risk', 'access_risk', 'intelligence_risk', 
-                     'classified_activity', 'media_risk', 'foreign_activity'])]
-        
-        summary = {}
-        for col in risk_cols:
-            if col in df.columns:
-                summary[col] = {
-                    'mean': df[col].mean(),
-                    'std': df[col].std(),
-                    'max': df[col].max(),
-                    'min': df[col].min()
-                }
-        
-        return summary

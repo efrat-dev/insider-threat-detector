@@ -89,18 +89,3 @@ class AnomalyFeatureEngineer:
                 df[f'{col}_z_anomaly'] = (z_scores > threshold).astype(int)
         
         return df
-    
-    def get_anomaly_feature_summary(self, df: pd.DataFrame) -> Dict:
-        """סיכום תכונות חריגות"""
-        anomaly_cols = [col for col in df.columns if 'anomaly' in col.lower()]
-        
-        summary = {}
-        for col in anomaly_cols:
-            if col in df.columns:
-                summary[col] = {
-                    'count': df[col].sum(),
-                    'percentage': df[col].mean() * 100,
-                    'correlation_with_malicious': df[col].corr(df.get('is_malicious', pd.Series([0]*len(df))))
-                }
-        
-        return summary

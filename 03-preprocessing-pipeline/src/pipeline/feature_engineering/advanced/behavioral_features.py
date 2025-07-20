@@ -65,21 +65,3 @@ class BehavioralFeatureEngineer:
         ])
         
         return df
-    
-    def get_behavioral_feature_summary(self, df: pd.DataFrame) -> Dict:
-        """סיכום תכונות התנהגותיות"""
-        behavioral_cols = [col for col in df.columns if any(x in col for x in 
-                          ['weighted_suspicious', 'unusual_work', 'digital_footprint', 
-                           'efficiency_anomaly', 'behavioral_risk_advanced'])]
-        
-        summary = {}
-        for col in behavioral_cols:
-            if col in df.columns:
-                summary[col] = {
-                    'mean': df[col].mean(),
-                    'std': df[col].std(),
-                    'max': df[col].max(),
-                    'min': df[col].min()
-                }
-        
-        return summary
