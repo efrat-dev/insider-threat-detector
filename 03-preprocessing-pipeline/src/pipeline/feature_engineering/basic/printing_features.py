@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
-from .base_feature_engineer import BaseFeatureEngineer
 
-class PrintingFeatureEngineer(BaseFeatureEngineer):
+class PrintingFeatureEngineer():
     """מחלקה ליצירת תכונות הדפסה"""
     
     def create_printing_features(self, df):

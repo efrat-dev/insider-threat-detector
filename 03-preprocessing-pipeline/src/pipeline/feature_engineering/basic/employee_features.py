@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
-from .base_feature_engineer import BaseFeatureEngineer
 
-class EmployeeFeatureEngineer(BaseFeatureEngineer):
+class EmployeeFeatureEngineer():
     """מחלקה ליצירת תכונות עובד"""
     
     def create_employee_features(self, df):

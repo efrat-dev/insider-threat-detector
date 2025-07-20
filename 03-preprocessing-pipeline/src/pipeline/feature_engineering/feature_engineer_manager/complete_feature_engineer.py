@@ -3,9 +3,8 @@ from typing import Dict, List
 import pandas as pd
 from .engineer_factory import EngineerFactory
 from .feature_pipeline import FeaturePipeline
-from pipeline.feature_engineering.basic.base_feature_engineer import BaseFeatureEngineer
 
-class CompleteFeatureEngineer(BaseFeatureEngineer):
+class CompleteFeatureEngineer():
     """מחלקה מקיפה להנדסת תכונות בסיסיות ומתקדמות לזיהוי איומים פנימיים"""
     
     def __init__(self):

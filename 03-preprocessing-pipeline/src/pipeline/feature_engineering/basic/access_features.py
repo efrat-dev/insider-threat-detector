@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
-from .base_feature_engineer import BaseFeatureEngineer
 
-class AccessFeatureEngineer(BaseFeatureEngineer):
+class AccessFeatureEngineer():
     """מחלקה ליצירת תכונות גישה ונוכחות"""
     
     def create_access_features(self, df):

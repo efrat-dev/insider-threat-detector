@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
-from .base_feature_engineer import BaseFeatureEngineer
 
-class BurningFeatureEngineer(BaseFeatureEngineer):
+class BurningFeatureEngineer():
     """מחלקה ליצירת תכונות שריפה"""
     
     def create_burning_features(self, df):

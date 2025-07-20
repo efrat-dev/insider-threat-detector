@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
-from .base_feature_engineer import BaseFeatureEngineer
 
-class InteractionFeatureEngineer(BaseFeatureEngineer):
+class InteractionFeatureEngineer():
     """מחלקה ליצירת תכונות אינטראקציה מתקדמות"""
     
     def create_interaction_features(self, df):
