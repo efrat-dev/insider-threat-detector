@@ -53,148 +53,67 @@ class DataTransformer:
         return df_processed
     
     def identify_redundant_features_many_columns(self, df: pd.DataFrame, 
-                                            correlation_threshold: float = 0.95) -> List[str]:
-        """זיהוי תכונות מיותרות - מטפל ביעילות במאות עמודות"""
+                                                correlation_threshold: float = 0.95,
+                                                chunk_size: int = 50) -> List[str]:
+        """זיהוי תכונות מיותרות - chunks עם בדיקה מלאה"""
         
         numerical_features = df.select_dtypes(include=[np.number]).columns
         
         if len(numerical_features) < 2:
             return []
         
-        print(f"Processing {len(numerical_features)} numerical features")
+        print(f"Processing {len(numerical_features)} features in chunks of {chunk_size}")
         
-        # דגימה חכמה לפי גודל הנתונים
-        if len(df) > 50000:
-            sample_size = 15000
-        elif len(df) > 20000:
-            sample_size = 10000
-        elif len(df) > 10000:
-            sample_size = 5000
-        else:
-            sample_size = len(df)
-        
-        if len(df) > sample_size:
-            df_sample = df.sample(n=sample_size, random_state=42)
+        # דגימת שורות (לא עמודות) אם הנתונים גדולים
+        if len(df) > 10000:
+            df_sample = df.sample(n=10000, random_state=42)
         else:
             df_sample = df
         
-        # **גישה 1: עבודה בחלקים (chunks) למספר גדול של עמודות**
-        if len(numerical_features) > 300:
-            print("Using chunked processing for large number of features")
-            return self._process_features_in_chunks(df_sample, numerical_features, correlation_threshold)
-        
-        # **גישה 2: אלגוריתם מיון מהיר לעמודות בינוניות**
-        elif len(numerical_features) > 100:
-            print("Using optimized processing for medium number of features")
-            return self._process_features_optimized(df_sample, numerical_features, correlation_threshold)
-        
-        # **גישה 3: עבודה רגילה למספר קטן של עמודות**
-        else:
-            print("Using standard processing")
-            return self._process_features_standard(df_sample, numerical_features, correlation_threshold)
-
-    def _process_features_in_chunks(self, df_sample, numerical_features, correlation_threshold):
-        """עבודה בחלקים - למאות עמודות"""
-        chunk_size = 150
-        all_redundant = set()
-        
-        # שלב 1: בדיקת correlation בתוך כל chunk
-        for i in range(0, len(numerical_features), chunk_size):
-            chunk_features = numerical_features[i:i+chunk_size]
-            print(f"Processing chunk {i//chunk_size + 1}: columns {i} to {min(i+chunk_size, len(numerical_features))}")
-            
-            chunk_corr = df_sample[chunk_features].corr().abs()
-            
-            # מציאת redundant features בchunk זה
-            mask = np.triu(np.ones(chunk_corr.shape, dtype=bool), k=1)
-            high_corr_indices = np.where((chunk_corr.values > correlation_threshold) & mask)
-            
-            for idx_i, idx_j in zip(high_corr_indices[0], high_corr_indices[1]):
-                col1 = chunk_features[idx_i]
-                col2 = chunk_features[idx_j]
-                
-                if len(col1) > len(col2):
-                    all_redundant.add(col1)
-                else:
-                    all_redundant.add(col2)
-        
-        # שלב 2: בדיקת correlation בין chunks (אופציונלי)
-        if len(all_redundant) < len(numerical_features) * 0.5:  # אם לא מצאנו הרבה redundant
-            print("Checking cross-chunk correlations...")
-            all_redundant.update(self._check_cross_chunk_correlations(
-                df_sample, numerical_features, correlation_threshold, chunk_size
-            ))
-        
-        return list(all_redundant)
-
-    def _check_cross_chunk_correlations(self, df_sample, numerical_features, correlation_threshold, chunk_size):
-        """בדיקת correlation בין chunks שונים"""
-        cross_redundant = set()
-        
-        # בדיקה רק של דגימה מכל chunk
-        for i in range(0, len(numerical_features), chunk_size):
-            chunk1 = numerical_features[i:i+min(50, chunk_size)]  # דגימה מהchunk הראשון
-            
-            for j in range(i+chunk_size, len(numerical_features), chunk_size):
-                chunk2 = numerical_features[j:j+min(50, chunk_size)]  # דגימה מהchunk השני
-                
-                if len(chunk1) > 0 and len(chunk2) > 0:
-                    combined_features = list(chunk1) + list(chunk2)
-                    combined_corr = df_sample[combined_features].corr().abs()
-                    
-                    # בדיקה רק בין החלקים
-                    for col1 in chunk1:
-                        for col2 in chunk2:
-                            if combined_corr.loc[col1, col2] > correlation_threshold:
-                                if len(col1) > len(col2):
-                                    cross_redundant.add(col1)
-                                else:
-                                    cross_redundant.add(col2)
-        
-        return cross_redundant
-    
-    def _process_features_optimized(self, df_sample, numerical_features, correlation_threshold):
-        """אלגוריתם מותאם לעמודות בינוניות (100-300)"""
         redundant_features = set()
         
-        # חישוב correlation matrix בחלקים קטנים יותר
-        batch_size = 50
-        processed_pairs = set()
+        # יצירת רשימת chunks
+        chunks = []
+        for i in range(0, len(numerical_features), chunk_size):
+            chunks.append(numerical_features[i:i+chunk_size])
         
-        for i in range(0, len(numerical_features), batch_size):
-            batch1 = numerical_features[i:i+batch_size]
-            
-            for j in range(i, len(numerical_features), batch_size):
-                batch2 = numerical_features[j:j+batch_size]
-                
-                # אם זה אותו batch, נבדק רק את המשולש העליון
-                if i == j:
-                    batch_corr = df_sample[batch1].corr().abs()
-                    mask = np.triu(np.ones(batch_corr.shape, dtype=bool), k=1)
-                    high_corr_indices = np.where((batch_corr.values > correlation_threshold) & mask)
-                    
-                    for idx_i, idx_j in zip(high_corr_indices[0], high_corr_indices[1]):
-                        col1 = batch1[idx_i]
-                        col2 = batch1[idx_j]
-                        
-                        if len(col1) > len(col2):
-                            redundant_features.add(col1)
-                        else:
-                            redundant_features.add(col2)
-                
-                # אם זה batches שונים, נבדק את כל הצירופים
-                elif i < j:
-                    combined_features = list(batch1) + list(batch2)
-                    combined_corr = df_sample[combined_features].corr().abs()
-                    
-                    for col1 in batch1:
-                        for col2 in batch2:
-                            if combined_corr.loc[col1, col2] > correlation_threshold:
-                                if len(col1) > len(col2):
-                                    redundant_features.add(col1)
-                                else:
-                                    redundant_features.add(col2)
+        print(f"Created {len(chunks)} chunks")
         
+        # שלב 1: בדיקה בתוך כל chunk
+        for chunk_idx, chunk in enumerate(chunks):
+            if len(chunk) > 1:
+                print(f"Processing within chunk {chunk_idx + 1}/{len(chunks)}")
+                corr_matrix = df_sample[chunk].corr().abs()
+                
+                # בדיקת כל זוגות עמודות בchunk
+                for j in range(len(chunk)):
+                    for k in range(j+1, len(chunk)):
+                        if corr_matrix.iloc[j, k] > correlation_threshold:
+                            col1, col2 = chunk[j], chunk[k]
+                            redundant_features.add(col1 if len(col1) > len(col2) else col2)
+        
+        # שלב 2: בדיקה בין כל זוגות chunks (בדיקה מלאה!)
+        for i in range(len(chunks)):
+            for j in range(i+1, len(chunks)):
+                print(f"Checking between chunks {i+1} and {j+1}")
+                
+                chunk1, chunk2 = chunks[i], chunks[j]
+                combined = list(chunk1) + list(chunk2)
+                
+                try:
+                    corr_matrix = df_sample[combined].corr().abs()
+                    
+                    # בדיקת כל זוגות עמודות בין הchunks
+                    for col1 in chunk1:
+                        for col2 in chunk2:
+                            if corr_matrix.loc[col1, col2] > correlation_threshold:
+                                redundant_features.add(col1 if len(col1) > len(col2) else col2)
+                
+                except Exception as e:
+                    print(f"Warning: Could not process chunks {i+1} and {j+1}: {e}")
+                    continue
+        
+        print(f"Found {len(redundant_features)} redundant features")
         return list(redundant_features)
     
     def _process_features_standard(self, df_sample, numerical_features, correlation_threshold):
