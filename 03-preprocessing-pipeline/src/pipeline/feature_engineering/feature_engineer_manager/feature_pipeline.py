@@ -1,4 +1,3 @@
-# File 3a: feature_pipeline.py (Core Pipeline Management - 70 lines)
 import numpy as np
 import pandas as pd
 from typing import List
@@ -49,7 +48,6 @@ class FeaturePipeline:
         print("Advanced feature engineering completed!")
         return df
     
-        
     def remove_original_columns(self, df: pd.DataFrame, columns_to_remove=None) -> pd.DataFrame:
         """הסרת עמודות מקוריות לפני הקידוד"""
         if columns_to_remove is None:
@@ -69,42 +67,32 @@ class FeaturePipeline:
     def apply_complete_feature_engineering(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
         """החלת הנדסת תכונות מקיפה"""
         print("Starting complete feature engineering...")
-                    
-    def apply_complete_feature_engineering(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
-        """החלת הנדסת תכונות מקיפה"""
-        print("Starting complete feature engineering...")
                 
-        # שלב 1: תכונות בסיסיות
-        df = self.create_all_basic_features(df)
+        # df = self.create_all_basic_features(df)
         
-        # שלב 2: תכונות מתקדמות
-        df = self.create_all_advanced_features(df)
+        ## df = self.create_all_advanced_features(df)
 
         df = self.remove_original_columns(df)
-        
-        # שלב 3: קידוד מקיף
+
         df = self.processor.apply_encoding_transforms(df, target_col)
         
-        # שלב 4: חריגות
-        df = self.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df)
+        ## df = self.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df)
                     
-        # שלב 6: אופטימיזציה של סט התכונות
-        if self.complete_engineer:
-            print("Optimizing feature set...")
-            try:
-                df = self.complete_engineer.optimize_feature_set(df, target_col)
-                print(f"Feature optimization completed. Final features: {len(df.columns)}")
-            except Exception as e:
-                print(f"Error in feature optimization: {e}")
+        # if self.complete_engineer:
+        #     print("Optimizing feature set...")
+        #     try:
+        #         df = self.complete_engineer.optimize_feature_set(df, target_col)
+        #         print(f"Feature optimization completed. Final features: {len(df.columns)}")
+        #     except Exception as e:
+        #         print(f"Error in feature optimization: {e}")
         
-        # שלב 7: הכנת סיכום תכונות
-        if self.complete_engineer:
-            print("Generating feature summary...")
-            try:
-                feature_summary = self.complete_engineer.get_feature_summary(df)
-                print(f"Feature summary generated with {len(feature_summary)} items")
-            except Exception as e:
-                print(f"Error in feature summary generation: {e}")
+        # if self.complete_engineer:
+        #     print("Generating feature summary...")
+        #     try:
+        #         feature_summary = self.complete_engineer.get_feature_summary(df)
+        #         print(f"Feature summary generated with {len(feature_summary)} items")
+        #     except Exception as e:
+        #         print(f"Error in feature summary generation: {e}")
 
         print(f"Complete feature engineering finished! Final features: {len(df.columns)}")
         
