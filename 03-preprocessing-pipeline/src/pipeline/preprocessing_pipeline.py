@@ -36,10 +36,7 @@ class PreprocessingPipeline:
             
             # 6. נורמליזציה
             df = self.data_transformer.normalize_features(df, method='standard')
-            
-            # 7. בדיקות עקביות
-            self.data_cleaner.consistency_checks(df)
-            
+                        
             print("Full preprocessing pipeline completed successfully!")
             print(f"Final DataFrame shape: {df.shape}")
             return df

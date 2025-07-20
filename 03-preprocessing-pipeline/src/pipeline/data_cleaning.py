@@ -135,38 +135,3 @@ class DataCleaner:
         print("Data types converted successfully")
         return df_processed
     
-    @staticmethod
-    def consistency_checks(df):
-        """בדיקות עקביות"""
-        issues = []
-        
-        # בדיקת ערכים שליליים בעמודות שאמורות להיות חיוביות
-        positive_columns = ['num_print_commands', 'total_printed_pages', 'num_burn_requests', 
-                          'total_burn_volume_mb', 'employee_seniority_years']
-        
-        for col in positive_columns:
-            if col in df.columns:
-                negative_count = (df[col] < 0).sum()
-                if negative_count > 0:
-                    issues.append(f"{col}: {negative_count} negative values")
-        
-        # בדיקת יחסים לוגיים
-        if 'num_print_commands' in df.columns and 'total_printed_pages' in df.columns:
-            illogical = (df['num_print_commands'] > 0) & (df['total_printed_pages'] == 0)
-            if illogical.sum() > 0:
-                issues.append(f"Print commands without pages: {illogical.sum()} cases")
-        
-        # בדיקת תאריכים
-        if 'first_entry_time' in df.columns and 'last_exit_time' in df.columns:
-            invalid_times = df['first_entry_time'] > df['last_exit_time']
-            if invalid_times.sum() > 0:
-                issues.append(f"Entry time after exit time: {invalid_times.sum()} cases")
-        
-        if issues:
-            print("Data consistency issues found:")
-            for issue in issues:
-                print(f"  - {issue}")
-        else:
-            print("No data consistency issues found")
-        
-        return issues
