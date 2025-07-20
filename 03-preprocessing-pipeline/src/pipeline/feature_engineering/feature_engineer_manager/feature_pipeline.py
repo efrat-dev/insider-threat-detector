@@ -19,7 +19,7 @@ class FeaturePipeline:
     def _initialize_encoder(self):
         """אתחול encoder בסיסי"""
         if not hasattr(self, 'base_encoder') or self.base_encoder is None:
-            from pipeline.feature_engineering.basic.base_feature_engineer import BaseFeatureEngineer
+            from .base_feature_engineer import BaseFeatureEngineer
             self.base_encoder = BaseFeatureEngineer()
     
     def apply_encoding_transforms(self, df: pd.DataFrame, target_col: str) -> pd.DataFrame:
