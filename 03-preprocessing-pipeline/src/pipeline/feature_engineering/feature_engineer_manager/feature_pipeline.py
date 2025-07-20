@@ -141,14 +141,6 @@ class FeaturePipeline:
         
         ## df = self.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df)
         
-        # if self.complete_engineer:
-        #     print("Generating feature summary...")
-        #     try:
-        #         feature_summary = self.complete_engineer.get_feature_summary(df)
-        #         print(f"Feature summary generated with {len(feature_summary)} items")
-        #     except Exception as e:
-        #         print(f"Error in feature summary generation: {e}")
-
         print(f"Complete feature engineering finished! Final features: {len(df.columns)}")
         
         return df
