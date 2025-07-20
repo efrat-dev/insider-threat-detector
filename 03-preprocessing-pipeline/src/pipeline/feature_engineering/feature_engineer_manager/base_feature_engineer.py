@@ -192,64 +192,6 @@ class BaseFeatureEngineer:
         print(f"\nCategorical encoding completed! Created {len(encoded_features)} new encoded features")
         print(f"Removed {len(existing_columns_to_drop)} original categorical columns")
         return df_processed
-
-    def handle_special_text_columns(self, df):
-        """טיפול מיוחד בעמודות טקסט מורכבות"""
-        df_processed = df.copy()
-        
-        # זיהוי עמודות עם טקסט מורכב - בדיקה מחודשת כי יכול להיות שנותרו עמודות
-        text_columns = []
-        for col in df_processed.columns:
-            if col not in ['is_malicious', 'date', 'timestamp']:
-                # בדיקה אם זה עמודת טקסט שנותרה
-                if df_processed[col].dtype == 'object':
-                    text_columns.append(col)
-        
-        columns_to_drop = []  # רשימת עמודות למחיקה
-        
-        print(f"Found {len(text_columns)} remaining text columns to process")
-        
-        for col in text_columns:
-            if col in df_processed.columns:
-                # בדיקת אורך הטקסט
-                try:
-                    text_lengths = df_processed[col].astype(str).str.len()
-                    df_processed[f'{col}_length'] = text_lengths
-                    
-                    # כמות מילים
-                    df_processed[f'{col}_word_count'] = df_processed[col].astype(str).str.split().str.len()
-                    
-                    # האם מכיל מספרים
-                    df_processed[f'{col}_has_numbers'] = df_processed[col].astype(str).str.contains(r'\d', na=False).astype(int)
-                    
-                    # האם מכיל תווים מיוחדים
-                    df_processed[f'{col}_has_special'] = df_processed[col].astype(str).str.contains(r'[^a-zA-Z0-9\s]', na=False).astype(int)
-                    
-                    # תדירות תווים
-                    df_processed[f'{col}_char_diversity'] = df_processed[col].astype(str).apply(lambda x: len(set(x)) if x else 0)
-                    
-                    # אם יצרנו תכונות חדשות, נוסיף את העמודה המקורית לרשימת המחיקה
-                    columns_to_drop.append(col)
-                    print(f"Processed and will drop text column: {col}")
-                    
-                except Exception as e:
-                    print(f"Error processing text column {col}: {str(e)}")
-        
-        # מחיקת העמודות המקוריות שעובדו
-        existing_columns_to_drop = [col for col in columns_to_drop if col in df_processed.columns]
-        if existing_columns_to_drop:
-            df_processed = df_processed.drop(columns=existing_columns_to_drop)
-            print(f"Dropped {len(existing_columns_to_drop)} original text columns after feature extraction")
-        
-        # בדיקה סופית ומחיקת כל עמודת object שנותרה (פרט לעמודות מוגנות)
-        remaining_objects = df_processed.select_dtypes(include=['object']).columns
-        final_drops = [col for col in remaining_objects if col not in ['is_malicious', 'date', 'timestamp']]
-        
-        if final_drops:
-            print(f"Final cleanup: dropping remaining object columns: {final_drops}")
-            df_processed = df_processed.drop(columns=final_drops)
-        
-        return df_processed
         
     def apply_statistical_transforms(self, df):
             """החלת טרנספורמציות סטטיסטיות משופרות"""

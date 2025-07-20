@@ -1,8 +1,5 @@
 # feature_pipeline.py - Unified Feature Pipeline Module
-import numpy as np
 import pandas as pd
-from typing import List
-
 
 class FeaturePipeline:
     """מנהל pipeline של הנדסת תכונות - כולל גם עיבוד וקידוד נתונים"""
@@ -34,45 +31,15 @@ class FeaturePipeline:
         except Exception as e:
             print(f"Error in categorical encoding: {e}")
         
-        # שלב 2: טיפול בעמודות טקסט מיוחדות
-        try:
-            df = self.base_encoder.handle_special_text_columns(df)
-            print("Special text columns handled")
-        except Exception as e:
-            print(f"Error in text processing: {e}")
         
-        # שלב 3: טרנספורמציות סטטיסטיות
+        # שלב 2: טרנספורמציות סטטיסטיות
         try:
             df = self.base_encoder.apply_statistical_transforms(df)
             print("Statistical transforms applied")
         except Exception as e:
             print(f"Error in statistical transforms: {e}")
         
-        # שלב 4: וידוא טיפוסי נתונים
-        try:
-            df = self._standardize_data_types(df, target_col)
-            print("Data types standardized")
-        except Exception as e:
-            print(f"Error in data type standardization: {e}")
-        
-        print(f"Encoding and transformation completed! Features: {len(df.columns)}")
-        return df
-    
-    def _standardize_data_types(self, df: pd.DataFrame, target_col: str) -> pd.DataFrame:
-        """סטנדרטיזציה של טיפוסי נתונים"""
-        # המרת עמודות boolean לנומריות
-        bool_cols = df.select_dtypes(include=['bool']).columns
-        df[bool_cols] = df[bool_cols].astype(int)
-        
-        # המרת עמודות object שהן למעשה נומריות
-        for col in df.select_dtypes(include=['object']).columns:
-            if col != target_col:
-                try:
-                    df[col] = pd.to_numeric(df[col], errors='ignore')
-                except:
-                    pass
-        
-        return df
+        return df  
     
     # ==================== Feature Engineering Methods ====================
     
@@ -127,20 +94,35 @@ class FeaturePipeline:
         
         return df_processed
     
+    def _standardize_data_types(self, df: pd.DataFrame, target_col: str) -> pd.DataFrame:
+        """סטנדרטיזציה של טיפוסי נתונים"""
+        # המרת עמודות boolean לנומריות
+        bool_cols = df.select_dtypes(include=['bool']).columns
+        df[bool_cols] = df[bool_cols].astype(int)
+        
+        # המרת עמודות object שהן למעשה נומריות
+        for col in df.select_dtypes(include=['object']).columns:
+            if col != target_col:
+                try:
+                    df[col] = pd.to_numeric(df[col], errors='ignore')
+                except:
+                    pass
+        
+        return df
+    
     def apply_complete_feature_engineering(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
         """החלת הנדסת תכונות מקיפה"""
         print("Starting complete feature engineering...")
         
         # df = self.create_all_basic_features(df)
-        
-        ## df = self.create_all_advanced_features(df)
+        # df = self.create_all_advanced_features(df)
 
         df = self.remove_original_columns(df)
-
         df = self.apply_encoding_transforms(df, target_col)
-        
-        ## df = self.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df)
+
+        # df = self.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df)
+
+        df = self._standardize_data_types(df, target_col)
         
         print(f"Complete feature engineering finished! Final features: {len(df.columns)}")
-        
         return df
