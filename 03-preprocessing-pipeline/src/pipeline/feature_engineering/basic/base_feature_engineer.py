@@ -251,14 +251,6 @@ class BaseFeatureEngineer:
         
         return df_processed
         
-        # מחיקת העמודות המקוריות שעובדו
-        existing_columns_to_drop = [col for col in columns_to_drop if col in df_processed.columns]
-        if existing_columns_to_drop:
-            df_processed = df_processed.drop(columns=existing_columns_to_drop)
-            print(f"Dropped {len(existing_columns_to_drop)} original text columns after feature extraction")
-        
-        return df_processed
-        
     def apply_statistical_transforms(self, df):
             """החלת טרנספורמציות סטטיסטיות משופרות"""
             df_processed = df.copy()
