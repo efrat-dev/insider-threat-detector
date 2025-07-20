@@ -4,7 +4,6 @@ from .temporal_features import TemporalFeatureEngineer
 from .risk_profile_features import RiskProfileFeatureEngineer
 from .anomaly_features import AnomalyFeatureEngineer
 from .advanced_interaction_features import AdvancedInteractionFeatureEngineer
-from .feature_analysis import FeatureAnalyzer
 
 __all__ = [
     'BehavioralFeatureEngineer',
@@ -12,5 +11,4 @@ __all__ = [
     'RiskProfileFeatureEngineer',
     'AnomalyFeatureEngineer',
     'AdvancedInteractionFeatureEngineer',
-    'FeatureAnalyzer'
 ]
