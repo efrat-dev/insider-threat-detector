@@ -54,17 +54,6 @@ class BaseFeatureEngineer:
         
         return categorical_columns
     
-    def _handle_categorical_missing_values(self, series):
-        """טיפול בערכים חסרים בעמודות קטגוריות"""
-        if pd.api.types.is_categorical_dtype(series):
-            # אם זה Categorical, נוסיף את הקטגוריה 'Missing' לרשימת הקטגוריות
-            if 'Missing' not in series.cat.categories:
-                series = series.cat.add_categories(['Missing'])
-            return series.fillna('Missing')
-        else:
-            # אם זה לא Categorical, נטפל בדרך הרגילה
-            return series.fillna('Missing')
-    
     def encode_categorical_variables(self, df, target_col='is_malicious'):
         """קידוד מלא לכל המשתנים הקטגוריים"""
         print("Starting comprehensive categorical encoding...")
@@ -90,10 +79,7 @@ class BaseFeatureEngineer:
                 continue
                 
             print(f"Processing column: {col}")
-            
-            # טיפול בערכים חסרים - תיקון הבעיה העיקרית
-            df_processed[col] = self._handle_categorical_missing_values(df_processed[col])
-            
+                        
             # המרה לטקסט (אם זה לא Categorical)
             if not pd.api.types.is_categorical_dtype(df_processed[col]):
                 df_processed[col] = df_processed[col].astype(str)
