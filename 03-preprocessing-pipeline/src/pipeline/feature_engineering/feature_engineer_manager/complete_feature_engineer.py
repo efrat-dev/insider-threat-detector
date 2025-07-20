@@ -4,7 +4,6 @@ import pandas as pd
 from .engineer_factory import EngineerFactory
 from .feature_pipeline import FeaturePipeline
 from .feature_optimizer import FeatureOptimizer
-from .feature_summary import FeatureSummary
 from pipeline.feature_engineering.basic.base_feature_engineer import BaseFeatureEngineer
 
 class CompleteFeatureEngineer(BaseFeatureEngineer):
@@ -15,7 +14,6 @@ class CompleteFeatureEngineer(BaseFeatureEngineer):
         self.factory = EngineerFactory()
         self.pipeline = FeaturePipeline(self.factory, self) 
         self.optimizer = FeatureOptimizer(self.factory)
-        self.summary = FeatureSummary(self.factory)
         
     def create_features_by_type(self, df: pd.DataFrame, feature_type: str) -> pd.DataFrame:
         return self.factory.create_features_by_type(df, feature_type)
