@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
-from sklearn.decomposition import PCA
-from typing import List, Dict, Tuple, Optional  # הוספת הimports החסרים
+from typing import List  
 
 class DataTransformer:
     """מחלקה לטרנספורמציות נתונים"""
@@ -215,18 +214,6 @@ class DataTransformer:
         
         return redundant_features
     
-    def get_feature_importance_report(self, df: pd.DataFrame, removed_features: List[str]) -> dict:
-        """דוח על התכונות שהוסרו"""
-        report = {
-            'original_features': len(df.columns),
-            'removed_features': len(removed_features),
-            'remaining_features': len(df.columns) - len(removed_features),
-            'removal_percentage': (len(removed_features) / len(df.columns)) * 100,
-            'removed_feature_names': removed_features
-        }
-        
-        return report
-
     def normalize_features(self, df, method='standard'):
         """נורמליזציה/סטנדרטיזציה של תכונות"""
         df_processed = df.copy()
@@ -252,38 +239,4 @@ class DataTransformer:
             self.scalers['robust'] = scaler
         
         print(f"Features normalized using {method} method")
-        return df_processed
-    
-    def dimensionality_reduction(self, df, method='pca', n_components=0.95):
-        """הפחתת מימדיות"""
-        df_processed = df.copy()
-        
-        # הכנת הנתונים
-        feature_columns = df_processed.select_dtypes(include=[np.number]).columns
-        exclude_cols = ['employee_id', 'is_malicious']
-        feature_columns = [col for col in feature_columns if col not in exclude_cols]
-        
-        X = df_processed[feature_columns]
-        
-        if method == 'pca':
-            self.pca = PCA(n_components=n_components)
-            X_transformed = self.pca.fit_transform(X)
-            
-            # יצירת DataFrame חדש עם הרכיבים העיקריים
-            pca_columns = [f'PC{i+1}' for i in range(X_transformed.shape[1])]
-            df_pca = pd.DataFrame(X_transformed, columns=pca_columns, index=df_processed.index)
-            
-            # שמירת עמודות לא נומריות
-            non_numeric_cols = df_processed.select_dtypes(exclude=[np.number]).columns
-            for col in non_numeric_cols:
-                df_pca[col] = df_processed[col]
-            
-            # שמירת עמודות חשובות
-            for col in exclude_cols:
-                if col in df_processed.columns:
-                    df_pca[col] = df_processed[col]
-            
-            print(f"PCA completed: {X_transformed.shape[1]} components explain {self.pca.explained_variance_ratio_.sum():.3f} of variance")
-            return df_pca
-        
         return df_processed
