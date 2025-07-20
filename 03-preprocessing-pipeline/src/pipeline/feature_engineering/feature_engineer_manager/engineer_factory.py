@@ -12,7 +12,6 @@ from ..advanced.temporal_features import TemporalFeatureEngineer
 from ..advanced.risk_profile_features import RiskProfileFeatureEngineer
 from ..advanced.anomaly_features import AnomalyFeatureEngineer
 from ..advanced.advanced_interaction_features import AdvancedInteractionFeatureEngineer
-from ..advanced.feature_analysis import FeatureAnalyzer
 
 class EngineerFactory:
     """מפעל ליצירת ולניהול מהנדסי תכונות"""
@@ -30,7 +29,6 @@ class EngineerFactory:
             'risk_profile': (RiskProfileFeatureEngineer, 'create_risk_profile_features'),
             'anomaly': (AnomalyFeatureEngineer, 'create_anomaly_detection_features'),
             'advanced_interaction': (AdvancedInteractionFeatureEngineer, 'create_interaction_features_advanced'),
-            'analyzer': (FeatureAnalyzer, None)
         }
         self.engineers = {}
         self._init_engineers()
