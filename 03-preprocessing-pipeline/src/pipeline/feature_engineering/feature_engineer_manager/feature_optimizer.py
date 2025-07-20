@@ -8,19 +8,7 @@ class FeatureOptimizer:
     
     def __init__(self, factory):
         self.factory = factory
-    
-    def optimize_feature_set(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
-        """אופטימיזציה של סט התכונות"""
-        print("Starting feature set optimization...")
         
-        # הסרת עמודות עם ערך אחיד
-        constant_features = [col for col in df.columns if df[col].nunique() <= 1]
-        if constant_features:
-            df = df.drop(columns=constant_features, errors='ignore')
-        
-        print(f"Optimization completed! Features: {len(df.columns)}")
-        return df
-    
     def remove_high_correlation_features(self, df: pd.DataFrame, threshold: float = 0.95) -> pd.DataFrame:
         """הסרת תכונות עם קורלציה גבוהה"""
         try:
@@ -44,7 +32,4 @@ class FeatureOptimizer:
         except Exception as e:
             print(f"Error removing correlated features: {e}")
             return df
-    
-    def get_feature_importance_analysis(self, df: pd.DataFrame, target_col: str) -> Dict:
-        """ניתוח חשיבות תכונות"""
-        return self.factory.get_analyzer_result('analyze_feature_quality', df, target_col) or {}
+        

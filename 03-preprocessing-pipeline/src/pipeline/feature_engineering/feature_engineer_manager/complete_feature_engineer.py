@@ -31,9 +31,6 @@ class CompleteFeatureEngineer(BaseFeatureEngineer):
     
     def create_statistical_anomalies(self, df: pd.DataFrame, threshold: float = 2.5) -> pd.DataFrame:
         return self.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df, threshold)
-        
-    def optimize_feature_set(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
-        return self.optimizer.optimize_feature_set(df, target_col)
-    
+            
     def get_feature_summary(self, df: pd.DataFrame) -> Dict:
         return self.summary.get_feature_summary(df)

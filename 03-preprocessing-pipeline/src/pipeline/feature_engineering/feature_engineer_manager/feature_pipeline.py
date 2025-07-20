@@ -77,15 +77,7 @@ class FeaturePipeline:
         df = self.processor.apply_encoding_transforms(df, target_col)
         
         ## df = self.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df)
-                    
-        # if self.complete_engineer:
-        #     print("Optimizing feature set...")
-        #     try:
-        #         df = self.complete_engineer.optimize_feature_set(df, target_col)
-        #         print(f"Feature optimization completed. Final features: {len(df.columns)}")
-        #     except Exception as e:
-        #         print(f"Error in feature optimization: {e}")
-        
+                
         # if self.complete_engineer:
         #     print("Generating feature summary...")
         #     try:
