@@ -65,13 +65,3 @@ class EngineerFactory:
             return self.safe_engineer_call(feature_type, method_name, df)
         return df
     
-    def get_analyzer_result(self, method_name: str, df: pd.DataFrame, *args, **kwargs):
-        """קריאה אחודה לאנליזה"""
-        analyzer = self.engineers.get('analyzer')
-        if analyzer:
-            try:
-                method = getattr(analyzer, method_name)
-                return method(df, *args, **kwargs)
-            except Exception as e:
-                print(f"Error in {method_name}: {e}")
-        return None    
