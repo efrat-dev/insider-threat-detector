@@ -40,15 +40,8 @@ class FeatureProcessor:
             print("Statistical transforms applied")
         except Exception as e:
             print(f"Error in statistical transforms: {e}")
-        
-        # שלב 4: טיפול בערכים חסרים
-        try:
-            df = self._handle_missing_values(df)
-            print("Missing values handled")
-        except Exception as e:
-            print(f"Error in missing values handling: {e}")
-        
-        # שלב 5: וידוא טיפוסי נתונים
+                
+        # שלב4  : וידוא טיפוסי נתונים
         try:
             df = self._standardize_data_types(df, target_col)
             print("Data types standardized")
@@ -56,18 +49,6 @@ class FeatureProcessor:
             print(f"Error in data type standardization: {e}")
         
         print(f"Encoding and transformation completed! Features: {len(df.columns)}")
-        return df
-    
-    def _handle_missing_values(self, df: pd.DataFrame) -> pd.DataFrame:
-        """טיפול בערכים חסרים"""
-        # מילוי ערכים חסרים בעמודות נומריות
-        numeric_cols = df.select_dtypes(include=[np.number]).columns
-        df[numeric_cols] = df[numeric_cols].fillna(0)
-        
-        # מילוי ערכים חסרים בעמודות קטגוריות
-        categorical_cols = df.select_dtypes(include=['object']).columns
-        df[categorical_cols] = df[categorical_cols].fillna('unknown')
-        
         return df
     
     def _standardize_data_types(self, df: pd.DataFrame, target_col: str) -> pd.DataFrame:
