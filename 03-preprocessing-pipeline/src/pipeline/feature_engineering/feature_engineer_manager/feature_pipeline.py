@@ -49,6 +49,27 @@ class FeaturePipeline:
         print("Advanced feature engineering completed!")
         return df
     
+        
+    def remove_original_columns(self, df: pd.DataFrame, columns_to_remove=None) -> pd.DataFrame:
+        """הסרת עמודות מקוריות לפני הקידוד"""
+        if columns_to_remove is None:
+            columns_to_remove = ['employee_origin_country', 'country_name', 'first_entry_time', 'last_exit_time']
+        
+        df_processed = df.copy()
+        existing_columns = [col for col in columns_to_remove if col in df_processed.columns]
+        
+        if existing_columns:
+            df_processed = df_processed.drop(columns=existing_columns)
+            print(f"Removed original columns before encoding: {existing_columns}")
+        else:
+            print("No original columns found to remove")
+        
+        return df_processed
+    
+    def apply_complete_feature_engineering(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
+        """החלת הנדסת תכונות מקיפה"""
+        print("Starting complete feature engineering...")
+                    
     def apply_complete_feature_engineering(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
         """החלת הנדסת תכונות מקיפה"""
         print("Starting complete feature engineering...")
@@ -58,6 +79,8 @@ class FeaturePipeline:
         
         # שלב 2: תכונות מתקדמות
         df = self.create_all_advanced_features(df)
+
+        df = self.remove_original_columns(df)
         
         # שלב 3: קידוד מקיף
         df = self.processor.apply_encoding_transforms(df, target_col)
