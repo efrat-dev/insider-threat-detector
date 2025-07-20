@@ -44,31 +44,6 @@ class DataCleaner:
         return df_processed
     
     @staticmethod
-    def detect_outliers(df, columns=None):
-        """זיהוי חריגים באמצעות IQR"""
-        if columns is None:
-            columns = df.select_dtypes(include=[np.number]).columns
-        
-        outliers_info = {}
-        
-        for col in columns:
-            Q1 = df[col].quantile(0.25)
-            Q3 = df[col].quantile(0.75)
-            IQR = Q3 - Q1
-            lower_bound = Q1 - 1.5 * IQR
-            upper_bound = Q3 + 1.5 * IQR
-            
-            outliers = df[(df[col] < lower_bound) | (df[col] > upper_bound)]
-            outliers_info[col] = {
-                'count': len(outliers),
-                'percentage': (len(outliers) / len(df)) * 100,
-                'lower_bound': lower_bound,
-                'upper_bound': upper_bound
-            }
-        
-        return outliers_info
-    
-    @staticmethod
     def handle_outliers(df, method='cap', threshold=0.05):
         """טיפול בחריגים"""
         df_processed = df.copy()
