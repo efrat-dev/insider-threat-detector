@@ -15,7 +15,7 @@ class Config(OrganizationalStructure, BehavioralPatterns, EmployeeAttributes, Ge
     """
     
     # Default dataset parameters
-    DEFAULT_NUM_EMPLOYEES = 1000
+    DEFAULT_NUM_EMPLOYEES = 1666
     DEFAULT_DAYS_RANGE = 180
     DEFAULT_MALICIOUS_RATIO = 0.05
     
