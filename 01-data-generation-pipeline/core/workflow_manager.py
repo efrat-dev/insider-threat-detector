@@ -18,8 +18,6 @@ from data_generator import DataGenerator
 from analyzers.comprehensive_analyzer import ComprehensiveAnalyzer as DataAnalyzer
 from data_exporter import DataExporter
 from core.config_manager import create_output_directory
-from utils.performance_profiler import profile_memory_usage, log_memory_usage
-
 
 def run_analysis_only(args, logger):
     """Run analysis on existing dataset"""
@@ -62,12 +60,7 @@ def run_full_generation(args, logger):
         logger.info(f"  - Print noise rate: {args.print_noise_rate:.1%}")
         logger.info(f"  - Entry time noise rate: {args.entry_time_noise_rate:.1%}")
         logger.info(f"  - Gaussian distribution: {args.use_gaussian}")
-    
-    # Profile initial memory usage
-    if args.profile_performance:
-        initial_memory = profile_memory_usage()
-        log_memory_usage(logger, "Initial", initial_memory)
-    
+        
     # Generate employee profiles
     logger.info("Generating employee profiles...")
     employee_manager = EmployeeManager(args.employees)
@@ -94,12 +87,7 @@ def run_full_generation(args, logger):
     if args.add_noise and 'row_modified' in df.columns:
         modified_count = df['row_modified'].sum()
         logger.info(f"Noise applied to {modified_count:,} records ({modified_count/len(df):.1%})")
-    
-    # Profile memory usage after generation
-    if args.profile_performance:
-        post_gen_memory = profile_memory_usage()
-        log_memory_usage(logger, "After generation", post_gen_memory)
-    
+        
     # Run analysis unless skipped
     if not args.skip_analysis:
         logger.info("Running behavioral analysis...")
