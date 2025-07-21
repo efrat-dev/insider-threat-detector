@@ -14,8 +14,7 @@ class ComprehensiveAnalyzer(BaseAnalyzer):
         self.behavioral_analyzer = BehavioralAnalyzer()
         self.security_analyzer = SecurityAnalyzer()
     
-    def generate_comprehensive_analysis(self, df: pd.DataFrame, 
-                                      malicious_employee_ids: Optional[set] = None) -> Dict[str, Any]:
+    def generate_comprehensive_analysis(self, df: pd.DataFrame) -> Dict[str, Any]:
         """Generate comprehensive analysis of the dataset"""
         analysis = {}
         

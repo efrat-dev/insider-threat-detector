@@ -110,29 +110,3 @@ class DataGenerator(DataGeneratorCore):
         
         return df
     
-    def get_malicious_employees(self) -> set:
-        """Get set of malicious employee IDs"""
-        return self.malicious_employee_ids
-    
-    def get_employee_info(self, emp_id: str) -> Dict[str, Any]:
-        """Get employee information by ID"""
-        return self.employees.get(emp_id, {})
-    
-    def get_dataset_metadata(self) -> Dict[str, Any]:
-        """Get metadata about the generated dataset"""
-        metadata = {
-            'num_employees': self.num_employees,
-            'days_range': self.days_range,
-            'malicious_ratio': self.malicious_ratio,
-            'malicious_employees': self.malicious_employees,
-            'start_date': (datetime.now() - timedelta(days=self.days_range)).date(),
-            'end_date': datetime.now().date(),
-            'total_expected_records': self.num_employees * self.days_range,
-            'noise_injection_enabled': self.add_noise
-        }
-        
-        # Add noise configuration to metadata if enabled
-        if self.add_noise and self.noise_injector:
-            metadata['noise_config'] = self.noise_injector.get_statistics()
-        
-        return metadata

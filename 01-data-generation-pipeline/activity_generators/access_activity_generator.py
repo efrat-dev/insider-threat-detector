@@ -67,13 +67,6 @@ class AccessActivityGenerator:
         start_hour = max(min_work_hour, min(12, start_hour))
         end_hour = max(start_hour + min_work_duration, 
                       min(max_work_hour, end_hour))
-        
-        # Malicious employees - more unusual hours
-        # if is_malicious and np.random.random() < 0.3:
-        #     if np.random.random() < 0.5:
-        #         start_hour = np.random.uniform(5, 7)  # Very early
-        #     else:
-        #         end_hour = np.random.uniform(20, 23)  # Very late
 
 # זדוניים - 1% סיכוי לשעות לילה
         if is_malicious and np.random.random() < 0.01:  # 1% במקום 30%

@@ -114,19 +114,6 @@ Examples:
         help='Suppress all output except errors'
     )
     
-    # Validation options
-    parser.add_argument(
-        '--validate-data',
-        action='store_true',
-        help='Run comprehensive data validation checks'
-    )
-    
-    parser.add_argument(
-        '--profile-performance',
-        action='store_true',
-        help='Profile performance and memory usage'
-    )
-    
     # Noise injection options
     noise_group = parser.add_argument_group('Noise injection options')
     noise_group.add_argument(

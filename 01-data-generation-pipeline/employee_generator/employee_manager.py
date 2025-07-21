@@ -52,24 +52,6 @@ class EmployeeManager:
         for dept, count in sorted(dept_counts.items(), key=lambda x: x[1], reverse=True):
             print(f"  {dept}: {count}")
     
-    def get_employee(self, emp_id):
-        """Get employee profile by ID"""
-        return self.employees.get(emp_id)
-    
-    def get_all_employees(self):
-        """Get all employee profiles"""
-        return self.employees
-    
-    def get_employees_by_department(self, department):
-        """Get all employees in a specific department"""
-        return {emp_id: emp for emp_id, emp in self.employees.items() 
-                if emp['department'] == department}
-    
-    def get_employees_by_behavioral_group(self, group):
-        """Get all employees in a specific behavioral group"""
-        return {emp_id: emp for emp_id, emp in self.employees.items() 
-                if emp['behavioral_group'] == group}
-    
     def select_malicious_employees(self, malicious_ratio=0.05):
         """Select random employees to be malicious"""
         num_malicious = int(len(self.employees) * malicious_ratio)
