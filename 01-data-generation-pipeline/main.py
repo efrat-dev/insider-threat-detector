@@ -18,7 +18,7 @@ import sys
 from datetime import datetime
 
 # Import our modules
-from cli import parse_arguments, validate_arguments, print_banner, print_configuration, print_final_statistics, print_success_message
+from cli import parse_arguments, validate_arguments, print_configuration, print_final_statistics, print_success_message
 from core import setup_logging, setup_random_seed, run_analysis_only, run_full_generation, DataNoiseInjector
 from utils import profile_memory_usage, log_memory_usage
 
@@ -35,7 +35,6 @@ def main():
         
         # Print banner and configuration unless quiet
         if not args.quiet:
-            print_banner()
             print_configuration(args)
         
         # Setup random seed

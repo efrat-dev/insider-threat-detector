@@ -10,17 +10,6 @@ Author: Advanced Security Analytics Team
 Date: 2024
 """
 
-
-def print_banner():
-    """Print application banner"""
-    print("בס\"ד")
-    print("=" * 70)
-    print("    Advanced Insider Threat Dataset Generator")
-    print("    Realistic Behavioral Pattern Simulation")
-    print("=" * 70)
-    print()
-
-
 def print_configuration(args):
     """Print current configuration"""
     print("Configuration:")
