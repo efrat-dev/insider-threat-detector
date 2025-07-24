@@ -139,7 +139,7 @@ class DataTransformer:
         numeric_columns = df_processed.select_dtypes(include=[np.number]).columns
         
         # הוצאת עמודות שלא צריכות נורמליזציה
-        exclude_cols = ['employee_id', 'is_malicious']
+        exclude_cols = ['employee_id', 'is_malicious', 'is_emp_malicios']
         numeric_columns = [col for col in numeric_columns if col not in exclude_cols]
         
         if method == 'standard':

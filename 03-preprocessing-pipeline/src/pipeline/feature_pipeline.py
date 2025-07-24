@@ -1,44 +1,17 @@
 # feature_pipeline.py - Unified Feature Pipeline Module
 import pandas as pd
-from .categorical_encoder import CategoricalEncoder
-from .statistical_transformer import StatisticalTransformer
+from .feature_engineering.feature_engineer_manager.categorical_encoder import CategoricalEncoder
+from .feature_engineering.feature_engineer_manager.statistical_transformer import StatisticalTransformer
 
-class FeaturePipeline:
+class FeatureEngineer:
     """מנהל pipeline של הנדסת תכונות - כולל גם עיבוד וקידוד נתונים"""
     
-    def __init__(self, factory, complete_engineer=None):
-        self.factory = factory
-        self.complete_engineer = complete_engineer
+    def __init__(self):
         self.categorical_encoder = CategoricalEncoder()
         self.statistical_transformer = StatisticalTransformer()
         self.basic_types = ['time', 'printing', 'burning', 'employee', 'access', 'interaction']
         self.advanced_types = ['behavioral', 'temporal', 'risk_profile', 'anomaly', 'advanced_interaction']
 
-    # ==================== Feature Processing Methods (מ-FeatureProcessor) ====================
-
-    
-    def apply_encoding_transforms(self, df: pd.DataFrame, target_col: str) -> pd.DataFrame:
-        """קידוד ועיבוד מקיף"""
-        print("Starting encoding and transformation phase...")
-        
-        # שלב 1: קידוד משתנים קטגוריים
-        try:
-            df = self.categorical_encoder.encode_categorical_variables(df, target_col)
-            print("Categorical encoding completed")
-        except Exception as e:
-            print(f"Error in categorical encoding: {e}")
-        
-        # שלב 2: טרנספורמציות סטטיסטיות
-        try:
-            df = self.statistical_transformer.apply_statistical_transforms(df)
-            print("Statistical transforms applied")
-        except Exception as e:
-            print(f"Error in statistical transforms: {e}")
-        
-        return df  
-    
-
-    
     # ==================== Feature Engineering Methods ====================
     
     def create_all_basic_features(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -92,7 +65,7 @@ class FeaturePipeline:
         
         return df_processed
     
-    def _standardize_data_types(self, df: pd.DataFrame, target_col: str) -> pd.DataFrame:
+    def standardize_data_types(self, df: pd.DataFrame, target_col: str) -> pd.DataFrame:
         """סטנדרטיזציה של טיפוסי נתונים"""
         # המרת עמודות boolean לנומריות
         bool_cols = df.select_dtypes(include=['bool']).columns
@@ -106,21 +79,4 @@ class FeaturePipeline:
                 except:
                     pass
         
-        return df
-    
-    def apply_complete_feature_engineering(self, df: pd.DataFrame, target_col: str = 'is_malicious') -> pd.DataFrame:
-        """החלת הנדסת תכונות מקיפה"""
-        print("Starting complete feature engineering...")
-        
-        # df = self.create_all_basic_features(df)
-        # df = self.create_all_advanced_features(df)
-
-        df = self.remove_original_columns(df)
-        df = self.apply_encoding_transforms(df, target_col)
-
-        # df = self.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df)
-
-        df = self._standardize_data_types(df, target_col)
-        
-        print(f"Complete feature engineering finished! Final features: {len(df.columns)}")
         return df

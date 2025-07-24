@@ -50,7 +50,7 @@ class DataCleaner:
         numeric_columns = df_processed.select_dtypes(include=[np.number]).columns
         
         for col in numeric_columns:
-            if col in ['employee_id', 'is_malicious']:  # לא לטפל בעמודות מזהות ותווית
+            if col in ['employee_id', 'is_malicious', 'is_emp_malicios']:  # לא לטפל בעמודות מזהות ותווית
                 continue
                 
             if method == 'cap':
@@ -91,7 +91,7 @@ class DataCleaner:
         
         # המרת עמודות בוליאניות
         boolean_columns = ['is_contractor', 'has_foreign_citizenship', 'has_criminal_record', 
-                          'has_medical_history', 'is_malicious', 'is_abroad', 'is_hostile_country_trip',
+                          'has_medical_history', 'is_malicious', 'is_emp_malicios', 'is_abroad', 'is_hostile_country_trip',
                           'is_official_trip', 'entered_during_night_hours', 'early_entry_flag',
                           'late_exit_flag', 'entry_during_weekend']
         

@@ -20,7 +20,7 @@ class StatisticalTransformer:
         numeric_columns = df_processed.select_dtypes(include=[np.number]).columns
         
         # הסרת עמודות מיוחדות
-        exclude_cols = ['is_malicious', 'date', 'timestamp']
+        exclude_cols = ['is_malicious', 'is_emp_malicious', 'date', 'timestamp']
         transform_columns = [col for col in numeric_columns if col not in exclude_cols]
         
         print(f"Applying statistical transforms to {len(transform_columns)} numeric columns")

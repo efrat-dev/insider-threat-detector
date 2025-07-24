@@ -62,7 +62,7 @@ class CategoricalEncoder:
         # הוספת כל עמודות object שלא נתפסו
         object_columns = df_processed.select_dtypes(include=['object']).columns
         for col in object_columns:
-            if col not in categorical_columns and col not in ['is_malicious', 'date', 'timestamp']:
+            if col not in categorical_columns and col not in ['is_malicious', 'is_emp_malicios', 'date', 'timestamp']:
                 categorical_columns.append(col)
         
         print(f"Found {len(categorical_columns)} categorical columns to encode:")

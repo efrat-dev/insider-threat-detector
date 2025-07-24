@@ -84,7 +84,7 @@ class AnomalyFeatureEngineer:
         numeric_cols = df.select_dtypes(include=[np.number]).columns
         
         for col in numeric_cols:
-            if col not in ['is_malicious', 'employee_id']:  # דילוג על עמודות לא רלוונטיות
+            if col not in ['is_malicious', 'is_emp_malicios', 'employee_id']:  # דילוג על עמודות לא רלוונטיות
                 z_scores = np.abs(stats.zscore(df[col]))
                 df[f'{col}_z_anomaly'] = (z_scores > threshold).astype(int)
         
