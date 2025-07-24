@@ -1,7 +1,7 @@
 # feature_pipeline.py - Unified Feature Pipeline Module
 import pandas as pd
-from .feature_engineering.feature_engineer_manager.categorical_encoder import CategoricalEncoder
-from .feature_engineering.feature_engineer_manager.statistical_transformer import StatisticalTransformer
+from .categorical_encoder import CategoricalEncoder
+from .statistical_transformer import StatisticalTransformer
 
 class FeatureEngineer:
     """מנהל pipeline של הנדסת תכונות - כולל גם עיבוד וקידוד נתונים"""
