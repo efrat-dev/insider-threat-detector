@@ -1,13 +1,11 @@
 from pipeline.data_cleaning import DataCleaner
 from pipeline.data_transformation import DataTransformer
-# from pipeline.feature_engineering.feature_engineer_manager.complete_feature_engineer import CompleteFeatureEngineer
-from .feature_pipeline import FeatureEngineer
+from .feature_engineer import FeatureEngineer
 class PreprocessingPipeline:
     """Pipeline מלא לעיבוד מקדים"""
     
     def __init__(self):
         self.data_cleaner = DataCleaner()
-        # self.complete_feature_engineer = CompleteFeatureEngineer()  # שימוש במהנדס התכונות המלא
         self.data_transformer = DataTransformer()
         self.feature_engineer = FeatureEngineer()
 
@@ -30,13 +28,10 @@ class PreprocessingPipeline:
             # # 3.2. יצירת תכונות מתקדמות  
             # df = self.feature_engineer.create_all_advanced_features(df)
             
-            # 3.3. הסרת עמודות מקוריות
             df = self.feature_engineer.remove_original_columns(df)
             
-            # 3.4. קידוד משתנים קטגוריאליים
             df = self.feature_engineer.categorical_encoder.encode_categorical_variables(df, target_col)
             
-            # 3.5. טרנספורמציות סטטיסטיות
             df = self.feature_engineer.statistical_transformer.apply_statistical_transforms(df)
             
             # # 3.6. יצירת אנומליות סטטיסטיות (מוערך)
@@ -45,20 +40,15 @@ class PreprocessingPipeline:
             # except Exception as e:
             #     print(f"Error in statistical anomalies: {e}")
             
-            # 3.7. סטנדרטיזציה של טיפוסי נתונים
             df = self.feature_engineer.standardize_data_types(df, target_col)
 
-            # 4. טיפול בחריגים
             df = self.data_cleaner.handle_outliers(df, method='cap')
             
-            # 5. סינון תכונות
-            # שלב 1: הסרת correlation גבוה
+            ##צריך לשנות כאן בשניהם שלא יסיר עמודות עם Z_SCORE
             df = self.data_transformer.feature_filtering(df, method='correlation', threshold=0.95)
             
-            # שלב 2: הסרת variance נמוך - סף מתון יותר
-            df = self.data_transformer.feature_filtering(df, method='variance', threshold=0.0001)  # במקום 0.95!
+            df = self.data_transformer.feature_filtering(df, method='variance', threshold=0.0001)  
             
-            # 6. נורמליזציה
             df = self.data_transformer.normalize_features(df, method='standard')
                         
             print("Full preprocessing pipeline completed successfully!")
