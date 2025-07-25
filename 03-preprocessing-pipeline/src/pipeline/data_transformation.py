@@ -10,45 +10,57 @@ class DataTransformer:
         self.scalers = {}
         self.pca = None
     
-    
+        
     def feature_filtering(self, df: pd.DataFrame, method: str = 'correlation', threshold: float = 0.95) -> pd.DataFrame:
         """
-        סינון תכונות מתקדם עם תמיכה בשיטות שונות
+        סינון תכונות מתקדם עם תמיכה בשיטות שונות והגנה על עמודות z-score
         
         Args:
             df: DataFrame עם הנתונים
             method: שיטת הסינון - 'correlation', 'variance', 'both'
             threshold: סף לסינון
-        
+            
         Returns:
             DataFrame מסונן
         """
         df_processed = df.copy()
         
+        # זיהוי עמודות z-score לצורך הגנה עליהן
+        z_score_columns = [col for col in df_processed.columns if col.endswith('zscore')]
+        print(f"Protected z-score columns: {z_score_columns}")
+        
         if method == 'correlation':
             redundant_features = self.identify_redundant_features_many_columns(df_processed, threshold)
+            # הסרת עמודות z-score מרשימת העמודות למחיקה
+            redundant_features = [col for col in redundant_features if col not in z_score_columns]
             df_processed = df_processed.drop(columns=redundant_features)
-            print(f"Dropped {len(redundant_features)} highly correlated features")
+            print(f"Dropped {len(redundant_features)} highly correlated features (z-score columns protected)")
             
         elif method == 'variance':
             numeric_columns = df_processed.select_dtypes(include=[np.number]).columns
             variances = df_processed[numeric_columns].var()
             low_variance_cols = variances[variances < threshold].index.tolist()
+            # הסרת עמודות z-score מרשימת העמודות למחיקה
+            low_variance_cols = [col for col in low_variance_cols if col not in z_score_columns]
             df_processed = df_processed.drop(columns=low_variance_cols)
-            print(f"Dropped {len(low_variance_cols)} low variance features")
+            print(f"Dropped {len(low_variance_cols)} low variance features (z-score columns protected)")
             
         elif method == 'both':
             # תחילה הסרת correlation
             redundant_features = self.identify_redundant_features_many_columns(df_processed, threshold)
+            # הסרת עמודות z-score מרשימת העמודות למחיקה
+            redundant_features = [col for col in redundant_features if col not in z_score_columns]
             df_processed = df_processed.drop(columns=redundant_features)
-            print(f"Dropped {len(redundant_features)} highly correlated features")
+            print(f"Dropped {len(redundant_features)} highly correlated features (z-score columns protected)")
             
             # לאחר מכן הסרת variance נמוכה
             numeric_columns = df_processed.select_dtypes(include=[np.number]).columns
             variances = df_processed[numeric_columns].var()
             low_variance_cols = variances[variances < threshold].index.tolist()
+            # הסרת עמודות z-score מרשימת העמודות למחיקה
+            low_variance_cols = [col for col in low_variance_cols if col not in z_score_columns]
             df_processed = df_processed.drop(columns=low_variance_cols)
-            print(f"Dropped {len(low_variance_cols)} low variance features")
+            print(f"Dropped {len(low_variance_cols)} low variance features (z-score columns protected)")
         
         return df_processed
     
