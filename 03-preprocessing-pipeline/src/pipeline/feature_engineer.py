@@ -7,9 +7,9 @@ from .feature_creator import FeatureCreator
 class FeatureEngineer:
     """מנהל pipeline של הנדסת תכונות - כולל גם עיבוד וקידוד נתונים"""
     
-    def __init__(self):
+    def __init__(self, model_type='isolation-forest'):
         self.categorical_encoder = CategoricalEncoder()
-        self.statistical_transformer = StatisticalTransformer()
+        self.statistical_transformer = StatisticalTransformer(model_type=model_type)
         self.feature_creator = FeatureCreator()
 
     

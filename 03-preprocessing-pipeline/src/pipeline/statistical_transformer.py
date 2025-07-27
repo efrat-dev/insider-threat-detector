@@ -5,16 +5,17 @@ import warnings
 warnings.filterwarnings('ignore')
 
 class StatisticalTransformer:
-    """מחלקה מיוחדת לטרנספורמציות סטטיסטיות - Z-score ורבעונים בלבד"""
+    """מחלקה מיוחדת לטרנספורמציות סטטיסטיות - Z-score ורבעונים בהתאם לסוג המודל"""
     
-    def __init__(self):
+    def __init__(self, model_type='isolation-forest'):
+        self.model_type = model_type
         self.scalers = {}
         self.fitted_params = {}
         self.is_fitted = False
     
     def fit(self, df):
         """אימון פרמטרי הטרנספורמציות הסטטיסטיות על נתוני הטריין"""
-        print("Fitting statistical transformations parameters...")
+        print(f"Fitting statistical transformations parameters for {self.model_type} model...")
         
         # איפוס פרמטרים
         self.fitted_params = {}
@@ -47,8 +48,8 @@ class StatisticalTransformer:
                     col_params['has_variance'] = col_params['std'] > 0
                     col_params['unique_values'] = df[col].nunique()
                     
-                    # פרמטרים לרבעונים
-                    if col_params['unique_values'] >= 4:
+                    # פרמטרים לרבעונים (רק עבור isolation-forest)
+                    if self.model_type == 'isolation-forest' and col_params['unique_values'] >= 4:
                         try:
                             # שמירת quartile boundaries
                             quartiles = df[col].quantile([0.25, 0.5, 0.75]).values
@@ -61,7 +62,7 @@ class StatisticalTransformer:
                         col_params['use_quartiles'] = False
                         col_params['quartile_bounds'] = None
                     
-                    # שמירת פרמטרי Z-score
+                    # שמירת פרמטרי Z-score (לכל סוגי המודלים)
                     if col_params['has_variance']:
                         scaler = StandardScaler()
                         scaler.fit(df[col].values.reshape(-1, 1))
@@ -74,7 +75,13 @@ class StatisticalTransformer:
                     continue
         
         self.is_fitted = True
-        print(f"Statistical fitting completed for {len(self.fitted_params)} columns")
+        
+        # הדפסת סיכום לפי סוג המודל
+        if self.model_type == 'lstm':
+            print(f"Statistical fitting completed for {len(self.fitted_params)} columns (Z-score only for LSTM)")
+        else:
+            print(f"Statistical fitting completed for {len(self.fitted_params)} columns (Z-score + quartiles for Isolation Forest)")
+        
         return df  
     
     def transform(self, df):
@@ -82,7 +89,7 @@ class StatisticalTransformer:
         if not self.is_fitted:
             raise ValueError("StatisticalTransformer must be fitted before transform")
         
-        print("Transforming data using fitted statistical parameters...")
+        print(f"Transforming data using fitted statistical parameters for {self.model_type} model...")
         df_processed = df.copy()
         
         transform_columns = self.fitted_params.get('transform_columns', [])
@@ -94,7 +101,7 @@ class StatisticalTransformer:
             col_params = self.fitted_params[col]
             
             try:
-                # Z-score עם scaler מהטריין
+                # Z-score עם scaler מהטריין (לכל סוגי המודלים)
                 if col_params.get('has_variance', False) and col in self.scalers:
                     try:
                         df_processed[f'{col}_zscore'] = self.scalers[col].transform(
@@ -104,8 +111,10 @@ class StatisticalTransformer:
                         print(f"Error applying Z-score to {col}: {str(e)}")
                         continue
                 
-                # רבעונים עם boundaries מהטריין
-                if col_params.get('use_quartiles', False) and col_params.get('quartile_bounds') is not None:
+                # רבעונים רק עבור isolation-forest
+                if (self.model_type == 'isolation-forest' and 
+                    col_params.get('use_quartiles', False) and 
+                    col_params.get('quartile_bounds') is not None):
                     try:
                         bounds = col_params['quartile_bounds']
                         df_processed[f'{col}_quartile'] = pd.cut(
@@ -122,7 +131,11 @@ class StatisticalTransformer:
                 print(f"Error transforming column {col}: {str(e)}")
                 continue
         
-        print("Statistical transformations completed")
+        if self.model_type == 'lstm':
+            print("Statistical transformations completed (Z-score only)")
+        else:
+            print("Statistical transformations completed (Z-score + quartiles)")
+        
         return df_processed
     
     def fit_transform(self, df):

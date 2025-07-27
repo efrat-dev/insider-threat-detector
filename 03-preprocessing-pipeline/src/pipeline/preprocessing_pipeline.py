@@ -7,10 +7,11 @@ import pandas as pd
 class PreprocessingPipeline:
     """Pipeline מלא לעיבוד מקדים ללא זליגת מידע"""
     
-    def __init__(self):
+    def __init__(self, model_type='isolation-forest'):
+        self.model_type = model_type
         self.data_cleaner = DataCleaner()
-        self.data_transformer = DataTransformer()
-        self.feature_engineer = FeatureEngineer()
+        self.data_transformer = DataTransformer() 
+        self.feature_engineer = FeatureEngineer(model_type=model_type)
         self.feature_creator = FeatureCreator()
 
         self.fitted_params = {}
@@ -18,7 +19,7 @@ class PreprocessingPipeline:
     
     def fit(self, X_train, y_train=None):
         """אימון הפייפליין על נתוני הטריין בלבד"""
-        print("Fitting preprocessing pipeline on training data...")
+        print(f"Fitting preprocessing pipeline on training data for {self.model_type} model...")
         
         df_train = X_train.copy()
         if y_train is not None:
@@ -45,7 +46,7 @@ class PreprocessingPipeline:
         if not self.is_fitted:
             raise ValueError("Pipeline must be fitted before transform")
         
-        print("Transforming data using fitted pipeline...")
+        print(f"Transforming data using fitted pipeline for {self.model_type} model...")
         df = X.copy()
         
         df = self.data_cleaner.transform_handle_missing_values(df)

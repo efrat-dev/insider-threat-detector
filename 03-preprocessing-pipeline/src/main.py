@@ -90,8 +90,8 @@ def main():
     print(f"Validation: {len(X_val)} samples ({len(X_val)/len(X)*100:.1f}%)")
     print(f"Test: {len(X_test)} samples ({len(X_test)/len(X)*100:.1f}%)")
     
-    # צור את הפייפליין
-    pipeline = PreprocessingPipeline()
+    # צור את הפייפליין עם סוג המודל
+    pipeline = PreprocessingPipeline(model_type=model_type)
     
     # אמן את הפייפליין על הטריין בלבד
     pipeline.fit(X_train, y_train)
