@@ -27,7 +27,6 @@ class FeatureCreator:
         df_processed['off_hours_ratio'] = df_processed['num_print_commands_off_hours'] / np.maximum(df_processed['num_print_commands'], 1)
         df_processed['is_heavy_printer'] = (df_processed['num_print_commands'] > df_processed['num_print_commands'].quantile(0.8)).astype(int)
 
-        print("Essential burning features created successfully")
         return df_processed
         
     def create_temporal_features(self, df):
@@ -78,7 +77,6 @@ class FeatureCreator:
         
     def create_all_features(self, df):
         """יצירת כל התכונות החדשות"""
-        print("Starting comprehensive feature creation...")
         
         df_processed = df.copy()
         df_processed = self.create_temporal_features(df_processed)

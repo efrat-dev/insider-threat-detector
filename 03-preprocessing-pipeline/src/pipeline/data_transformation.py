@@ -40,7 +40,6 @@ class DataTransformer:
                 protected_columns.append(col)
         
         self.fitted_params['filtering']['protected_columns'] = protected_columns
-        print(f"Protected columns ({len(protected_columns)}): {protected_columns[:10]}..." if len(protected_columns) > 10 else protected_columns)
         
         # רשימת עמודות לשמירה
         columns_to_keep = list(df_processed.columns)
@@ -219,7 +218,6 @@ class DataTransformer:
         # שלב 1: בדיקה בתוך כל chunk
         for chunk_idx, chunk in enumerate(chunks):
             if len(chunk) > 1:
-                print(f"Processing within chunk {chunk_idx + 1}/{len(chunks)}")
                 try:
                     corr_matrix = df_sample[chunk].corr().abs()
                     
@@ -236,7 +234,6 @@ class DataTransformer:
         # שלב 2: בדיקה בין כל זוגות chunks (בדיקה מלאה!)
         for i in range(len(chunks)):
             for j in range(i+1, len(chunks)):
-                print(f"Checking between chunks {i+1} and {j+1}")
                 
                 chunk1, chunk2 = chunks[i], chunks[j]
                 combined = list(chunk1) + list(chunk2)

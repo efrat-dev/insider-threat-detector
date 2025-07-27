@@ -78,16 +78,11 @@ class CategoricalEncoder:
         for col in object_columns:
             if col not in self.categorical_columns and col not in ['is_malicious', 'is_emp_malicios', 'target', 'date', 'timestamp']:
                 self.categorical_columns.append(col)
-        
-        print(f"Found {len(self.categorical_columns)} categorical columns to encode:")
-        print(self.categorical_columns)
-        
+                
         for col in self.categorical_columns:
             if col not in df.columns:
                 continue
-            
-            print(f"Learning encoding for column: {col}")
-            
+                        
             # העתקת הנתונים לעבודה
             df_work = df.copy()
             col_data = df_work[col].astype(str)
@@ -96,7 +91,6 @@ class CategoricalEncoder:
             try:
                 if unique_values == 1:
                     self.encoding_strategies[col] = 'skip'
-                    print(f"  Column {col} has only one unique value, will skip")
                     
                 elif unique_values == 2:
                     # קידוד בינארי פשוט
@@ -164,9 +158,7 @@ class CategoricalEncoder:
                         self.encoding_strategies[col] = 'minimal'
                         freq_map = col_data.value_counts().to_dict()
                         self.frequency_encodings[col] = freq_map
-                
-                print(f"  Successfully learned encoding for {col} with {unique_values} unique values")
-                
+                                
             except Exception as e:
                 print(f"  Error learning encoding for column {col}: {str(e)}")
                 self.encoding_strategies[col] = 'skip'
@@ -196,9 +188,7 @@ class CategoricalEncoder:
             if strategy == 'skip':
                 columns_to_drop.append(col)
                 continue
-            
-            print(f"Transforming column: {col} with strategy: {strategy}")
-            
+                        
             # החלת קיבוצי קטגוריות אם קיימים
             col_data = df_processed[col].astype(str).fillna('missing')
             if col in self.category_groupings:
@@ -246,9 +236,7 @@ class CategoricalEncoder:
                         encoded_features.append(f'{col}_freq')
                     
                     columns_to_drop.append(col)
-                
-                print(f"Successfully transformed {col}")
-                
+                                
             except Exception as e:
                 print(f"  Error transforming column {col}: {str(e)}")
                 columns_to_drop.append(col)
