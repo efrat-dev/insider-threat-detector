@@ -54,7 +54,6 @@ class StatisticalTransformer:
                     
                     # בדיקות לטרנספורמציות
                     col_params['can_log'] = (df[col] >= 0).all()
-                    col_params['can_sqrt'] = (df[col] >= 0).all()
                     col_params['has_variance'] = col_params['std'] > 0
                     col_params['unique_values'] = df[col].nunique()
                     
@@ -108,11 +107,7 @@ class StatisticalTransformer:
                 # טרנספורמציה לוגריתמית
                 if col_params.get('can_log', False):
                     df_processed[f'{col}_log'] = np.log1p(df_processed[col])
-                
-                # טרנספורמציה שורש
-                if col_params.get('can_sqrt', False):
-                    df_processed[f'{col}_sqrt'] = np.sqrt(np.maximum(df_processed[col], 0))
-                
+                                
                 # Z-score עם scaler מהטריין
                 if col_params.get('has_variance', False) and col in self.scalers:
                     try:

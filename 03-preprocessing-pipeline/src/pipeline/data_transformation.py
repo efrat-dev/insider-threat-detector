@@ -25,8 +25,8 @@ class DataTransformer:
         df_processed = df.copy()
         
         # זיהוי כל עמודות הטרנספורמציות הסטטיסטיות לצורך הגנה עליהן
-        # statistical_transformations = ['zscore', 'log', 'sqrt', 'above_mean', 'quartile']
-        statistical_transformations = ['zscore', 'quartile']
+        statistical_transformations = ['zscore', 'log', 'above_mean', 'quartile']
+
         protected_columns = []
         
         for col in df_processed.columns:
