@@ -7,7 +7,7 @@ class FeatureCreator:
     def __init__(self):
         pass
     
-    def create_burning_features(self, df):
+    def create_media_features(self, df):
         """יצירת תכונות שריפה חיוניות בלבד"""
         df_processed = df.copy()
         
@@ -21,6 +21,12 @@ class FeatureCreator:
         
         df_processed['is_heavy_burner'] = (df_processed['num_burn_requests'] > df_processed['num_burn_requests'].quantile(0.8)).astype(int)
         
+        df_processed['avg_pages_per_print'] = df_processed['total_printed_pages'] / np.maximum(df_processed['num_print_commands'], 1)
+        df_processed['print_intensity'] = df_processed['num_print_commands'] / np.maximum(df_processed['total_presence_minutes'] / 60, 1)
+        
+        df_processed['off_hours_ratio'] = df_processed['num_print_commands_off_hours'] / np.maximum(df_processed['num_print_commands'], 1)
+        df_processed['is_heavy_printer'] = (df_processed['num_print_commands'] > df_processed['num_print_commands'].quantile(0.8)).astype(int)
+
         print("Essential burning features created successfully")
         return df_processed
         
@@ -59,19 +65,6 @@ class FeatureCreator:
 
         return df_processed
     
-    def create_printing_features(self, df):
-        """יצירת תכונות הדפסה חיוניות בלבד"""
-        df_processed = df.copy()
-        
-        df_processed['avg_pages_per_print'] = df_processed['total_printed_pages'] / np.maximum(df_processed['num_print_commands'], 1)
-        df_processed['print_intensity'] = df_processed['num_print_commands'] / np.maximum(df_processed['total_presence_minutes'] / 60, 1)
-        
-        df_processed['color_print_ratio'] = df_processed['num_color_prints'] / np.maximum(df_processed['num_print_commands'], 1)
-        df_processed['off_hours_ratio'] = df_processed['num_print_commands_off_hours'] / np.maximum(df_processed['num_print_commands'], 1)
-        df_processed['is_heavy_printer'] = (df_processed['num_print_commands'] > df_processed['num_print_commands'].quantile(0.8)).astype(int)
-        
-        return df_processed
-        
     def create_employee_features(self, df):
         """יצירת תכונות עובד חיוניות בלבד"""
         df_processed = df.copy()
@@ -96,8 +89,7 @@ class FeatureCreator:
         
         df_processed = df.copy()
         df_processed = self.create_temporal_features(df_processed)
-        df_processed = self.create_printing_features(df_processed)
-        df_processed = self.create_burning_features(df_processed)
+        df_processed = self.create_media_features(df_processed)
         df_processed = self.create_employee_features(df_processed)
 
         return df_processed
