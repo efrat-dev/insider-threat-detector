@@ -16,7 +16,7 @@ class FeatureEngineer:
     def remove_original_columns(self, df: pd.DataFrame, columns_to_remove=None) -> pd.DataFrame:
         """הסרת עמודות מקוריות לפני הקידוד"""
         if columns_to_remove is None:
-            columns_to_remove = ['employee_origin_country', 'country_name', 'first_entry_time', 'last_exit_time', 'modification_details', 'row_modified']
+            columns_to_remove = ['employee_origin_country', 'country_name', 'first_entry_time', 'last_exit_time', 'date', 'modification_details', 'row_modified']
         
         df_processed = df.copy()
         existing_columns = [col for col in columns_to_remove if col in df_processed.columns]
