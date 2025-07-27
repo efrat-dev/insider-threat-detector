@@ -1,59 +1,68 @@
 from pipeline.data_cleaning import DataCleaner
 from pipeline.data_transformation import DataTransformer
 from .feature_engineer import FeatureEngineer
+from .feature_creator import FeatureCreator
+import pandas as pd
+
 class PreprocessingPipeline:
-    """Pipeline מלא לעיבוד מקדים"""
+    """Pipeline מלא לעיבוד מקדים ללא זליגת מידע"""
     
     def __init__(self):
         self.data_cleaner = DataCleaner()
         self.data_transformer = DataTransformer()
         self.feature_engineer = FeatureEngineer()
+        self.feature_creator = FeatureCreator()
 
-    def create_full_pipeline(self, target_col='is_malicious'):
-        """יצירת pipeline מלא לעיבוד מקדים"""
-        def full_preprocessing(df):
-            print("Starting full preprocessing pipeline...")
-            
-            # 1. טיפול בערכים חסרים
-            df = self.data_cleaner.handle_missing_values(df)
-            
-            # 2. המרת טיפוסי נתונים
-            df = self.data_cleaner.convert_data_types(df)
-            
-            # 3. יצירת כל התכונות הבסיסיות (מחליף את השלבים 3-7 הקודמים)
-
-            # # 3.1. יצירת תכונות בסיסיות
-            # df = self.feature_engineer.create_all_basic_features(df)
-            
-            # # 3.2. יצירת תכונות מתקדמות  
-            # df = self.feature_engineer.create_all_advanced_features(df)
-            
-            df = self.feature_engineer.remove_original_columns(df)
-            
-            df = self.feature_engineer.categorical_encoder.encode_categorical_variables(df, target_col)
-            
-            df = self.feature_engineer.statistical_transformer.apply_statistical_transforms(df)
-            
-            # # 3.6. יצירת אנומליות סטטיסטיות (מוערך)
-            # try:
-            #     df = self.feature_engineer.factory.safe_engineer_call('anomaly', 'create_statistical_anomalies', df)
-            # except Exception as e:
-            #     print(f"Error in statistical anomalies: {e}")
-            
-            df = self.feature_engineer.standardize_data_types(df, target_col)
-
-            df = self.data_cleaner.handle_outliers(df, method='cap')
-            
-            ##צריך לשנות כאן בשניהם שלא יסיר עמודות עם Z_SCORE
-            df = self.data_transformer.feature_filtering(df, method='correlation', threshold=0.95)
-            
-            df = self.data_transformer.feature_filtering(df, method='variance', threshold=0.0001)  
-            
-            df = self.data_transformer.normalize_features(df, method='standard')
-                        
-            print("Full preprocessing pipeline completed successfully!")
-            print(f"Final DataFrame shape: {df.shape}")
-            return df
+        self.fitted_params = {}
+        self.is_fitted = False
+    
+    def fit(self, X_train, y_train=None):
+        """אימון הפייפליין על נתוני הטריין בלבד"""
+        print("Fitting preprocessing pipeline on training data...")
         
+        df_train = X_train.copy()
+        if y_train is not None:
+            df_train['target'] = y_train
+        
+        df_train = self.data_cleaner.fit_handle_missing_values(df_train)
+        
+        df_train = self.data_cleaner.convert_data_types(df_train)
 
-        return full_preprocessing
+        df_train = self.feature_engineer.fit_apply_all_feature_engineering(df_train)
+
+        df_train = self.data_cleaner.fit_handle_outliers(df_train, method='cap')
+        
+        df_train = self.data_transformer.fit_feature_filtering(df_train)
+        
+        self.data_transformer.fit_normalize_features(df_train)
+        
+        self.is_fitted = True
+        print("Pipeline fitting completed!")
+        return self
+    
+    def transform(self, X):
+        """החלת הפייפליין על דאטה חדש (טריין או טסט)"""
+        if not self.is_fitted:
+            raise ValueError("Pipeline must be fitted before transform")
+        
+        print("Transforming data using fitted pipeline...")
+        df = X.copy()
+        
+        df = self.data_cleaner.transform_handle_missing_values(df)
+        
+        df = self.data_cleaner.convert_data_types(df)
+        
+        df = self.feature_engineer.transform_apply_all_feature_engineering(df)
+
+        df = self.data_cleaner.transform_handle_outliers(df)
+        
+        df = self.data_transformer.transform_feature_filtering(df)
+        
+        df = self.data_transformer.transform_normalize_features(df)
+        
+        print(f"Transform completed! Shape: {df.shape}")
+        return df
+    
+    def fit_transform(self, X_train, y_train=None):
+        """fit + transform במקום אחד לנתוני הטריין"""
+        return self.fit(X_train, y_train).transform(X_train)

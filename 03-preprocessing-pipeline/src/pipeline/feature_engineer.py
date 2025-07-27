@@ -2,6 +2,7 @@
 import pandas as pd
 from .categorical_encoder import CategoricalEncoder
 from .statistical_transformer import StatisticalTransformer
+from .feature_creator import FeatureCreator
 
 class FeatureEngineer:
     """מנהל pipeline של הנדסת תכונות - כולל גם עיבוד וקידוד נתונים"""
@@ -9,45 +10,8 @@ class FeatureEngineer:
     def __init__(self):
         self.categorical_encoder = CategoricalEncoder()
         self.statistical_transformer = StatisticalTransformer()
-        self.basic_types = ['time', 'printing', 'burning', 'employee', 'access', 'interaction']
-        self.advanced_types = ['behavioral', 'temporal', 'risk_profile', 'anomaly', 'advanced_interaction']
+        self.feature_creator = FeatureCreator()
 
-    # ==================== Feature Engineering Methods ====================
-    
-    def create_all_basic_features(self, df: pd.DataFrame) -> pd.DataFrame:
-        """יצירת כל התכונות הבסיסיות"""
-        print("Starting basic feature engineering...")
-        for feature_type in self.basic_types:
-            try:
-                df = self.factory.create_features_by_type(df, feature_type)
-                print(f"{feature_type} features created")
-            except Exception as e:
-                print(f"Error in {feature_type}: {e}")
-        return df
-    
-    def create_all_advanced_features(self, df: pd.DataFrame) -> pd.DataFrame:
-        """יצירת כל התכונות המתקדמות"""
-        print("Starting advanced feature engineering...")
-        for feature_type in self.advanced_types:
-            try:
-                df = self.factory.create_features_by_type(df, feature_type)
-            except Exception as e:
-                print(f"Error in {feature_type}: {e}")
-        
-        # תכונות מתקדמות מיוחדות
-        specialized_methods = [
-            ('ratio', 'create_ratio_features'),
-            ('polynomial', 'create_polynomial_features')
-        ]
-        
-        for name, method in specialized_methods:
-            try:
-                df = self.factory.safe_engineer_call('advanced_interaction', method, df)
-            except Exception as e:
-                print(f"Error in {name}: {e}")
-        
-        print("Advanced feature engineering completed!")
-        return df
     
     def remove_original_columns(self, df: pd.DataFrame, columns_to_remove=None) -> pd.DataFrame:
         """הסרת עמודות מקוריות לפני הקידוד"""
@@ -65,18 +29,66 @@ class FeatureEngineer:
         
         return df_processed
     
-    def standardize_data_types(self, df: pd.DataFrame, target_col: str) -> pd.DataFrame:
+    def standardize_data_types(self, df: pd.DataFrame) -> pd.DataFrame:
         """סטנדרטיזציה של טיפוסי נתונים"""
+        # זיהוי אוטומטי של עמודת המטרה
+        possible_targets = ['target', 'is_malicious', 'is_emp_malicious']
+        target_col = next((col for col in possible_targets if col in df.columns), None)
+        
         # המרת עמודות boolean לנומריות
         bool_cols = df.select_dtypes(include=['bool']).columns
         df[bool_cols] = df[bool_cols].astype(int)
         
         # המרת עמודות object שהן למעשה נומריות
         for col in df.select_dtypes(include=['object']).columns:
-            if col != target_col:
+            if target_col is None or col != target_col:
                 try:
                     df[col] = pd.to_numeric(df[col], errors='ignore')
                 except:
                     pass
         
         return df
+    
+    def fit_apply_all_feature_engineering(self, df):
+            """הפעלת כל שלבי הנדסת התכונות + fit על encoding וטרנספורמציות"""
+            print("Starting comprehensive feature engineering with fitting...")
+            
+            # שלב 1: יצירת תכונות בסיסית
+            df_processed = self.feature_creator.create_all_features(df)
+            df_processed = self.remove_original_columns(df_processed)
+            df_processed = self.standardize_data_types(df_processed)
+            
+            # שלב 2: fit + encoding קטגוריאלי
+            print("Fitting and applying categorical encoding...")
+            df_processed = self.categorical_encoder.fit_encode(df_processed)
+            
+            # שלב 3: fit + טרנספורמציות סטטיסטיות
+            print("Fitting and applying statistical transformations...")
+            df_processed = self.statistical_transformer.fit_transform(df_processed)
+            
+            self.is_fitted = True
+            print(f"Feature engineering with fitting completed. Final shape: {df_processed.shape}")
+            return df_processed
+        
+    def transform_apply_all_feature_engineering(self, df):
+            """הפעלת כל שלבי הנדסת התכונות + transform על encoding וטרנספורמציות"""
+            if not self.is_fitted:
+                raise ValueError("FeatureEngineer must be fitted before transform")
+            
+            print("Starting comprehensive feature engineering with transform...")
+            
+            # שלב 1: יצירת תכונות בסיסית
+            df_processed = self.feature_creator.create_all_features(df)
+            df_processed = self.remove_original_columns(df_processed)
+            df_processed = self.standardize_data_types(df_processed)
+            
+            # שלב 2: transform encoding קטגוריאלי
+            print("Applying categorical encoding transform...")
+            df_processed = self.categorical_encoder.transform_encode(df_processed)
+            
+            # שלב 3: transform טרנספורמציות סטטיסטיות
+            print("Applying statistical transformations transform...")
+            df_processed = self.statistical_transformer.transform(df_processed)
+            
+            print(f"Feature engineering transform completed. Final shape: {df_processed.shape}")
+            return df_processed
