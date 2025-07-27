@@ -38,17 +38,10 @@ class FeatureCreator:
         df_processed['date'] = pd.to_datetime(df_processed['date'], errors='coerce')
         df_processed['weekday'] = df_processed['date'].dt.weekday
         df_processed['month'] = df_processed['date'].dt.month
-        df_processed['quarter'] = df_processed['date'].dt.quarter
 
         df_processed['is_end_of_month'] = (df_processed['date'].dt.day >= 25).astype(int)
         df_processed['is_quarter_end'] = df_processed['month'].isin([3, 6, 9, 12]).astype(int)
 
-        df_processed['season'] = df_processed['month'].map({
-            12: 'winter', 1: 'winter', 2: 'winter',
-            3: 'spring', 4: 'spring', 5: 'spring',
-            6: 'summer', 7: 'summer', 8: 'summer',
-            9: 'autumn', 10: 'autumn', 11: 'autumn'
-        })
         df_processed['first_entry_time'] = pd.to_datetime(df_processed.get('first_entry_time'), errors='coerce')
         df_processed['entry_hour'] = df_processed['first_entry_time'].dt.hour
         df_processed['entry_minute'] = df_processed['first_entry_time'].dt.minute
