@@ -6,23 +6,6 @@ A comprehensive data preprocessing and feature engineering pipeline for insider 
 
 This project provides a complete data processing pipeline specifically designed for insider threat detection datasets. It includes advanced data cleaning, feature engineering, transformation, and quality validation capabilities to prepare security data for machine learning models.
 
-## Project Structure
-
-```
-src/
-├── pipeline/
-│   ├── preprocessing_pipeline.py          # Main pipeline orchestrator
-│   ├── base_preprocessor.py               # Base preprocessing utilities
-│   ├── data_cleaning.py                   # Data cleaning and validation
-│   ├── data_transformation.py             # Data transformation utilities
-│   ├── feature_engineering/
-│   │   ├── basic/                         # Basic feature engineering
-│   │   ├── advanced/                      # Advanced feature engineering
-│   │   └── feature_engineer_manager/
-│   │       └── complete_feature_engineer.py   # Complete feature engineering manager
-│   └── main.py                            # Main execution script
-```
-
 ## Features
 
 ### 🔧 Data Processing Pipeline
