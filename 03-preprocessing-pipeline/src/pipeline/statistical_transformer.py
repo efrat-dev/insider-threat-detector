@@ -1,16 +1,14 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
-from scipy import stats
 import warnings
 warnings.filterwarnings('ignore')
 
 class StatisticalTransformer:
-    """מחלקה מיוחדת לטרנספורמציות סטטיסטיות"""
+    """מחלקה מיוחדת לטרנספורמציות סטטיסטיות - Z-score ורבעונים בלבד"""
     
     def __init__(self):
         self.scalers = {}
-        self.feature_stats = {}
         self.fitted_params = {}
         self.is_fitted = False
     
@@ -21,7 +19,6 @@ class StatisticalTransformer:
         # איפוס פרמטרים
         self.fitted_params = {}
         self.scalers = {}
-        self.feature_stats = {}
         
         # זיהוי עמודות מספריות לטרנספורמציה
         numeric_columns = df.select_dtypes(include=[np.number]).columns
@@ -46,14 +43,7 @@ class StatisticalTransformer:
                 
                 try:
                     # פרמטרים בסיסיים
-                    col_params['mean'] = df[col].mean()
-                    col_params['median'] = df[col].median()
                     col_params['std'] = df[col].std()
-                    col_params['min_val'] = df[col].min()
-                    col_params['max_val'] = df[col].max()
-                    
-                    # בדיקות לטרנספורמציות
-                    col_params['can_log'] = (df[col] >= 0).all()
                     col_params['has_variance'] = col_params['std'] > 0
                     col_params['unique_values'] = df[col].nunique()
                     
@@ -104,26 +94,15 @@ class StatisticalTransformer:
             col_params = self.fitted_params[col]
             
             try:
-                # טרנספורמציה לוגריתמית
-                if col_params.get('can_log', False):
-                    df_processed[f'{col}_log'] = np.log1p(df_processed[col])
-                                
                 # Z-score עם scaler מהטריין
                 if col_params.get('has_variance', False) and col in self.scalers:
                     try:
                         df_processed[f'{col}_zscore'] = self.scalers[col].transform(
                             df_processed[col].values.reshape(-1, 1)
                         ).flatten()
-                    except:
-                        # fallback manual calculation
-                        df_processed[f'{col}_zscore'] = (
-                            df_processed[col] - col_params['mean']
-                        ) / col_params['std']
-                
-                # בינארי (מעל/מתחת לממוצע מהטריין)
-                df_processed[f'{col}_above_mean'] = (
-                    df_processed[col] > col_params['mean']
-                ).astype(int)
+                    except Exception as e:
+                        print(f"Error applying Z-score to {col}: {str(e)}")
+                        continue
                 
                 # רבעונים עם boundaries מהטריין
                 if col_params.get('use_quartiles', False) and col_params.get('quartile_bounds') is not None:
@@ -135,14 +114,9 @@ class StatisticalTransformer:
                             labels=[0, 1, 2, 3],
                             include_lowest=True
                         ).astype(int)
-                    except:
-                        # fallback לבינארי מול median
-                        median_val = col_params['median']
-                        df_processed[f'{col}_quartile'] = np.where(
-                            df_processed[col] <= median_val, 0, 1
-                        )
-                else:
-                    df_processed[f'{col}_quartile'] = 0
+                    except Exception as e:
+                        print(f"Error applying quartiles to {col}: {str(e)}")
+                        continue
                         
             except Exception as e:
                 print(f"Error transforming column {col}: {str(e)}")
