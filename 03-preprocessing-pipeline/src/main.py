@@ -102,10 +102,21 @@ def main():
     X_test_processed = pipeline.transform(X_test)
     
     # הכן DataFrames עם הטרגט
-    train_df = pd.concat([X_train_processed, y_train.reset_index(drop=True)], axis=1)
-    val_df = pd.concat([X_val_processed, y_val.reset_index(drop=True)], axis=1)
-    test_df = pd.concat([X_test_processed, y_test.reset_index(drop=True)], axis=1)
-    
+    train_df = pd.concat([
+        X_train_processed.reset_index(drop=True), 
+        y_train.reset_index(drop=True)
+    ], axis=1)
+
+    val_df = pd.concat([
+        X_val_processed.reset_index(drop=True), 
+        y_val.reset_index(drop=True)
+    ], axis=1)
+
+    test_df = pd.concat([
+        X_test_processed.reset_index(drop=True), 
+        y_test.reset_index(drop=True)
+    ], axis=1)
+
     # שמור את התוצאות עם סיומת המודל
     train_filename = f'train_processed_{model_type.replace("-", "_")}.csv'
     val_filename = f'val_processed_{model_type.replace("-", "_")}.csv'
