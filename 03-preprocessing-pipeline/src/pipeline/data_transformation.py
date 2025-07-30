@@ -34,7 +34,7 @@ class DataTransformer:
                 protected_columns.append(col)
         
         # הוספת עמודות חשובות נוספות שלא רוצים למחוק
-        essential_columns = ['employee_id', 'is_malicious', 'is_emp_malicious_binary', 'date']
+        essential_columns = ['employee_id', 'is_malicious', 'is_emp_malicious_binary', 'date', 'first_entry_time', 'last_exit_time']
         for col in essential_columns:
             if col in df_processed.columns and col not in protected_columns:
                 protected_columns.append(col)
@@ -124,7 +124,7 @@ class DataTransformer:
         numeric_columns = df.select_dtypes(include=[np.number]).columns
         
         # הוצאת עמודות שלא צריכות נורמליזציה
-        exclude_cols = ['employee_id', 'is_malicious', 'is_emp_malicious_binary', 'target']
+        exclude_cols = ['employee_id', 'is_malicious', 'is_emp_malicious_binary', 'target', 'date', 'first_entry_time', 'last_exit_time']
         numeric_columns = [col for col in numeric_columns if col not in exclude_cols]
         
         # שמירת רשימת העמודות לנורמליזציה

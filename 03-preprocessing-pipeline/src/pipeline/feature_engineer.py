@@ -16,7 +16,7 @@ class FeatureEngineer:
     def remove_original_columns(self, df: pd.DataFrame, columns_to_remove=None) -> pd.DataFrame:
         """הסרת עמודות מקוריות לפני הקידוד"""
         if columns_to_remove is None:
-            columns_to_remove = ['employee_origin_country', 'country_name', 'first_entry_time', 'last_exit_time', 'date', 'modification_details', 'row_modified']
+            columns_to_remove = ['employee_origin_country', 'country_name',  'modification_details', 'row_modified']
         
         df_processed = df.copy()
         existing_columns = [col for col in columns_to_remove if col in df_processed.columns]
@@ -31,6 +31,8 @@ class FeatureEngineer:
     
     def standardize_data_types(self, df: pd.DataFrame) -> pd.DataFrame:
         """סטנדרטיזציה של טיפוסי נתונים"""
+        exclude_cols = {'first_entry_time', 'last_exit_time', 'date'}
+
         # זיהוי אוטומטי של עמודת המטרה
         possible_targets = ['target', 'is_malicious', 'is_emp_malicious']
         target_col = next((col for col in possible_targets if col in df.columns), None)
@@ -39,16 +41,16 @@ class FeatureEngineer:
         bool_cols = df.select_dtypes(include=['bool']).columns
         df[bool_cols] = df[bool_cols].astype(int)
         
-        # המרת עמודות object שהן למעשה נומריות
+        # המרת עמודות object שהן למעשה נומריות, מלבד עמודות מוחרגות
         for col in df.select_dtypes(include=['object']).columns:
-            if target_col is None or col != target_col:
+            if col not in exclude_cols and (target_col is None or col != target_col):
                 try:
                     df[col] = pd.to_numeric(df[col], errors='ignore')
                 except:
                     pass
-        
+
         return df
-    
+        
     def fit_apply_all_feature_engineering(self, df):
             """הפעלת כל שלבי הנדסת התכונות + fit על encoding וטרנספורמציות"""
             print("Starting comprehensive feature engineering with fitting...")

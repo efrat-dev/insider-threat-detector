@@ -114,16 +114,17 @@ class DataCleaner:
         if not self.is_fitted or 'outliers' not in self.fitted_params:
             print("Warning: Outliers parameters not fitted, skipping outliers handling")
             return df
-        
+
         print("Transforming outliers using fitted parameters...")
         df_processed = df.copy()
         method = self.fitted_params['outliers']['method']
-        
+        exclude_cols = {'first_entry_time', 'last_exit_time', 'date'}
+
         for col, bounds in self.fitted_params['outliers']['bounds'].items():
-            if col in df_processed.columns:
+            if col in df_processed.columns and col not in exclude_cols:
                 lower_bound = bounds['lower_bound']
                 upper_bound = bounds['upper_bound']
-                
+
                 if method == 'cap':
                     df_processed[col] = np.where(df_processed[col] < lower_bound, lower_bound, df_processed[col])
                     df_processed[col] = np.where(df_processed[col] > upper_bound, upper_bound, df_processed[col])
@@ -133,7 +134,7 @@ class DataCleaner:
                         (df_processed[col] < lower_bound) | (df_processed[col] > upper_bound),
                         np.nan, df_processed[col]
                     )
-        
+
         print(f"Outliers transformed using {method} method")
         return df_processed
     
