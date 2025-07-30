@@ -19,22 +19,26 @@ def split_data_for_isolation_forest(X, y):
     
     return X_train, X_val, X_test, y_train, y_val, y_test
 
-def split_data_for_lstm(X, y, date_column='date'):
-    """חלוקה זמנית עבור LSTM"""
-    print("Using temporal split for LSTM...")
+def split_data_for_lstm(X, y, employee_col='employee_id', date_col='date'):
+    """חלוקה עם מיון לפי עובד ותאריך עבור LSTM"""
+    print("Using employee-ordered split for LSTM...")
     
-    # וודא שהדאטה ממויין לפי תאריך
-    if date_column in X.columns:
-        # צור DataFrame מאוחד לסורטינג
-        combined_df = pd.concat([X, y], axis=1)
-        combined_df = combined_df.sort_values(by=date_column)
-        
-        # פצל בחזרה
-        X_sorted = combined_df.drop(columns=[y.name])
-        y_sorted = combined_df[y.name]
+    # צור DataFrame מאוחד למיון
+    combined_df = pd.concat([X, y], axis=1)
+    
+    # מיין לפי employee_id ואז לפי date
+    if employee_col in combined_df.columns and date_col in combined_df.columns:
+        combined_df = combined_df.sort_values(by=[employee_col, date_col])
+        print(f"Data sorted by {employee_col} and {date_col}")
+    elif employee_col in combined_df.columns:
+        combined_df = combined_df.sort_values(by=employee_col)
+        print(f"Data sorted by {employee_col} only (date column not found)")
     else:
-        print(f"Warning: Date column '{date_column}' not found. Using index order.")
-        X_sorted, y_sorted = X, y
+        print(f"Warning: Employee column '{employee_col}' not found. Using original order.")
+    
+    # פצל בחזרה ל-X ו-y
+    X_sorted = combined_df.drop(columns=[y.name])
+    y_sorted = combined_df[y.name]
     
     n_samples = len(X_sorted)
     
@@ -71,8 +75,9 @@ def main():
     df = pd.read_csv('insider_threat_dataset.csv')
     df = df.astype({col: 'float32' for col in df.select_dtypes(include=['float64']).columns})
     
-    # אם אסור למחוק את העמודה הזו - צריך לראות האם להסיר אותה מהעיבוד כמו טרגט
-    df = df.drop(columns=['is_emp_malicious'])
+    # הסר עמודות שלא רלוונטיות
+    if 'is_emp_malicious' in df.columns:
+        df = df.drop(columns=['is_emp_malicious'])
     
     # הכן את הדאטה לחלוקה
     target_col = 'is_malicious'
@@ -116,8 +121,8 @@ def main():
         X_test_processed.reset_index(drop=True), 
         y_test.reset_index(drop=True)
     ], axis=1)
-
-    # שמור את התוצאות עם סיומת המודל
+    
+    # שמור קבצי CSV
     train_filename = f'train_processed_{model_type.replace("-", "_")}.csv'
     val_filename = f'val_processed_{model_type.replace("-", "_")}.csv'
     test_filename = f'test_processed_{model_type.replace("-", "_")}.csv'
