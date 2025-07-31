@@ -73,52 +73,73 @@ def main():
     
     # טען את הדאטה
     df = pd.read_csv('insider_threat_dataset.csv')
+    print(f"Original dataset size: {len(df)} records")
+    
+    # המרה לfloat32 כדי לחסוך זיכרון
     df = df.astype({col: 'float32' for col in df.select_dtypes(include=['float64']).columns})
     
     # הסר עמודות שלא רלוונטיות
     if 'is_emp_malicious' in df.columns:
         df = df.drop(columns=['is_emp_malicious'])
     
-    # הכן את הדאטה לחלוקה
+    # הכן את הדאטה לעיבוד
     target_col = 'is_malicious'
     X = df.drop(columns=[target_col])
     y = df[target_col]
     
-    # חלק את הדאטה לפי סוג המודל
-    if model_type == 'isolation-forest':
-        X_train, X_val, X_test, y_train, y_val, y_test = split_data_for_isolation_forest(X, y)
-    elif model_type == 'lstm':
-        X_train, X_val, X_test, y_train, y_val, y_test = split_data_for_lstm(X, y)
-    
-    print(f"\nDataset split sizes:")
-    print(f"Train: {len(X_train)} samples ({len(X_train)/len(X)*100:.1f}%)")
-    print(f"Validation: {len(X_val)} samples ({len(X_val)/len(X)*100:.1f}%)")
-    print(f"Test: {len(X_test)} samples ({len(X_test)/len(X)*100:.1f}%)")
-    
     # צור את הפייפליין עם סוג המודל
     pipeline = PreprocessingPipeline(model_type=model_type)
     
-    # אמן את הפייפליין על הטריין בלבד
-    pipeline.fit(X_train, y_train)
+    # אמן את הפייפליין על כל הדאטה (רק fit, לא transform עדיין)
+    pipeline.fit(X, y)
     
-    # החל את הפייפליין על כל הסטים בנפרד
-    X_train_processed = pipeline.transform(X_train)
-    X_val_processed = pipeline.transform(X_val)
-    X_test_processed = pipeline.transform(X_test)
+    # החל את הפייפליין על כל הדאטה
+    X_processed = pipeline.transform(X)
+    
+    # בדוק ערכים חסרים אחרי הפרי-פרוססינג והסר רשומות עם ערכים חסרים
+    print(f"\nChecking for missing values after preprocessing...")
+    print(f"Records before cleaning: {len(X_processed)}")
+    
+    # מצא שורות ללא ערכים חסרים
+    mask = ~X_processed.isnull().any(axis=1)
+    
+    # החל את המסיכה על X ו-y
+    X_clean = X_processed[mask]
+    y_clean = y[mask]
+    
+    removed_count = len(X_processed) - len(X_clean)
+    print(f"Removed {removed_count} records with missing values")
+    print(f"Records after cleaning: {len(X_clean)}")
+    
+    # בדיקת בטיחות
+    if len(X_clean) == 0:
+        print("Error: No records left after removing missing values!")
+        sys.exit(1)
+    
+    # עכשיו חלק את הדאטה הנקיה לפי סוג המודל
+    if model_type == 'isolation-forest':
+        X_train, X_val, X_test, y_train, y_val, y_test = split_data_for_isolation_forest(X_clean, y_clean)
+    elif model_type == 'lstm':
+        X_train, X_val, X_test, y_train, y_val, y_test = split_data_for_lstm(X_clean, y_clean)
+    
+    print(f"\nDataset split sizes after preprocessing and cleaning:")
+    print(f"Train: {len(X_train)} samples ({len(X_train)/len(X_clean)*100:.1f}%)")
+    print(f"Validation: {len(X_val)} samples ({len(X_val)/len(X_clean)*100:.1f}%)")
+    print(f"Test: {len(X_test)} samples ({len(X_test)/len(X_clean)*100:.1f}%)")
     
     # הכן DataFrames עם הטרגט
     train_df = pd.concat([
-        X_train_processed.reset_index(drop=True), 
+        X_train.reset_index(drop=True), 
         y_train.reset_index(drop=True)
     ], axis=1)
 
     val_df = pd.concat([
-        X_val_processed.reset_index(drop=True), 
+        X_val.reset_index(drop=True), 
         y_val.reset_index(drop=True)
     ], axis=1)
 
     test_df = pd.concat([
-        X_test_processed.reset_index(drop=True), 
+        X_test.reset_index(drop=True), 
         y_test.reset_index(drop=True)
     ], axis=1)
     
@@ -131,7 +152,7 @@ def main():
     val_df.to_csv(val_filename, index=False)
     test_df.to_csv(test_filename, index=False)
     
-    print(f"\nProcessed dataset shapes:")
+    print(f"\nFinal processed dataset shapes:")
     print(f"Train shape: {train_df.shape}")
     print(f"Validation shape: {val_df.shape}")
     print(f"Test shape: {test_df.shape}")
@@ -143,7 +164,7 @@ def main():
     print(f"Test - Positive: {y_test.sum()}/{len(y_test)} ({y_test.mean()*100:.2f}%)")
     
     print(f"\nFiles saved:")
-    print(f"- {train_filename}")
+    print(f"- {train_filename}") 
     print(f"- {val_filename}")
     print(f"- {test_filename}")
 
