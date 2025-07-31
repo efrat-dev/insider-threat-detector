@@ -1,119 +1,155 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+from sklearn.feature_selection import VarianceThreshold
 from typing import List  
 
 class DataTransformer:
     """מחלקה לטרנספורמציות נתונים"""
     
     def __init__(self):
-        self.scalers = {}
-        self.pca = None
+        self.variance_threshold = None
+        self.correlation_threshold = 0.95
+        self.scaler = None
+        self.variance_filtered_features_ = []
+        self.correlation_filtered_features_ = []
+        self.final_features_ = []
+        
+        # Initialize fitted_params and scalers dictionaries
         self.fitted_params = {}
-        self.is_fitted = False
+        self.scalers = {}
+        
+    def _is_protected_column(self, col_name):
+        """בדיקה האם העמודה מוגנת (מכילה zscore או quartile)"""
+        return 'zscore' in col_name.lower() or 'quartile' in col_name.lower()
+        
+    def fit_variance_filtering(self, df, threshold=0.01):
+        """פילטרינג פיצ'רים עם וריאנס נמוך"""
+        print(f"Fitting variance filtering with threshold {threshold}...")
+        
+        # הפרדת פיצ'רים נומריים
+        numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+        if 'target' in numeric_cols:
+            numeric_cols.remove('target')
+        
+        if len(numeric_cols) == 0:
+            print("No numeric columns found for variance filtering")
+            self.variance_filtered_features_ = df.columns.tolist()
+            return df
+        
+        # הפרדה בין עמודות מוגנות לרגילות
+        protected_cols = [col for col in numeric_cols if self._is_protected_column(col)]
+        regular_cols = [col for col in numeric_cols if not self._is_protected_column(col)]
+        
+        print(f"Protected columns (will not be filtered): {protected_cols}")
+        
+        if len(regular_cols) == 0:
+            print("No regular numeric columns for variance filtering (all are protected)")
+            self.variance_filtered_features_ = df.columns.tolist()
+            return df
+        
+        # יצירת VarianceThreshold רק לעמודות הרגילות
+        self.variance_threshold = VarianceThreshold(threshold=threshold)
+        
+        # אימון על הפיצ'רים הנומריים הרגילים
+        self.variance_threshold.fit(df[regular_cols])
+        
+        # קבלת שמות הפיצ'רים הרגילים שנשארים
+        selected_regular = [col for col, selected in 
+                           zip(regular_cols, self.variance_threshold.get_support()) 
+                           if selected]
+        
+        # שמירת רשימת הפיצ'רים שנשארים (רגילים + מוגנים + לא נומריים)
+        non_numeric_cols = [col for col in df.columns if col not in numeric_cols]
+        self.variance_filtered_features_ = selected_regular + protected_cols + non_numeric_cols
+        
+        removed_count = len(regular_cols) - len(selected_regular)
+        print(f"Variance filtering: removed {removed_count} features with low variance")
+        print(f"Kept {len(protected_cols)} protected features regardless of variance")
+        
+        return df[self.variance_filtered_features_]
     
-    def fit_feature_filtering(self, df: pd.DataFrame, method: str = 'correlation', threshold: float = 0.95):
-        """אימון פרמטרי סינון התכונות על נתוני הטריין"""
-        print(f"Fitting feature filtering parameters with method: {method}, threshold: {threshold}")
+    def transform_variance_filtering(self, df):
+        """החלת פילטרינג וריאנס על דאטה חדש"""
+        if self.variance_threshold is None:
+            raise ValueError("Variance filtering not fitted yet")
         
-        # שמירת פרמטרי הסינון
-        self.fitted_params['filtering'] = {
-            'method': method,
-            'threshold': threshold
-        }
+        # Filter features to only include those that exist in the current dataframe
+        available_features = [col for col in self.variance_filtered_features_ if col in df.columns]
         
-        df_processed = df.copy()
+        if len(available_features) != len(self.variance_filtered_features_):
+            missing_features = set(self.variance_filtered_features_) - set(available_features)
+            print(f"Warning: {len(missing_features)} features from variance filtering not found in transform data: {missing_features}")
         
-        # זיהוי כל עמודות הטרנספורמציות הסטטיסטיות לצורך הגנה עליהן
-        statistical_transformations = ['zscore', 'quartile']
-        protected_columns = []
-        
-        for col in df_processed.columns:
-            # בדיקה אם העמודה מסתיימת באחת מהטרנספורמציות הסטטיסטיות
-            if any(col.endswith(f'_{transform}') for transform in statistical_transformations):
-                protected_columns.append(col)
-        
-        # הוספת עמודות חשובות נוספות שלא רוצים למחוק
-        essential_columns = ['employee_id', 'is_malicious', 'is_emp_malicious_binary', 'date', 'first_entry_time', 'last_exit_time']
-        for col in essential_columns:
-            if col in df_processed.columns and col not in protected_columns:
-                protected_columns.append(col)
-        
-        self.fitted_params['filtering']['protected_columns'] = protected_columns
-        
-        # רשימת עמודות לשמירה
-        columns_to_keep = list(df_processed.columns)
-        
-        if method == 'correlation':
-            redundant_features = self.identify_redundant_features_many_columns(df_processed, threshold)
-            # הסרת עמודות מוגנות מרשימת העמודות למחיקה
-            redundant_features = [col for col in redundant_features if col not in protected_columns]
-            columns_to_keep = [col for col in columns_to_keep if col not in redundant_features]
-            print(f"Will drop {len(redundant_features)} highly correlated features (statistical transformations protected)")
-            
-        elif method == 'variance':
-            numeric_columns = df_processed.select_dtypes(include=[np.number]).columns
-            variances = df_processed[numeric_columns].var()
-            low_variance_cols = variances[variances < threshold].index.tolist()
-            # הסרת עמודות מוגנות מרשימת העמודות למחיקה
-            low_variance_cols = [col for col in low_variance_cols if col not in protected_columns]
-            columns_to_keep = [col for col in columns_to_keep if col not in low_variance_cols]
-            print(f"Will drop {len(low_variance_cols)} low variance features (statistical transformations protected)")
-            
-        elif method == 'both':
-            # תחילה הסרת correlation
-            redundant_features = self.identify_redundant_features_many_columns(df_processed, threshold)
-            redundant_features = [col for col in redundant_features if col not in protected_columns]
-            columns_to_keep = [col for col in columns_to_keep if col not in redundant_features]
-            print(f"Will drop {len(redundant_features)} highly correlated features (statistical transformations protected)")
-            
-            # לאחר מכן הסרת variance נמוכה
-            remaining_df = df_processed[columns_to_keep]
-            numeric_columns = remaining_df.select_dtypes(include=[np.number]).columns
-            variances = remaining_df[numeric_columns].var()
-            low_variance_cols = variances[variances < threshold].index.tolist()
-            low_variance_cols = [col for col in low_variance_cols if col not in protected_columns]
-            columns_to_keep = [col for col in columns_to_keep if col not in low_variance_cols]
-            print(f"Will drop {len(low_variance_cols)} low variance features (statistical transformations protected)")
-        
-        # שמירת רשימת העמודות הסופית
-        self.fitted_params['filtering']['selected_columns'] = columns_to_keep
-        
-        # החזרת הדאטה המסונן
-        df_filtered = df[columns_to_keep].copy()
-        
-        print(f"Feature filtering fitted: {len(df.columns)} -> {len(columns_to_keep)} columns")
-        
-        # הדפסת סיכום של מה שהוסר
-        removed_columns = [col for col in df.columns if col not in columns_to_keep]
-        if removed_columns:
-            print(f"Removed columns ({len(removed_columns)}): {removed_columns[:10]}..." if len(removed_columns) > 10 else removed_columns)
-        
-        return df_filtered
+        return df[available_features]
     
-    def transform_feature_filtering(self, df: pd.DataFrame):
-        """החלת סינון התכונות עם פרמטרים מהטריין"""
-        if not self.fitted_params.get('filtering'):
-            raise ValueError("Feature filtering must be fitted before transform")
+    def fit_correlation_filtering(self, df, threshold=0.95):
+        """פילטרינג פיצ'רים עם קורלציה גבוהה"""
+        print(f"Fitting correlation filtering with threshold {threshold}...")
         
-        print("Transforming features using fitted filtering parameters...")
+        self.correlation_threshold = threshold
         
-        selected_columns = self.fitted_params['filtering']['selected_columns']
+        # הפרדת פיצ'רים נומריים
+        numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+        if 'target' in numeric_cols:
+            numeric_cols.remove('target')
         
-        # שמירה על עמודות שקיימות בדאטה החדש
-        available_columns = [col for col in selected_columns if col in df.columns]
+        if len(numeric_cols) <= 1:
+            print("Not enough numeric columns for correlation filtering")
+            self.correlation_filtered_features_ = df.columns.tolist()
+            return df
         
-        if len(available_columns) != len(selected_columns):
-            missing_cols = set(selected_columns) - set(available_columns)
-            print(f"Warning: {len(missing_cols)} columns from training are missing in transform data")
+        # הפרדה בין עמודות מוגנות לרגילות
+        protected_cols = [col for col in numeric_cols if self._is_protected_column(col)]
+        regular_cols = [col for col in numeric_cols if not self._is_protected_column(col)]
         
-        df_processed = df[available_columns].copy()
-        print(f"Feature filtering applied: {len(df.columns)} -> {len(df_processed.columns)} columns")
+        print(f"Protected columns (will not be filtered): {protected_cols}")
         
-        return df_processed
+        if len(regular_cols) <= 1:
+            print("Not enough regular numeric columns for correlation filtering")
+            self.correlation_filtered_features_ = df.columns.tolist()
+            return df
+        
+        # חישוב מטריצת קורלציה רק לעמודות הרגילות
+        corr_matrix = df[regular_cols].corr().abs()
+        
+        # מציאת זוגות פיצ'רים עם קורלציה גבוהה
+        upper_tri = corr_matrix.where(
+            np.triu(np.ones(corr_matrix.shape), k=1).astype(bool)
+        )
+        
+        # פיצ'רים להסרה (רק מהעמודות הרגילות)
+        to_drop = [column for column in upper_tri.columns 
+                  if any(upper_tri[column] > threshold)]
+        
+        # שמירת רשימת הפיצ'רים שנשארים
+        remaining_regular = [col for col in regular_cols if col not in to_drop]
+        non_numeric_cols = [col for col in df.columns if col not in numeric_cols]
+        self.correlation_filtered_features_ = remaining_regular + protected_cols + non_numeric_cols
+        
+        print(f"Correlation filtering: removed {len(to_drop)} highly correlated features")
+        print(f"Kept {len(protected_cols)} protected features regardless of correlation")
+        if to_drop:
+            print(f"Removed features: {to_drop}")
+        
+        return df[self.correlation_filtered_features_]
+    
+    def transform_correlation_filtering(self, df):
+        """החלת פילטרינג קורלציה על דאטה חדש"""
+        if not hasattr(self, 'correlation_filtered_features_'):
+            raise ValueError("Correlation filtering not fitted yet")
+        
+        # Filter features to only include those that exist in the current dataframe
+        available_features = [col for col in self.correlation_filtered_features_ if col in df.columns]
+        
+        if len(available_features) != len(self.correlation_filtered_features_):
+            missing_features = set(self.correlation_filtered_features_) - set(available_features)
+            print(f"Warning: {len(missing_features)} features from correlation filtering not found in transform data: {missing_features}")
+        
+        return df[available_features]
     
     def fit_normalize_features(self, df, method='standard'):
-        """אימון פרמטרי הנורמליזציה על נתוני הטריין"""
+        """אfימון פרמטרי הנורמליזציה על נתוני הטריין"""
         print(f"Fitting normalization parameters with method: {method}")
         
         # שמירת פרמטרי הנורמליזציה
@@ -200,6 +236,18 @@ class DataTransformer:
         
         print(f"Processing {len(numerical_features)} features in chunks of {chunk_size}")
         
+        # הפרדה בין עמודות מוגנות לרגילות
+        protected_features = [col for col in numerical_features if self._is_protected_column(col)]
+        regular_features = [col for col in numerical_features if not self._is_protected_column(col)]
+        
+        print(f"Protected features (will not be removed): {len(protected_features)}")
+        if protected_features:
+            print(f"Protected features: {protected_features}")
+        
+        if len(regular_features) < 2:
+            print("Not enough regular features for redundancy analysis")
+            return []
+        
         # דגימת שורות (לא עמודות) אם הנתונים גדולים
         if len(df) > 10000:
             df_sample = df.sample(n=10000, random_state=42)
@@ -208,12 +256,12 @@ class DataTransformer:
         
         redundant_features = set()
         
-        # יצירת רשימת chunks
+        # יצירת רשימת chunks רק לעמודות הרגילות
         chunks = []
-        for i in range(0, len(numerical_features), chunk_size):
-            chunks.append(numerical_features[i:i+chunk_size])
+        for i in range(0, len(regular_features), chunk_size):
+            chunks.append(regular_features[i:i+chunk_size])
         
-        print(f"Created {len(chunks)} chunks")
+        print(f"Created {len(chunks)} chunks from regular features")
         
         # שלב 1: בדיקה בתוך כל chunk
         for chunk_idx, chunk in enumerate(chunks):
@@ -251,7 +299,23 @@ class DataTransformer:
                     print(f"Warning: Could not process chunks {i+1} and {j+1}: {e}")
                     continue
         
-        print(f"Found {len(redundant_features)} redundant features")
+        # שלב 3: בדיקת עמודות מוגנות מול עמודות רגילות (רק העמודות הרגילות יוסרו)
+        if protected_features and regular_features:
+            try:
+                all_features = list(regular_features) + list(protected_features)
+                corr_matrix = df_sample[all_features].corr().abs()
+                
+                for protected_col in protected_features:
+                    for regular_col in regular_features:
+                        if corr_matrix.loc[protected_col, regular_col] > correlation_threshold:
+                            # נוסיף את העמודה הרגילה להסרה (לא את המוגנת)
+                            redundant_features.add(regular_col)
+                            print(f"Regular feature '{regular_col}' highly correlated with protected feature '{protected_col}' - marked for removal")
+                            
+            except Exception as e:
+                print(f"Warning: Could not process protected vs regular features: {e}")
+        
+        print(f"Found {len(redundant_features)} redundant features (protected features excluded)")
         return list(redundant_features)
     
     def _process_features_standard(self, df_sample, numerical_features, correlation_threshold):

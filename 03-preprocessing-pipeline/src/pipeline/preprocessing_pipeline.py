@@ -9,13 +9,23 @@ class PreprocessingPipeline:
     
     def __init__(self, model_type='isolation-forest'):
         self.model_type = model_type
+        
+        # Initialize all pipeline components
         self.data_cleaner = DataCleaner()
-        self.data_transformer = DataTransformer() 
+        self.data_transformer = DataTransformer()
         self.feature_engineer = FeatureEngineer(model_type=model_type)
         self.feature_creator = FeatureCreator()
-
+        
+        # Initialize fitted_params dictionary for the pipeline
         self.fitted_params = {}
         self.is_fitted = False
+        
+        # Additional attributes (these are now handled by individual components)
+        # Keep these for backward compatibility if needed
+        self.variance_threshold = None
+        self.correlation_threshold = None
+        self.selected_features = None
+        self.scaler = None
     
     def fit(self, X_train, y_train=None):
         """אימון הפייפליין על נתוני הטריין בלבד"""
@@ -33,8 +43,14 @@ class PreprocessingPipeline:
 
         df_train = self.data_cleaner.fit_handle_outliers(df_train, method='cap')
         
-        df_train = self.data_transformer.fit_feature_filtering(df_train)
+        # df_train = self.data_transformer.fit_feature_filtering(df_train)
+                # שלב 4: פילטרינג וריאנס
+        # שלב 4: פילטרינג וריאנס - מסיר פיצ'רים עם וריאנס נמוך
+        df_train = self.data_transformer.fit_variance_filtering(df_train)
         
+        # שלב 5: פילטרינג קורלציה - מסיר פיצ'רים עם קורלציה גבוהה
+        df_train = self.data_transformer.fit_correlation_filtering(df_train)
+
         self.data_transformer.fit_normalize_features(df_train)
         
         self.is_fitted = True
@@ -57,8 +73,13 @@ class PreprocessingPipeline:
 
         df = self.data_cleaner.transform_handle_outliers(df)
         
-        df = self.data_transformer.transform_feature_filtering(df)
+        # df = self.data_transformer.transform_feature_filtering(df)
+                # שלב 4: פילטרינג וריאנס
+        df = self.data_transformer.transform_variance_filtering(df)
         
+        # שלב 5: פילטרינג קורלציה
+        df = self.data_transformer.transform_correlation_filtering(df)
+
         df = self.data_transformer.transform_normalize_features(df)
         
         print(f"Transform completed! Shape: {df.shape}")
