@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-מודול הוספת רעש לדאטה סינתטי - גרסה עם רעש קיצוני כברירת מחדל
+מודול הוספת רעש לדאטה סינתטי - גרסה עם רעש נמוך כברירת מחדל
 -------------------------------------------------
 הוספת רעש סינתטי באופן ריאליסטי ומבוקר, לשדות נומריים, בינאריים וזמני כניסה
 תוך שמירה על עקביות בין שדות תלוים
@@ -17,18 +17,18 @@ import logging
 class DataNoiseInjector:
     """מחלקה להוספת רעש לדאטה סינתטי"""
     
-    def __init__(self, burn_noise_rate: float = 0.85,   # הועלה ל-85%
-                 print_noise_rate: float = 0.80,        # הועלה ל-80%
-                 entry_time_noise_rate: float = 0.90,   # הועלה ל-90%
-                 use_gaussian: bool = True,              # ברירת מחדל: True
+    def __init__(self, burn_noise_rate: float = 0.05,   # הוחזר ל-5%
+                 print_noise_rate: float = 0.05,        # הוחזר ל-5%
+                 entry_time_noise_rate: float = 0.10,   # הוחזר ל-10%
+                 use_gaussian: bool = False,              # הוחזר ל-False
                  random_seed: Optional[int] = None):
         """
         אתחול מחלקת הוספת הרעש
         
         Args:
-            burn_noise_rate: אחוז השורות שיושפעו מרעש צריבה (ברירת מחדל: 85%)
-            print_noise_rate: אחוז השורות שיושפעו מרעש הדפסה (ברירת מחדל: 80%)
-            entry_time_noise_rate: אחוז השורות שיושפעו מרעש זמן כניסה (ברירת מחדל: 90%)
+            burn_noise_rate: אחוז השורות שיושפעו מרעש צריבה (ברירת מחדל: 5%)
+            print_noise_rate: אחוז השורות שיושפעו מרעש הדפסה (ברירת מחדל: 5%)
+            entry_time_noise_rate: אחוז השורות שיושפעו מרעש זמן כניסה (ברירת מחדל: 10%)
             use_gaussian: האם להשתמש ברעש גאוסיאני לשדות מסוימים
             random_seed: זרע אקראי לשחזור תוצאות
         """
@@ -51,59 +51,59 @@ class DataNoiseInjector:
         }
     
     def inject_burn_noise(self, row: pd.Series, changes: List[str]) -> pd.Series:
-        """הוספת רעש לנתוני צריבה - גרסה קיצונית"""
+        """הוספת רעש לנתוני צריבה - גרסה נמוכה"""
         if random.random() < self.burn_noise_rate:
             self.statistics['burn_modifications'] += 1
             
-            # סה"כ כמות בקשות - טווח קיצוני
+            # סה"כ כמות בקשות - טווח נמוך
             if self.use_gaussian:
-                delta_burns = max(1, int(np.random.normal(8, 5)))
+                delta_burns = max(1, int(np.random.normal(2, 1)))
             else:
-                delta_burns = random.randint(3, 20)  # הועלה ל-20
+                delta_burns = random.randint(1, 3)  # הוחזר לטווח נמוך
             row['num_burn_requests'] += delta_burns
             changes.append(f"num_burn_requests += {delta_burns}")
             
-            # סה"כ קבצים - טווח קיצוני
+            # סה"כ קבצים - טווח נמוך
             if self.use_gaussian:
-                delta_files = max(1, int(np.random.normal(20, 15)))
+                delta_files = max(1, int(np.random.normal(6, 4)))
             else:
-                delta_files = random.randint(5, 60)  # הועלה ל-60
+                delta_files = random.randint(2, 10)  # הוחזר לטווח נמוך
             row['total_files_burned'] += delta_files
             changes.append(f"total_files_burned += {delta_files}")
             
-            # סה"כ נפח צריבה - טווח קיצוני
+            # סה"כ נפח צריבה - טווח נמוך
             if self.use_gaussian:
-                delta_mb = max(100, int(np.random.normal(500, 300)))
+                delta_mb = max(50, int(np.random.normal(175, 75)))
             else:
-                delta_mb = random.randint(100, 2000)  # הועלה ל-2000
+                delta_mb = random.randint(50, 300)  # הוחזר לטווח נמוך
             row['total_burn_volume_mb'] += delta_mb
             changes.append(f"total_burn_volume_mb += {delta_mb}")
             
-            # בקשות במועד חריג - הסתברות קיצונית
-            if random.random() < 0.85:  # הועלה ל-85%
-                additional_off_hours = random.randint(2, 8)
+            # בקשות במועד חריג - הסתברות נמוכה
+            if random.random() < 0.3:  # הוחזר ל-30%
+                additional_off_hours = 1
                 row['num_burn_requests_off_hours'] += additional_off_hours
                 changes.append(f"num_burn_requests_off_hours += {additional_off_hours}")
             
-            # סיווג ממוצע של הבקשות - שינוי קיצוני
+            # סיווג ממוצע של הבקשות - שינוי נמוך
             if self.use_gaussian:
-                delta_avg = np.random.normal(0, 1.0)
+                delta_avg = np.random.normal(0, 0.3)
             else:
-                delta_avg = round(random.uniform(-1.5, 1.5), 2)  # הועלה ל-1.5
+                delta_avg = round(random.uniform(-0.4, 0.4), 2)  # הוחזר לטווח נמוך
             row['avg_request_classification'] = max(0, min(4, row['avg_request_classification'] + delta_avg))
             changes.append(f"avg_request_classification adjusted by {delta_avg}")
             
-            # סיווג מקסימלי - הסתברות קיצונית
-            if random.random() < 0.40 and row['max_request_classification'] < 4:  # הועלה ל-40%
-                increment = random.randint(1, 3)
+            # סיווג מקסימלי - הסתברות נמוכה
+            if random.random() < 0.05 and row['max_request_classification'] < 4:  # הוחזר ל-5%
+                increment = 1
                 row['max_request_classification'] = min(4, row['max_request_classification'] + increment)
                 changes.append(f"max_request_classification +{increment}")
             
-            # מספר קמפוסים - הסתברות קיצונית
-            if random.random() < 0.35:  # הועלה ל-35%
-                if row['burn_campuses'] < 5:  # הועלה ל-5
+            # מספר קמפוסים - הסתברות נמוכה
+            if random.random() < 0.03:  # הוחזר ל-3%
+                if row['burn_campuses'] < 2:  # הוחזר ל-2
                     old_campuses = row['burn_campuses']
-                    row['burn_campuses'] += random.randint(1, 2)
+                    row['burn_campuses'] += 1
                     changes.append(f"burn_campuses: {old_campuses} → {row['burn_campuses']}")
                 
                 if row['burn_campuses'] > 1:
@@ -113,15 +113,15 @@ class DataNoiseInjector:
         return row
     
     def inject_print_noise(self, row: pd.Series, changes: List[str]) -> pd.Series:
-        """הוספת רעש לנתוני הדפסות - גרסה קיצונית"""
+        """הוספת רעש לנתוני הדפסות - גרסה נמוכה"""
         if row['num_print_commands'] > 0 and random.random() < self.print_noise_rate:
             self.statistics['print_modifications'] += 1
             
-            # כמות פקודות הדפסה - שינוי קיצוני
+            # כמות פקודות הדפסה - שינוי נמוך
             if self.use_gaussian:
-                noise_factor = max(0.1, np.random.normal(0.5, 0.3))
+                noise_factor = max(0.05, np.random.normal(0.15, 0.05))
             else:
-                noise_factor = random.uniform(0.3, 0.8)  # הועלה ל-0.8
+                noise_factor = random.uniform(0.05, 0.2)  # הוחזר לטווח נמוך
             delta_prints = max(1, int(row['num_print_commands'] * noise_factor))
             row['num_print_commands'] += delta_prints
             changes.append(f"num_print_commands += {delta_prints}")
@@ -129,38 +129,38 @@ class DataNoiseInjector:
             # התאמת כמות עמודים
             old_prints = max(row['num_print_commands'] - delta_prints, 1)
             pages_per_print = row['total_printed_pages'] / old_prints
-            additional_pages = int(delta_prints * pages_per_print * random.uniform(0.5, 1.8))
+            additional_pages = int(delta_prints * pages_per_print)
             row['total_printed_pages'] += additional_pages
             changes.append(f"total_printed_pages += {additional_pages}")
             
-            # אחוז הדפסות בצבע - שינוי קיצוני
+            # אחוז הדפסות בצבע - שינוי נמוך
             if self.use_gaussian:
-                color_delta = np.random.normal(0, 0.20)
+                color_delta = np.random.normal(0, 0.03)
             else:
-                color_delta = random.uniform(-0.30, 0.30)  # הועלה ל-0.30
+                color_delta = random.uniform(-0.05, 0.05)  # הוחזר לטווח נמוך
             row['ratio_color_prints'] = min(1.0, max(0.0, row['ratio_color_prints'] + color_delta))
             changes.append(f"ratio_color_prints adjusted by {color_delta:.3f}")
             
-            # פקודות הדפסה במועד חריג - הסתברות קיצונית
-            if random.random() < 0.75:  # הועלה ל-75%
-                additional_off_hours = random.randint(2, 6)
+            # פקודות הדפסה במועד חריג - הסתברות נמוכה
+            if random.random() < 0.3:  # הוחזר ל-30%
+                additional_off_hours = 1
                 row['num_print_commands_off_hours'] += additional_off_hours
                 changes.append(f"num_print_commands_off_hours += {additional_off_hours}")
         
         return row
     
     def inject_entry_time_noise(self, row: pd.Series, changes: List[str]) -> pd.Series:
-        """הוספת רעש לשעת הכניסה - גרסה קיצונית"""
+        """הוספת רעש לשעת הכניסה - גרסה נמוכה"""
         if pd.notna(row['first_entry_time']) and random.random() < self.entry_time_noise_rate:
             self.statistics['entry_time_modifications'] += 1
             
             try:
-                # שינוי שעת הכניסה - טווח קיצוני
+                # שינוי שעת הכניסה - טווח נמוך
                 t = datetime.strptime(row['first_entry_time'], "%H:%M")
                 if self.use_gaussian:
-                    delta_minutes = int(np.random.normal(0, 45))
+                    delta_minutes = int(np.random.normal(0, 7))
                 else:
-                    delta_minutes = random.randint(-90, 90)  # הועלה ל-90
+                    delta_minutes = random.randint(-10, 10)  # הוחזר לטווח נמוך
                 
                 new_time = (datetime.combine(datetime.today(), t.time()) + timedelta(minutes=delta_minutes)).time()
                 row['first_entry_time'] = new_time.strftime("%H:%M")
