@@ -20,8 +20,6 @@ from datetime import datetime
 # Import our modules
 from cli import parse_arguments, validate_arguments, print_configuration, print_final_statistics, print_success_message
 from core import setup_logging, setup_random_seed, run_analysis_only, run_full_generation, DataNoiseInjector
-from utils import profile_memory_usage, log_memory_usage
-
 
 def main():
     """Main application entry point"""
@@ -112,12 +110,7 @@ def main():
         end_time = datetime.now()
         execution_time = end_time - start_time
         logger.info(f"Execution completed in {execution_time}")
-        
-        # Profile final memory usage
-        if args.profile_performance:
-            final_memory = profile_memory_usage()
-            log_memory_usage(logger, "Final", final_memory)
-        
+                
         # Success message
         if not args.quiet:
             print_success_message(exported_files)
