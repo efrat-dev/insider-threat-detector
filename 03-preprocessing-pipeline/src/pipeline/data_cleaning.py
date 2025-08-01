@@ -19,6 +19,8 @@ class DataCleaner:
         # עמודות עם ערכים חסרים רבים (לפי הנתונים שלך)
         travel_columns = ['trip_day_number', 'country_name']
         time_columns = ['first_entry_time', 'last_exit_time']
+        derived_time_columns = ['entry_time_numeric', 'exit_time_numeric', 
+                               'entry_time_numeric_zscore', 'exit_time_numeric_zscore']
         
         # שמירת פרמטרים לעמודות נסיעות
         for col in travel_columns:
@@ -28,22 +30,37 @@ class DataCleaner:
                 elif col == 'country_name':
                     self.fitted_params['missing_values'][col] = {'method': 'fill_constant', 'value': 'No_Travel'}
         
-        # שמירת פרמטרים לעמודות זמן
+        # שמירת פרמטרים לעמודות זמן - מילוי עם ערכים שמתאימים לטיפוס
         for col in time_columns:
             if col in df.columns:
-                self.fitted_params['missing_values'][col] = {'method': 'fill_constant', 'value': 'No_Entry_Exit'}
+                # עבור datetime columns - נמלא עם תאריך default או NaT
+                self.fitted_params['missing_values'][col] = {'method': 'fill_datetime', 'value': pd.NaT}
         
-        # חישוב פרמטרים לעמודות נומריות
+        # שמירת פרמטרים לעמודות זמן נגזרות (שייווצרו בהמשך)
+        for col in derived_time_columns:
+            # עבור עמודות נומריות שנגזרות מזמן - נמלא עם 0 או median
+            self.fitted_params['missing_values'][col] = {'method': 'fill_zero', 'value': 0}
+        
+        # התמודדות עם total_presence_minutes
+        if 'total_presence_minutes' in df.columns:
+            self.fitted_params['missing_values']['total_presence_minutes'] = {'method': 'fill_zero', 'value': 0}
+        
+        # חישוב פרמטרים לעמודות נומריות אחרות
         numeric_columns = df.select_dtypes(include=[np.number]).columns
         for col in numeric_columns:
-            if col not in self.fitted_params['missing_values'] and df[col].isnull().sum() > 0:
+            if (col not in self.fitted_params['missing_values'] and 
+                df[col].isnull().sum() > 0 and 
+                col not in ['employee_id', 'is_malicious', 'target']):
+                
                 median_val = df[col].median()
                 self.fitted_params['missing_values'][col] = {'method': 'fill_median', 'value': median_val}
         
         # חישוב פרמטרים לעמודות קטגוריות
         categorical_columns = df.select_dtypes(include=['object', 'category']).columns
         for col in categorical_columns:
-            if col not in self.fitted_params['missing_values'] and df[col].isnull().sum() > 0:
+            if (col not in self.fitted_params['missing_values'] and 
+                df[col].isnull().sum() > 0):
+                
                 mode_val = df[col].mode()[0] if not df[col].mode().empty else 'Unknown'
                 self.fitted_params['missing_values'][col] = {'method': 'fill_mode', 'value': mode_val}
         
@@ -75,8 +92,39 @@ class DataCleaner:
                     df_processed[col] = df_processed[col].fillna(value)
                 elif method == 'fill_mode':
                     df_processed[col] = df_processed[col].fillna(value)
+                elif method == 'fill_datetime':
+                    # עבור datetime columns - אפשר למלא עם תאריך ברירת מחדל או להשאיר NaT
+                    # או להמיר לזמן "לא קיים" כמו 1900-01-01
+                    default_date = pd.Timestamp('1900-01-01')  # תאריך שמייצג "לא קיים"
+                    df_processed[col] = df_processed[col].fillna(default_date)
         
         print("Missing values transformed successfully")
+        return df_processed
+    
+    def handle_missing_after_feature_engineering(self, df):
+        """טיפול נוסף בערכים חסרים אחרי יצירת פיצ'רים"""
+        print("Handling missing values after feature engineering...")
+        df_processed = df.copy()
+        
+        # טיפול בעמודות שנוצרו במהלך feature engineering
+        derived_numeric_cols = [col for col in df_processed.columns 
+                               if any(suffix in col for suffix in ['_zscore', '_numeric', '_freq', '_binary'])]
+        
+        for col in derived_numeric_cols:
+            if df_processed[col].isnull().sum() > 0:
+                print(f"  Filling {col} with 0 (derived feature)")
+                df_processed[col] = df_processed[col].fillna(0)
+        
+        # טיפול בעמודות זמן שנוצרו
+        time_numeric_cols = [col for col in df_processed.columns 
+                           if 'time_numeric' in col]
+        
+        for col in time_numeric_cols:
+            if df_processed[col].isnull().sum() > 0:
+                print(f"  Filling {col} with 0 (time feature)")
+                df_processed[col] = df_processed[col].fillna(0)
+        
+        print("Post-feature-engineering missing values handled")
         return df_processed
     
     def fit_handle_outliers(self, df, method='cap', threshold=0.05):
@@ -92,7 +140,7 @@ class DataCleaner:
         numeric_columns = df.select_dtypes(include=[np.number]).columns
         
         for col in numeric_columns:
-            if col in ['employee_id', 'is_malicious', 'is_emp_malicios']:  # לא לטפל בעמודות מזהות ותווית
+            if col in ['employee_id', 'is_malicious', 'is_emp_malicios', 'target']:  # לא לטפל בעמודות מזהות ותווית
                 continue
             
             Q1 = df[col].quantile(0.25)
