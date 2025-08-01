@@ -95,6 +95,12 @@ Examples:
         help='Skip statistical analysis and summary generation'
     )
     
+    parser.add_argument(
+    '--validate-data',
+    action='store_true',
+    help='Run comprehensive data validation and quality checks'
+   )
+    
     # Technical options
     parser.add_argument(
         '--seed',
