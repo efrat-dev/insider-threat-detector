@@ -74,48 +74,56 @@ def main():
     # טען את הדאטה
     df = pd.read_csv('insider_threat_dataset.csv')
     print(f"Original dataset size: {len(df)} records")
-    
+        
     # המרה לfloat32 כדי לחסוך זיכרון
     df = df.astype({col: 'float32' for col in df.select_dtypes(include=['float64']).columns})
-    
+        
     # הסר עמודות שלא רלוונטיות
+    columns_to_drop = []
     if 'is_emp_malicious' in df.columns:
-        df = df.drop(columns=['is_emp_malicious'])
+        columns_to_drop.append('is_emp_malicious')
+        
+    if 'modification_details' in df.columns:
+        columns_to_drop.append('modification_details')
+
+    if columns_to_drop:
+        df = df.drop(columns=columns_to_drop)
+        print(f"Dropped columns: {columns_to_drop}")    
     
     # הכן את הדאטה לעיבוד
     target_col = 'is_malicious'
     X = df.drop(columns=[target_col])
     y = df[target_col]
     
+    print(f"\nPreparing X and y...")
+    print(f"X shape: {X.shape}")
+    print(f"y shape: {y.shape}")
+        
     # צור את הפייפליין עם סוג המודל
+    print(f"\nCreating preprocessing pipeline for {model_type}...")
     pipeline = PreprocessingPipeline(model_type=model_type)
     
     # אמן את הפייפליין על כל הדאטה (רק fit, לא transform עדיין)
+    print("\n🔧 FITTING pipeline...")
     pipeline.fit(X, y)
-    
+    print("✅ Pipeline fit completed!")
+        
     # החל את הפייפליין על כל הדאטה
+    print("\n🔄 TRANSFORMING data...")
     X_processed = pipeline.transform(X)
+    print("✅ Pipeline transform completed!")
     
-    # בדוק ערכים חסרים אחרי הפרי-פרוססינג והסר רשומות עם ערכים חסרים
     print(f"\nChecking for missing values after preprocessing...")
     print(f"Records before cleaning: {len(X_processed)}")
     
-    # מצא שורות ללא ערכים חסרים
+    # וידוא שאין שורות בעלות ערכים חסרים
     mask = ~X_processed.isnull().any(axis=1)
-    
-    # החל את המסיכה על X ו-y
     X_clean = X_processed[mask]
     y_clean = y[mask]
-    
     removed_count = len(X_processed) - len(X_clean)
-    print(f"Removed {removed_count} records with missing values")
-    print(f"Records after cleaning: {len(X_clean)}")
-    
-    # בדיקת בטיחות
-    if len(X_clean) == 0:
-        print("Error: No records left after removing missing values!")
-        sys.exit(1)
-    
+    if removed_count > 0:
+        print(f"\n⚠️ ATTENTION: {removed_count} records were removed due to missing values!")
+                
     # עכשיו חלק את הדאטה הנקיה לפי סוג המודל
     if model_type == 'isolation-forest':
         X_train, X_val, X_test, y_train, y_val, y_test = split_data_for_isolation_forest(X_clean, y_clean)
