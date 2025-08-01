@@ -18,6 +18,7 @@ from data_generator import DataGenerator
 from analyzers.comprehensive_analyzer import ComprehensiveAnalyzer as DataAnalyzer
 from data_exporter import DataExporter
 from core.config_manager import create_output_directory
+from .daily_label_creator import create_daily_labels_from_df
 
 def run_analysis_only(args, logger):
     """Run analysis on existing dataset"""
@@ -82,7 +83,9 @@ def run_full_generation(args, logger):
     )
     
     df = data_gen.generate_dataset()
-    
+
+    df = create_daily_labels_from_df(df)
+
     # Log noise statistics if applied
     if args.add_noise and 'row_modified' in df.columns:
         modified_count = df['row_modified'].sum()
