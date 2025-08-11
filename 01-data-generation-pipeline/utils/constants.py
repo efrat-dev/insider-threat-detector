@@ -1,8 +1,5 @@
 """
 Constants and configuration values for the Advanced Insider Threat Dataset Generator.
-
-Author: Advanced Security Analytics Team
-Date: 2024
 """
 
 # Application metadata

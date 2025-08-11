@@ -5,9 +5,6 @@ This module orchestrates the main business logic workflows including:
 - Analysis-only mode execution
 - Full dataset generation process
 - Data validation and export coordination
-
-Author: Advanced Security Analytics Team
-Date: 2024
 """
 
 import pandas as pd
@@ -20,22 +17,23 @@ from data_exporter import DataExporter
 from core.config_manager import create_output_directory
 from .daily_label_creator import create_daily_labels_from_df
 
+
 def run_analysis_only(args, logger):
-    """Run analysis on existing dataset"""
+    """Run analysis on an existing dataset"""
     logger.info("Running analysis-only mode")
     
-    # Load existing dataset
+    # Load the existing dataset
     logger.info(f"Loading dataset from {args.input_file}")
     df = pd.read_csv(args.input_file)
     
-    # Create analyzer
+    # Initialize the analyzer
     analyzer = DataAnalyzer()
     
-    # Run analysis
+    # Run behavioral analysis
     logger.info("Running behavioral analysis...")
     analyzer.generate_summary_statistics(df)
     
-    # Validate data if requested
+    # Run data validation if requested
     if args.validate_data:
         logger.info("Running data validation...")
         analyzer.validate_data_quality(df)
@@ -51,10 +49,10 @@ def run_analysis_only(args, logger):
 
 
 def run_full_generation(args, logger):
-    """Run full dataset generation process"""
+    """Run the full dataset generation process"""
     logger.info("Starting full dataset generation")
     
-    # Log noise configuration
+    # Log noise injection configuration if enabled
     if args.add_noise:
         logger.info("Noise injection configuration:")
         logger.info(f"  - Burn noise rate: {args.burn_noise_rate:.1%}")
@@ -84,9 +82,10 @@ def run_full_generation(args, logger):
     
     df = data_gen.generate_dataset()
 
+    # Create daily labels for suspicious activity
     df = create_daily_labels_from_df(df)
 
-    # Log noise statistics if applied
+    # Log noise statistics if noise was applied
     if args.add_noise and 'row_modified' in df.columns:
         modified_count = df['row_modified'].sum()
         logger.info(f"Noise applied to {modified_count:,} records ({modified_count/len(df):.1%})")
@@ -102,7 +101,7 @@ def run_full_generation(args, logger):
             logger.info("Running data validation...")
             analyzer.validate_data_quality(df)
     
-    # Export dataset
+    # Export the generated dataset
     logger.info("Exporting dataset...")
     output_path = create_output_directory(args.output_dir)
     

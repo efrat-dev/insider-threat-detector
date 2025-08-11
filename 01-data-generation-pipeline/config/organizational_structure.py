@@ -1,10 +1,13 @@
-# organizational_structure.py
 """
-Organizational structure definitions including departments, positions, and behavioral groups.
+Organizational structure definitions including department hierarchies, position titles, 
+behavioral group classifications, and department size weights.
+
+This configuration supports realistic employee generation aligned with company structure 
+and behavior profiling.
 """
 
 class OrganizationalStructure:
-    # Department-Position mapping based on organizational structure
+    # Mapping of departments to their respective position titles
     DEPARTMENT_POSITIONS = {
         'Executive Management': [
             'Chief Executive Officer (CEO)',
@@ -91,7 +94,7 @@ class OrganizationalStructure:
         ]
     }
 
-    # Behavioral groups mapping
+    # Mapping from departments to behavioral group codes used for activity pattern modeling
     BEHAVIORAL_GROUPS = {
         'Executive Management': 'A',
         'Marketing and Business Development': 'D',
@@ -106,7 +109,7 @@ class OrganizationalStructure:
         'Project Management': 'C'
     }
 
-    # Department size weights for realistic distribution
+    # Relative department size weights to enable realistic sampling of employees by department
     DEPARTMENT_WEIGHTS = {
         'R&D Department': 0.25,
         'Engineering Department': 0.20,

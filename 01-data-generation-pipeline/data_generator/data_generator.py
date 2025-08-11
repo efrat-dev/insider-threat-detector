@@ -13,14 +13,13 @@ class DataGenerator(DataGeneratorCore):
                  add_noise: bool = False, noise_config: Optional[Dict[str, Any]] = None):
         super().__init__(employees, days_range, malicious_ratio)
         
-        # Initialize noise injection if requested
+        # Initialize noise injector if requested
         self.add_noise = add_noise
         self.noise_injector = None
+        
         if add_noise:
-            # מיפוי שמות פרמטרים מה-config לשמות הנכונים במחלקה
             if noise_config:
                 mapped_config = {}
-                # מיפוי שמות פרמטרים
                 param_mapping = {
                     'burn_rate': 'burn_noise_rate',
                     'print_rate': 'print_noise_rate', 
@@ -28,26 +27,21 @@ class DataGenerator(DataGeneratorCore):
                     'gaussian': 'use_gaussian',
                     'seed': 'random_seed'
                 }
-                
+                # Map old param names to new ones
                 for old_name, new_name in param_mapping.items():
                     if old_name in noise_config:
                         mapped_config[new_name] = noise_config[old_name]
-                
-                # הוספת פרמטרים נוספים שעלולים להיות בשמות הנכונים
+                # Also add any params already with correct names
                 for param in ['burn_noise_rate', 'print_noise_rate', 'entry_time_noise_rate', 'use_gaussian', 'random_seed']:
                     if param in noise_config:
                         mapped_config[param] = noise_config[param]
-                
                 self.noise_injector = DataNoiseInjector(**mapped_config)
             else:
                 self.noise_injector = DataNoiseInjector()
         
         print(f"Using {len(self.employees)} employees")
         print(f"Malicious employees: {self.malicious_employees} ({self.malicious_ratio:.1%})")
-        if add_noise:
-            print(f"Noise injection: ENABLED")
-        else:
-            print(f"Noise injection: DISABLED")
+        print(f"Noise injection: {'ENABLED' if add_noise else 'DISABLED'}")
         self._print_department_distribution()
     
     def _print_department_distribution(self):
@@ -67,40 +61,30 @@ class DataGenerator(DataGeneratorCore):
         data = []
         start_date = datetime.now() - timedelta(days=self.days_range)
         
-        # Progress tracking
-        total_iterations = len(self.employees) * self.days_range
+        total_iterations = self.num_employees * self.days_range
         completed = 0
         
-        for emp_id in list(self.employees.keys()):
+        for emp_id in self.employees.keys():
             is_malicious = emp_id in self.malicious_employee_ids
             
             for day in range(self.days_range):
                 current_date = start_date + timedelta(days=day)
                 
-                # Show progress every 10%
                 completed += 1
                 if completed % (total_iterations // 10) == 0:
                     progress = (completed / total_iterations) * 100
                     print(f"Progress: {progress:.0f}% ({completed}/{total_iterations})")
                 
-                # Generate daily record
-                daily_record = self.generate_daily_record(
-                    emp_id, current_date.date(), is_malicious
-                )
+                daily_record = self.generate_daily_record(emp_id, current_date.date(), is_malicious)
                 data.append(daily_record)
         
         df = pd.DataFrame(data)
-        
-        # Post-process the dataframe
         df = self.post_process_dataframe(df)
         
-        # Apply noise injection if enabled
         if self.add_noise and self.noise_injector:
             print("Applying noise injection...")
-            # תיקון: שינוי מ-inject_noise ל-add_noise_to_dataframe
             df = self.noise_injector.add_noise_to_dataframe(df)
             
-            # Log noise statistics
             if 'row_modified' in df.columns:
                 modified_count = df['row_modified'].sum()
                 print(f"Noise applied to {modified_count:,} records ({modified_count/len(df):.1%})")

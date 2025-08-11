@@ -3,10 +3,24 @@ from typing import Dict, Any
 from .base_analyzer import BaseAnalyzer
 
 class BehavioralAnalyzer(BaseAnalyzer):
-    """Specialized analyzer for behavioral group analysis"""
+    """
+    Specialized analyzer for detailed behavioral group analysis.
+    
+    Extends BaseAnalyzer with group-specific behavioral insights, 
+    including work patterns, printing, burning, and travel activities.
+    """
     
     def _generate_behavioral_analysis(self, df: pd.DataFrame) -> Dict[str, Any]:
-        """Generate detailed behavioral group analysis"""
+        """
+        Generate detailed behavioral analysis segmented by behavioral groups.
+        
+        Args:
+            df (pd.DataFrame): Dataset containing employee activity and behavioral group info.
+        
+        Returns:
+            Dict[str, Any]: Analysis results keyed by behavioral group codes, 
+                            including error if 'behavioral_group' column is missing.
+        """
         analysis = {}
         
         if 'behavioral_group' not in df.columns:
@@ -17,7 +31,7 @@ class BehavioralAnalyzer(BaseAnalyzer):
             group_data = df[df['behavioral_group'] == group]
             group_name = self._get_group_name(group)
             
-            # Basic group stats
+            # Basic group statistics
             group_stats = {
                 'group_name': group_name,
                 'total_employees': group_data['employee_id'].nunique(),
@@ -26,16 +40,10 @@ class BehavioralAnalyzer(BaseAnalyzer):
                 'malicious_ratio': group_data['is_malicious'].mean()
             }
             
-            # Work patterns
+            # Behavioral pattern analyses
             group_stats['work_patterns'] = self._analyze_work_patterns(group_data)
-            
-            # Printing patterns
             group_stats['printing_patterns'] = self._analyze_printing_patterns(group_data)
-            
-            # Burning patterns
             group_stats['burning_patterns'] = self._analyze_burning_patterns(group_data)
-            
-            # Travel patterns
             group_stats['travel_patterns'] = self._analyze_travel_patterns(group_data)
             
             analysis[group] = group_stats
@@ -43,7 +51,16 @@ class BehavioralAnalyzer(BaseAnalyzer):
         return analysis
     
     def _analyze_work_patterns(self, group_data: pd.DataFrame) -> Dict[str, Any]:
-        """Analyze work patterns for a behavioral group"""
+        """
+        Analyze work time patterns within a behavioral group.
+        
+        Args:
+            group_data (pd.DataFrame): Subset of data for a specific behavioral group.
+        
+        Returns:
+            Dict[str, Any]: Statistics like average entry/exit times, early/late rates, weekend and night work rates,
+                            or error message if relevant data missing or invalid.
+        """
         if 'first_entry_time' not in group_data.columns:
             return {'error': 'No work time data available'}
         
@@ -67,7 +84,16 @@ class BehavioralAnalyzer(BaseAnalyzer):
             return {'error': f"Error processing work patterns: {str(e)}"}
     
     def _analyze_printing_patterns(self, group_data: pd.DataFrame) -> Dict[str, Any]:
-        """Analyze printing patterns for a behavioral group"""
+        """
+        Analyze printing activity patterns within a behavioral group.
+        
+        Args:
+            group_data (pd.DataFrame): Subset of data for a specific behavioral group.
+        
+        Returns:
+            Dict[str, Any]: Statistics about printing frequency, average pages, commands, color print ratio,
+                            off-hours print ratio, and multi-campus print rate, or error message if no data.
+        """
         if 'total_printed_pages' not in group_data.columns:
             return {'error': 'No printing data available'}
         
@@ -86,7 +112,16 @@ class BehavioralAnalyzer(BaseAnalyzer):
         }
     
     def _analyze_burning_patterns(self, group_data: pd.DataFrame) -> Dict[str, Any]:
-        """Analyze burning patterns for a behavioral group"""
+        """
+        Analyze burning (secure document destruction) activity patterns within a behavioral group.
+        
+        Args:
+            group_data (pd.DataFrame): Subset of data for a specific behavioral group.
+        
+        Returns:
+            Dict[str, Any]: Statistics on burning frequency, avg requests, classification levels,
+                            volume, files, off-hours burn ratio, multi-campus burn rate, or error message.
+        """
         if 'num_burn_requests' not in group_data.columns:
             return {'error': 'No burning data available'}
         
@@ -107,7 +142,17 @@ class BehavioralAnalyzer(BaseAnalyzer):
         }
     
     def _analyze_travel_patterns(self, group_data: pd.DataFrame) -> Dict[str, Any]:
-        """Analyze travel patterns for a behavioral group"""
+        """
+        Analyze travel activity patterns within a behavioral group.
+        
+        Args:
+            group_data (pd.DataFrame): Subset of data for a specific behavioral group.
+        
+        Returns:
+            Dict[str, Any]: Statistics on travel frequency, official travel ratio,
+                            hostile country visits, origin country visits,
+                            and average trip duration, or error message if no data.
+        """
         if 'is_abroad' not in group_data.columns:
             return {'error': 'No travel data available'}
         

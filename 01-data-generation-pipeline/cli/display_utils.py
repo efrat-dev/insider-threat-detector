@@ -5,13 +5,22 @@ This module handles all user interface display functionality including:
 - Banner printing
 - Configuration display
 - Final statistics reporting
-
-Author: Advanced Security Analytics Team
-Date: 2024
 """
 
 def print_configuration(args):
-    """Print current configuration"""
+    """
+    Print the current dataset generation configuration.
+
+    Parameters:
+        args (Namespace): Parsed command-line arguments containing
+                          configuration values.
+
+    Displays:
+        - Employee count and simulation duration.
+        - Malicious employee ratio and expected malicious counts.
+        - Output format and directory.
+        - Noise injection settings (if enabled).
+    """
     print("Configuration:")
     print(f"  Employees: {args.employees:,}")
     print(f"  Days: {args.days:,}")
@@ -23,7 +32,7 @@ def print_configuration(args):
     if args.seed:
         print(f"  Random seed: {args.seed}")
     
-    # הצגת הגדרות רעש
+    # Noise injection settings
     if args.add_noise:
         print(f"  Noise injection: ENABLED")
         print(f"    - Burn noise rate: {args.burn_noise_rate:.1%}")
@@ -37,7 +46,20 @@ def print_configuration(args):
 
 
 def print_final_statistics(df, logger):
-    """Print final dataset statistics"""
+    """
+    Print and log final dataset statistics after generation.
+
+    Parameters:
+        df (pandas.DataFrame): The generated dataset.
+        logger (logging.Logger): Logger instance for recording statistics.
+
+    Displays:
+        - Total records and employee count.
+        - Date range covered by the dataset.
+        - Malicious employee and record counts.
+        - Noise injection statistics (if applicable).
+        - Department and behavioral group distributions.
+    """
     logger.info("=== FINAL DATASET STATISTICS ===")
     logger.info(f"Total records: {len(df):,}")
     logger.info(f"Total employees: {df['employee_id'].nunique():,}")
@@ -45,7 +67,7 @@ def print_final_statistics(df, logger):
     logger.info(f"Malicious employees: {df[df['is_malicious']==1]['employee_id'].nunique()}")
     logger.info(f"Malicious records: {df['is_malicious'].sum():,} ({df['is_malicious'].mean():.1%})")
     
-    # הצגת סטטיסטיקות רעש אם קיימות
+    # Noise statistics if present
     if 'row_modified' in df.columns:
         modified_count = df['row_modified'].sum()
         logger.info(f"Records with noise: {modified_count:,} ({modified_count/len(df):.1%})")
@@ -64,8 +86,17 @@ def print_final_statistics(df, logger):
 
 
 def print_success_message(exported_files=None):
-    """Print success message with file information"""
-    print("\n" + "=" * 50)
+    """
+    Print a success message after dataset generation.
+
+    Parameters:
+        exported_files (dict, optional): Mapping of file types to file paths
+                                         for generated outputs.
+
+    Displays:
+        - A confirmation banner indicating successful completion.
+        - List of exported files with their types and names (if provided).
+    """
     print("Dataset generation completed successfully!")
     if exported_files:
         print("Files created:")

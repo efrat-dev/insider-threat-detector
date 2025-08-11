@@ -5,19 +5,26 @@ from collections import defaultdict
 
 
 class BaseAnalyzer:
-    """Base class for data analysis with common utilities"""
+    """
+    Base class for data analysis with common utilities for behavioral datasets.
+    
+    Provides basic statistics generation, data quality validation, and
+    behavioral group naming utilities.
+    """
     
     def __init__(self, behavioral_groups_mapping: Optional[Dict[str, str]] = None):
         """
-        Initialize the BaseAnalyzer
+        Initialize the BaseAnalyzer.
         
         Args:
-            behavioral_groups_mapping: Optional mapping of behavioral group codes to names
+            behavioral_groups_mapping (Optional[Dict[str, str]]): 
+                Mapping from behavioral group codes to human-readable group names.
+                If not provided, default names will be used.
         """
         self.behavioral_groups_mapping = behavioral_groups_mapping or {}
         self.reverse_mapping = {v: k for k, v in self.behavioral_groups_mapping.items()}
         
-        # Default behavioral group names if mapping is not provided
+        # Default behavioral group names if no mapping is supplied
         self.default_group_names = {
             0: "Standard Employee",
             1: "High Activity Employee", 
@@ -30,13 +37,31 @@ class BaseAnalyzer:
         }
     
     def _get_group_name(self, group_code: int) -> str:
-        """Get human-readable name for behavioral group"""
+        """
+        Retrieve the human-readable name for a behavioral group given its code.
+        
+        Args:
+            group_code (int): Behavioral group code.
+        
+        Returns:
+            str: Group name.
+        """
         if self.behavioral_groups_mapping:
             return self.reverse_mapping.get(group_code, f"Group_{group_code}")
         return self.default_group_names.get(group_code, f"Group_{group_code}")
     
     def _generate_basic_statistics(self, df: pd.DataFrame) -> Dict[str, Any]:
-        """Generate basic dataset statistics"""
+        """
+        Generate basic statistics about the dataset, including counts,
+        date range, malicious employee stats, and distributions by department,
+        campus, and behavioral group (if available).
+        
+        Args:
+            df (pd.DataFrame): Input dataset containing employee activity records.
+        
+        Returns:
+            Dict[str, Any]: Dictionary of computed statistics.
+        """
         stats = {
             'total_records': len(df),
             'total_employees': df['employee_id'].nunique(),
@@ -52,31 +77,36 @@ class BaseAnalyzer:
             }
         }
         
-        # Department distribution
         if 'employee_department' in df.columns:
             stats['department_distribution'] = df.groupby('employee_department')['employee_id'].nunique().to_dict()
         
-        # Campus distribution
         if 'employee_campus' in df.columns:
             stats['campus_distribution'] = df.groupby('employee_campus')['employee_id'].nunique().to_dict()
         
-        # Behavioral group distribution
         if 'behavioral_group' in df.columns:
             stats['behavioral_group_distribution'] = df.groupby('behavioral_group')['employee_id'].nunique().to_dict()
         
         return stats
     
     def _generate_data_quality_analysis(self, df: pd.DataFrame) -> Dict[str, Any]:
-        """Analyze data quality and consistency"""
+        """
+        Analyze the quality and consistency of the dataset, including missing values,
+        logical consistency checks, off-hours activity ratios, and classification levels.
+        
+        Args:
+            df (pd.DataFrame): Input dataset to analyze.
+        
+        Returns:
+            Dict[str, Any]: Dictionary containing data quality metrics and checks.
+        """
         quality = {}
         
-        # Missing value analysis
+        # Missing value counts per column
         quality['missing_values'] = df.isnull().sum().to_dict()
         
-        # Logical consistency checks
         consistency_checks = {}
         
-        # Check abroad employees with building access
+        # Check for employees marked abroad with building access records
         if 'is_abroad' in df.columns and 'num_entries' in df.columns:
             abroad_data = df[df['is_abroad'] == 1]
             if len(abroad_data) > 0:
@@ -86,7 +116,6 @@ class BaseAnalyzer:
                     'suspicious_abroad_access_ratio': (abroad_data['num_entries'] > 0).mean()
                 }
         
-        # Check off-hours activity ratios
         total_activities = {}
         if 'num_print_commands' in df.columns:
             total_activities['print_commands'] = df['num_print_commands'].sum()
@@ -105,11 +134,10 @@ class BaseAnalyzer:
                                        max(total_activities.get('burn_requests', 1), 1))
             }
         
-        # Check classification levels
         classification_checks = {}
         if 'employee_classification' in df.columns:
             classification_checks['avg_employee_classification'] = df['employee_classification'].mean()
-        if 'avg_request_classification' in df.columns:
+        if 'avg_request_classification' in df.columns and 'num_burn_requests' in df.columns:
             classification_checks['avg_burn_classification'] = df[df['num_burn_requests'] > 0]['avg_request_classification'].mean()
         
         consistency_checks['classification_levels'] = classification_checks
@@ -118,21 +146,31 @@ class BaseAnalyzer:
         return quality
     
     def validate_data_quality(self, df: pd.DataFrame) -> Dict[str, Any]:
-        """Run comprehensive data validation checks"""
+        """
+        Perform comprehensive data validation checks on the dataset, including
+        required columns presence, data types, duplicates, date range validity,
+        and employee ID consistency.
+        
+        Args:
+            df (pd.DataFrame): Dataset to validate.
+        
+        Returns:
+            Dict[str, Any]: Validation results containing any issues or confirmations.
+        """
         validation_results = {}
         
-        # Check for required columns
+        # Required columns check
         required_columns = ['employee_id', 'date', 'is_malicious']
         missing_columns = [col for col in required_columns if col not in df.columns]
         validation_results['missing_required_columns'] = missing_columns
         
-        # Check data types
+        # Data type report
         validation_results['data_types'] = df.dtypes.to_dict()
         
-        # Check for duplicates
+        # Duplicate records count
         validation_results['duplicate_records'] = df.duplicated().sum()
         
-        # Check date range consistency
+        # Date range validation
         if 'date' in df.columns:
             try:
                 dates = pd.to_datetime(df['date'])
@@ -142,10 +180,10 @@ class BaseAnalyzer:
                     'max': dates.max(),
                     'gaps': len(pd.date_range(dates.min(), dates.max())) - dates.nunique()
                 }
-            except:
+            except Exception:
                 validation_results['date_range_valid'] = False
         
-        # Check employee ID consistency
+        # Employee ID consistency
         if 'employee_id' in df.columns:
             validation_results['employee_id_stats'] = {
                 'unique_employees': df['employee_id'].nunique(),

@@ -5,9 +5,6 @@ This module handles system configuration including:
 - Logging setup
 - Random seed initialization
 - Output directory creation
-
-Author: Advanced Security Analytics Team
-Date: 2024
 """
 
 import sys

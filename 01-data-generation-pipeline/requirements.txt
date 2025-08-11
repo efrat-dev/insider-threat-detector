@@ -2,8 +2,3 @@
 pandas>=2.0.0
 numpy>=1.24.0
 openpyxl==3.1.2
-
-# Optional: Additional useful packages for data analysis
-# matplotlib>=3.7.0  # For plotting and visualization
-# seaborn>=0.12.0    # For statistical data visualization
-# xlsxwriter>=3.1.0  # For writing Excel files

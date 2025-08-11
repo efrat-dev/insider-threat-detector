@@ -1,10 +1,17 @@
-# employee_attributes.py
 """
-Employee attributes, security classifications, and seniority definitions.
+Definitions of employee attributes, security classification probabilities, and seniority ranges.
+
+This module contains probabilistic distributions and ranges used to simulate realistic
+employee characteristics across different departments and position types.
+
+- Classification probabilities specify security clearance or classification levels by department.
+- Seniority ranges define expected years of experience for different roles.
+- Employee attribute probabilities model binary attributes such as contractor status,
+  foreign citizenship, criminal record, and medical history.
 """
 
 class EmployeeAttributes:
-    # Classification probabilities by department
+    # Security classification level probabilities per department
     CLASSIFICATION_PROBABILITIES = {
         'Executive Management': {
             'levels': [3, 4],
@@ -32,15 +39,15 @@ class EmployeeAttributes:
         }
     }
 
-    # Seniority ranges by position type
+    # Seniority (years of experience) ranges by employee position category
     SENIORITY_RANGES = {
-        'executive': (8, 31),    # Chief, Head of, Director
-        'manager': (5, 21),      # Manager
-        'secretary': (1, 16),    # Secretary
-        'default': (0, 26)       # All others
+        'executive': (8, 31),    # Chief, Head of, Director roles
+        'manager': (5, 21),      # Managers
+        'secretary': (1, 16),    # Secretaries
+        'default': (0, 26)       # Other roles
     }
 
-    # Employee attribute probabilities
+    # Probabilistic binary employee attributes with weights for 0/1 values
     EMPLOYEE_PROBABILITIES = {
         'contractor': {'values': [0, 1], 'weights': [0.85, 0.15]},
         'foreign_citizenship': {'values': [0, 1], 'weights': [0.85, 0.15]},

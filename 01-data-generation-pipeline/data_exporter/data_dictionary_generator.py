@@ -1,14 +1,14 @@
 from datetime import datetime
 
 class DataDictionaryGenerator:
-    """Class for generating data dictionary documentation"""
-    
+    """Class for generating data dictionary documentation."""
+
     def __init__(self):
-        """Initialize the data dictionary generator"""
+        """Initialize the data dictionary generator."""
         pass
-    
+
     def create_data_dictionary(self, filename="data_dictionary.txt"):
-        """Create a data dictionary explaining all columns"""
+        """Create a data dictionary explaining all columns."""
         dictionary_content = """
 === INSIDER THREAT DATASET - DATA DICTIONARY ===
 
@@ -92,7 +92,6 @@ F: IT - Technical staff, some irregular hours, high burning
 - null values in trip-related fields indicate no travel
 - Behavioral patterns are based on job role and department
 """
-        
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(dictionary_content)
         

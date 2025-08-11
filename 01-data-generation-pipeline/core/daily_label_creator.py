@@ -1,6 +1,19 @@
 """
-Creates daily labels for suspicious activity detection
-This file creates action-level daily labels based on the original employee-level label
+Creates daily action-level labels for suspicious activity detection based on employee-level labels.
+
+This module transforms an input DataFrame containing employee-level maliciousness labels into a
+daily-labeled dataset by applying multi-stage anomaly detection logic. It includes:
+
+- Threshold calculation based on non-malicious employee behavior
+- Identification of highly suspicious days for known malicious employees
+- Extension of suspicious labels to adjacent days based on softer thresholds
+- Simulation of false positives by selecting a subset of innocent employees
+- Detailed statistical reporting of labeling outcomes
+
+Functions:
+-----------
+create_daily_labels_from_df(df):
+    Processes the input DataFrame and returns an enhanced DataFrame with daily-level 'is_malicious' labels.
 """
 
 import pandas as pd
@@ -8,67 +21,62 @@ import numpy as np
 
 def create_daily_labels_from_df(df):
     """
-    Creates new daily labels based on anomalous activity from existing DataFrame
-    Enhanced version with multi-stage labeling and smart selection for innocent employees
-    
+    Generate refined daily-level suspicious activity labels from employee-level data.
+
+    The function performs multi-step labeling by:
+      1. Preserving original employee malicious labels and initializing daily labels.
+      2. Computing anomaly detection thresholds from non-malicious employees only.
+      3. Marking suspicious days for pre-identified malicious employees based on strict thresholds.
+      4. Expanding suspicious flags to days immediately before and after detected anomalies using softer thresholds.
+      5. Introducing false positives by randomly selecting a fraction of innocent employees and marking anomalous days relative to their own baseline behavior.
+      6. Calculating and printing comprehensive statistics on labeling results.
+
     Args:
-        df (pandas.DataFrame): Input data with 'is_malicious' column for employees
-        
+        df (pandas.DataFrame): Input dataset containing employee activity data and an 'is_malicious' employee-level label.
+
     Returns:
-        pandas.DataFrame: Data with new daily labels including sophisticated detection logic
+        pandas.DataFrame: Copy of the input DataFrame augmented with:
+          - 'is_emp_malicious': original employee-level malicious label.
+          - 'is_malicious': new daily-level suspicious activity label.
     """
     
-    print("Creating daily labels for suspicious activity detection...")
-    
-    # Create a new copy of the data to avoid modifying the original
+    print("Starting creation of daily suspicious activity labels...")
+
+    # Step 1: Initialize labels
     df_labeled = df.copy()
-    
-    print("Step 1: Creating employee labels and initializing daily labels...")
-    # Copy the original label to a new employee-level column
     df_labeled['is_emp_malicious'] = df_labeled['is_malicious']
-    
-    # Initialize the new daily action-level label
     df_labeled['is_malicious'] = 0
-    
-    # Convert date column to datetime if needed
+
+    # Ensure 'date' column is datetime for temporal operations
     if 'date' in df_labeled.columns:
         df_labeled['date'] = pd.to_datetime(df_labeled['date'])
-    
-    # Filter malicious and non-malicious employees
-    malicious_ids = df_labeled[df_labeled['is_emp_malicious'] == 1]['employee_id'].unique()
-    non_malicious_ids = df_labeled[df_labeled['is_emp_malicious'] == 0]['employee_id'].unique()
-    
-    print(f"Found {len(malicious_ids)} malicious employees")
-    print(f"Found {len(non_malicious_ids)} non-malicious employees")
-    
-    print("Step 2: Calculating thresholds based on non-malicious employees only...")
-    # Calculate thresholds based on non-malicious employees only to avoid skewed averages
+
+    # Identify malicious and non-malicious employee IDs
+    malicious_ids = df_labeled.loc[df_labeled['is_emp_malicious'] == 1, 'employee_id'].unique()
+    non_malicious_ids = df_labeled.loc[df_labeled['is_emp_malicious'] == 0, 'employee_id'].unique()
+
+    print(f"Detected {len(malicious_ids)} malicious employees and {len(non_malicious_ids)} non-malicious employees.")
+
+    # Step 2: Calculate detection thresholds from non-malicious employee activity
     non_malicious_df = df_labeled[df_labeled['is_emp_malicious'] == 0]
-    
+
     thresholds = {
-        # High anomaly thresholds - for detecting highly suspicious activity
         'prints_95': non_malicious_df['num_print_commands'].quantile(0.95),
         'burns_95': non_malicious_df['num_burn_requests'].quantile(0.95),
         'presence_95': non_malicious_df['total_presence_minutes'].quantile(0.95),
         'trip_days_95': non_malicious_df['trip_day_number'].quantile(0.95),
-        
-        # Softer thresholds - for marking days before/after severe anomalous activity
         'prints_75': non_malicious_df['num_print_commands'].quantile(0.75),
         'burns_75': non_malicious_df['num_burn_requests'].quantile(0.75),
         'presence_75': non_malicious_df['total_presence_minutes'].quantile(0.75),
     }
-    
-    print(f"Detection thresholds (95th percentile):")
-    print(f"  - Print commands: {thresholds['prints_95']:.2f}")
-    print(f"  - Burn requests: {thresholds['burns_95']:.2f}")
-    print(f"  - Presence minutes: {thresholds['presence_95']:.2f}")
-    print(f"  - Trip days: {thresholds['trip_days_95']:.2f}")
-    
-    print("Step 3: Identifying highly suspicious days for malicious employees...")
-    # Stage 1: Mark malicious actions for pre-identified malicious employees
+
+    print("Calculated detection thresholds (95th percentile):")
+    for key in ['prints_95', 'burns_95', 'presence_95', 'trip_days_95']:
+        print(f"  - {key}: {thresholds[key]:.2f}")
+
+    # Step 3: Label highly suspicious days for malicious employees
     high_flag = (
-        (df_labeled['employee_id'].isin(malicious_ids)) &
-        (
+        (df_labeled['employee_id'].isin(malicious_ids)) & (
             (df_labeled['num_print_commands'] > thresholds['prints_95']) |
             (df_labeled['num_print_commands_off_hours'] > 0) |
             (df_labeled['num_burn_requests'] > thresholds['burns_95']) |
@@ -83,21 +91,19 @@ def create_daily_labels_from_df(df):
         )
     )
     df_labeled.loc[high_flag, 'is_malicious'] = 1
-    
-    print("Step 4: Identifying days before/after suspicious activity...")
-    # Stage 2: Mark days before and after for malicious employees
+
+    # Step 4: Label days adjacent to suspicious activity for malicious employees
     if 'date' in df_labeled.columns:
         for emp_id in malicious_ids:
-            emp_df = df_labeled[df_labeled['employee_id'] == emp_id].sort_values('date')
-            flagged_days = emp_df[emp_df['is_malicious'] == 1]['date'].tolist()
+            emp_data = df_labeled[df_labeled['employee_id'] == emp_id].sort_values('date')
+            suspicious_days = emp_data.loc[emp_data['is_malicious'] == 1, 'date'].tolist()
 
-            for day in flagged_days:
-                for offset in [-1, 1]:  # Day before and after
-                    nearby_day = day + pd.Timedelta(days=offset)
+            for day in suspicious_days:
+                for offset in [-1, 1]:
+                    adjacent_day = day + pd.Timedelta(days=offset)
                     cond = (
                         (df_labeled['employee_id'] == emp_id) &
-                        (df_labeled['date'] == nearby_day) &
-                        (
+                        (df_labeled['date'] == adjacent_day) & (
                             (df_labeled['num_print_commands'] > thresholds['prints_75']) |
                             (df_labeled['num_burn_requests'] > thresholds['burns_75']) |
                             (df_labeled['total_presence_minutes'] > thresholds['presence_75']) |
@@ -106,37 +112,25 @@ def create_daily_labels_from_df(df):
                         )
                     )
                     df_labeled.loc[cond, 'is_malicious'] = 1
-    
-    print("Step 5: Creating false positives from innocent employees...")
-    # Stage 3: Mark anomalous actions of innocent employees (compared to themselves)
-    # Select 5% of innocent employees randomly to simulate false positives
-    selected_ids = np.random.choice(
-        non_malicious_ids, 
-        size=int(len(non_malicious_ids) * 0.05), 
-        replace=False
-    )
-    
-    print(f"Selected {len(selected_ids)} innocent employees for false positive simulation")
-    
-    for emp_id in selected_ids:
-        emp_df = df_labeled[df_labeled['employee_id'] == emp_id].sort_values('date')
-        
-        # Calculate personal averages for this employee
-        avg_prints = emp_df['num_print_commands'].mean()
-        avg_burns = emp_df['num_burn_requests'].mean()
-        avg_presence = emp_df['total_presence_minutes'].mean()
 
-        # Find candidate days that are anomalous for this employee
-        candidate_days = emp_df[
-            (emp_df['num_print_commands'] > max(thresholds['prints_95'], 2 * avg_prints)) |
-            (emp_df['num_burn_requests'] > max(thresholds['burns_95'], 2 * avg_burns)) |
-            (emp_df['total_presence_minutes'] > max(thresholds['presence_95'], 2 * avg_presence)) |
-            (emp_df['entered_during_night_hours'] == 1)
+    # Step 5: Simulate false positives among innocent employees
+    selected_ids = np.random.choice(non_malicious_ids, size=int(len(non_malicious_ids) * 0.05), replace=False)
+    print(f"Simulating false positives for {len(selected_ids)} randomly selected innocent employees.")
+
+    for emp_id in selected_ids:
+        emp_data = df_labeled[df_labeled['employee_id'] == emp_id].sort_values('date')
+        avg_prints = emp_data['num_print_commands'].mean()
+        avg_burns = emp_data['num_burn_requests'].mean()
+        avg_presence = emp_data['total_presence_minutes'].mean()
+
+        candidate_days = emp_data[
+            (emp_data['num_print_commands'] > max(thresholds['prints_95'], 2 * avg_prints)) |
+            (emp_data['num_burn_requests'] > max(thresholds['burns_95'], 2 * avg_burns)) |
+            (emp_data['total_presence_minutes'] > max(thresholds['presence_95'], 2 * avg_presence)) |
+            (emp_data['entered_during_night_hours'] == 1)
         ]
 
-        # Create false positives to simulate real-world detection challenges
         if not candidate_days.empty:
-            # Calculate suspicion score for each anomalous day
             candidate_days = candidate_days.copy()
             candidate_days['suspicion_score'] = (
                 candidate_days['num_print_commands'].rank(pct=True) +
@@ -145,37 +139,29 @@ def create_daily_labels_from_df(df):
                 candidate_days['entered_during_night_hours'] * 0.5 +
                 candidate_days['early_entry_flag'] * 0.5
             )
-            
-            # Smart selection: 80% most suspicious day, 20% random
-            if np.random.rand() < 0.8:
-                selected_row = candidate_days.sort_values('suspicion_score', ascending=False).index[0]
-            else:
-                selected_row = candidate_days.sample(1).index[0]
 
-            # Mark the selected day as malicious
-            df_labeled.loc[selected_row, 'is_malicious'] = 1
-    
-    # Calculate comprehensive statistics
-    total_days = len(df_labeled)
-    malicious_days = df_labeled['is_malicious'].sum()
-    malicious_employee_records = df_labeled['is_emp_malicious'].sum()
-    
-    # Advanced statistics
-    malicious_emp_flagged_days = df_labeled[
-        (df_labeled['is_emp_malicious'] == 1) & (df_labeled['is_malicious'] == 1)
-    ]['is_malicious'].sum()
-    
-    innocent_emp_flagged_days = df_labeled[
-        (df_labeled['is_emp_malicious'] == 0) & (df_labeled['is_malicious'] == 1)
-    ]['is_malicious'].sum()
-    
-    print(f"\nComprehensive daily labels statistics:")
-    print(f"  - Total daily records: {total_days}")
-    print(f"  - Total malicious employee records: {malicious_employee_records}")
-    print(f"  - Total suspicious days identified: {malicious_days}")
-    print(f"  - Suspicious days from malicious employees: {malicious_emp_flagged_days}")
-    print(f"  - False positive days from innocent employees: {innocent_emp_flagged_days}")
-    print(f"  - Overall percentage of suspicious days: {(malicious_days/total_days)*100:.2f}%")
-    print(f"  - Detection rate for malicious employees: {(malicious_emp_flagged_days/malicious_employee_records)*100:.2f}%")
-    
+            if np.random.rand() < 0.8:
+                selected_idx = candidate_days.sort_values('suspicion_score', ascending=False).index[0]
+            else:
+                selected_idx = candidate_days.sample(1).index[0]
+
+            df_labeled.loc[selected_idx, 'is_malicious'] = 1
+
+    # Summary statistics
+    total_records = len(df_labeled)
+    total_suspicious = df_labeled['is_malicious'].sum()
+    total_malicious_employees = df_labeled['is_emp_malicious'].sum()
+
+    malicious_suspicious_days = df_labeled[(df_labeled['is_emp_malicious'] == 1) & (df_labeled['is_malicious'] == 1)]['is_malicious'].sum()
+    false_positive_days = df_labeled[(df_labeled['is_emp_malicious'] == 0) & (df_labeled['is_malicious'] == 1)]['is_malicious'].sum()
+
+    print("\nDaily labeling statistics summary:")
+    print(f"  Total records: {total_records}")
+    print(f"  Total malicious employees: {total_malicious_employees}")
+    print(f"  Total suspicious days: {total_suspicious}")
+    print(f"  Suspicious days for malicious employees: {malicious_suspicious_days}")
+    print(f"  False positive suspicious days: {false_positive_days}")
+    print(f"  Suspicious days rate: {(total_suspicious / total_records) * 100:.2f}%")
+    print(f"  Detection rate for malicious employees: {(malicious_suspicious_days / total_malicious_employees) * 100:.2f}%")
+
     return df_labeled

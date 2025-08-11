@@ -1,4 +1,3 @@
-# __init__.py
 """
 Configuration package initialization.
 """

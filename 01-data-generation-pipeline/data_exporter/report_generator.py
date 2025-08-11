@@ -3,21 +3,21 @@ from .data_dictionary_generator import DataDictionaryGenerator
 
 class ReportGenerator:
     """Class for generating analysis reports"""
-    
+
     def __init__(self, behavioral_groups_mapping):
         """
         Initialize the report generator
-        
+
         Args:
             behavioral_groups_mapping: Dictionary mapping departments to behavioral groups
         """
         self.behavioral_groups_mapping = behavioral_groups_mapping
         self.dict_generator = DataDictionaryGenerator()
-    
+
     def create_data_dictionary(self, filename="data_dictionary.txt"):
         """Create a data dictionary explaining all columns"""
         return self.dict_generator.create_data_dictionary(filename)
-    
+
     def create_analysis_report(self, df, filename="analysis_report.txt"):
         """Create a comprehensive analysis report"""
         report_content = f"""
@@ -37,22 +37,20 @@ Malicious Employee Rate: {df[df['is_malicious']==1]['employee_id'].nunique() / d
 
 === DEPARTMENT DISTRIBUTION ===
 """
-        
         dept_counts = df.groupby('employee_department')['employee_id'].nunique().sort_values(ascending=False)
         for dept, count in dept_counts.items():
             malicious_in_dept = df[(df['employee_department'] == dept) & (df['is_malicious'] == 1)]['employee_id'].nunique()
             report_content += f"{dept}: {count} employees ({malicious_in_dept} malicious, {malicious_in_dept/count:.1%})\n"
-        
+
         report_content += f"""
 === BEHAVIORAL GROUP ANALYSIS ===
 """
-        
         group_counts = df.groupby('behavioral_group')['employee_id'].nunique().sort_index()
         for group, count in group_counts.items():
             group_name = [k for k, v in self.behavioral_groups_mapping.items() if v == group][0]
             malicious_in_group = df[(df['behavioral_group'] == group) & (df['is_malicious'] == 1)]['employee_id'].nunique()
             report_content += f"Group {group} ({group_name}): {count} employees ({malicious_in_group} malicious, {malicious_in_group/count:.1%})\n"
-        
+
         report_content += f"""
 === ACTIVITY STATISTICS ===
 Total Print Commands: {df['num_print_commands'].sum():,}
@@ -73,14 +71,13 @@ Weekend Entries: {df['entry_during_weekend'].sum():,}
 === DATA QUALITY CHECKS ===
 Missing Values:
 """
-        
         missing_data = df.isnull().sum()
         for col, missing in missing_data[missing_data > 0].items():
             report_content += f"  {col}: {missing} ({missing/len(df):.1%})\n"
-        
+
         if missing_data[missing_data > 0].empty:
             report_content += "  No missing values detected\n"
-        
+
         report_content += f"""
 Logical Consistency:
   Employees abroad with no building access: {len(df[(df['is_abroad'] == 1) & (df['num_entries'] == 0)])} / {len(df[df['is_abroad'] == 1])}
@@ -101,9 +98,9 @@ Combined Risk Indicators: {df['risk_travel_indicator'].sum()} incidents
 5. Investigate multi-campus access patterns
 6. Review unofficial travel combined with sensitive activities
 """
-        
+
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(report_content)
-        
+
         print(f"Analysis report created: {filename}")
         return filename
