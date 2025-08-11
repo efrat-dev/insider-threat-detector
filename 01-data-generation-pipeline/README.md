@@ -9,14 +9,14 @@
 The **Synthetic Insider Threat Dataset Generator** is a comprehensive tool designed to simulate realistic insider threat scenarios within **classified organizational environments** for cybersecurity research, machine learning model training, and security system evaluation. When real-world labeled data is limited or too sensitive to use, this tool provides high-quality synthetic datasets that mimic authentic organizational behavior patterns and security incidents in **high-security, classified settings** where traditional data collection is restricted.
 Key Features
 
-🔒 **Classified Environment Simulation:** Specifically designed for high-security, classified organizational settings with security clearance levels and sensitive data handling
-🏢 **Realistic Organizational Structure:** Simulates 11 different departments with authentic position hierarchies typical of defense/security organizations
-👥 **Behavioral Modeling:** Six distinct behavioral groups with characteristic activity patterns for classified environments
-📊 **Advanced Analytics:** Built-in statistical analysis and data quality validation for security-focused datasets
-🔄 **Noise Injection:** Configurable synthetic noise to simulate real-world data anomalies in classified systems
-📈 **Scalable Generation:** Support for datasets ranging from hundreds to thousands of employees with security classifications
-🎲 **Reproducible Results:** Seed-based random generation for consistent outputs in research environments
-📋 **Multiple Export Formats:** CSV and Excel output options with comprehensive security-aware reporting
+- 🔒 **Classified Environment Simulation:** Specifically designed for high-security, classified organizational settings with security clearance levels and sensitive data handling
+- 🏢 **Realistic Organizational Structure:** Simulates 11 different departments with authentic position hierarchies typical of defense/security organizations
+- 👥 **Behavioral Modeling:** Six distinct behavioral groups with characteristic activity patterns for classified environments
+- 📊 **Advanced Analytics:** Built-in statistical analysis and data quality validation for security-focused datasets
+- 🔄 **Noise Injection:** Configurable synthetic noise to simulate real-world data anomalies in classified systems
+- 📈 **Scalable Generation:** Support for datasets ranging from hundreds to thousands of employees with security classifications
+- 🎲 **Reproducible Results:** Seed-based random generation for consistent outputs in research environments
+- 📋 **Multiple Export Formats:** CSV and Excel output options with comprehensive security-aware reporting
 
 
 ## 📋 Table of Contents
