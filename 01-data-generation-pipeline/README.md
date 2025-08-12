@@ -4,7 +4,14 @@
 
 ## What is this?
 
-This tool generates realistic employee activity datasets for insider threat research, security training, and anomaly detection system development. It creates synthetic data that mimics real organizational behavior patterns while maintaining privacy and security.
+This tool generates **classified environment datasets** specifically designed for insider threat research in secure organizations. Unlike generic employee data generators, this system models **classified document handling, security clearance levels, and sensitive operational activities** that are critical for understanding insider threats in government agencies, defense contractors, and high-security enterprises.
+
+### 🔐 **Unique Classification Features**
+- **Multi-Level Security Classifications** (Levels 1-4) for employees and documents
+- **Classified Document Burning** simulation with security level tracking
+- **Clearance-Based Access Patterns** reflecting real security protocols
+- **Hostile Country Travel** tracking with security implications
+- **Cross-Classification Activities** modeling unauthorized access scenarios
 
 ## 🚀 Quick Start
 
@@ -28,18 +35,38 @@ python main.py --analysis-only --input-file existing_data.csv
 
 ## 📊 Sample Output
 
-The generator creates datasets with 40+ features including:
-- Building access patterns (entry/exit times, multi-campus access)
-- Document activities (printing volume, secure destruction)
-- Travel patterns (business trips, hostile country visits)
-- Risk indicators (off-hours activity, suspicious combinations)
+The generator creates **classified environment datasets** with 40+ security-focused features:
+
+```csv
+employee_id,date,employee_classification,is_malicious,avg_request_classification,max_request_classification,num_burn_requests,hostile_country_trip,...
+001,2024-01-01,3,0,2.5,4,2,0,...
+002,2024-01-01,4,1,3.8,4,5,1,...
+```
+
+### 🔐 **Security-Specific Data Fields**
+- **Employee Security Clearance** (Levels 1-4)
+- **Document Classification Levels** (average and maximum per activity)
+- **Classified Document Destruction** with volume and classification tracking
+- **Security Risk Indicators** including hostile country travel and cross-classification access
+- **Clearance-Based Activity Patterns** reflecting security protocol compliance
 
 ## 🎯 Use Cases
 
-- **🔬 Research**: Academic insider threat studies and behavioral analysis
-- **🛡️ Security**: Training datasets for detection algorithms and security tools
-- **💼 Business**: HR analytics, system testing, and compliance scenarios
-- **🎓 Education**: Cybersecurity training and simulation exercises
+### 🔬 **Classified Environment Research**
+- **Government Agency Studies**: Insider threat patterns in classified environments
+- **Defense Contractor Analysis**: Security clearance-based behavioral modeling
+- **Intelligence Community Research**: Multi-level security access pattern analysis
+
+### 🛡️ **Security Applications**
+- **Clearance Violation Detection**: Training algorithms to detect unauthorized access
+- **Classification Leak Prevention**: Modeling document exfiltration scenarios
+- **Security Protocol Testing**: Validating clearance-based access controls
+- **Insider Threat Training**: Realistic scenarios for security awareness programs
+
+### 💼 **Specialized Applications**
+- **Security Audit Preparation**: Test data for classified environment audits
+- **Compliance Testing**: DCID 6/3, ICD 503, and other security standard validation
+- **Risk Assessment Models**: Development of clearance-based risk scoring systems
 
 ## 📁 Project Structure
 

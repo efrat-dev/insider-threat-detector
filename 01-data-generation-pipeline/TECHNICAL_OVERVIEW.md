@@ -9,11 +9,18 @@
 ## 🔄 Data Generation Flow
 
 ```
-Employee Profiles → Behavioral Simulation → Activity Generation → Analysis → Export
-     ↓                      ↓                     ↓             ↓         ↓
+Employee Profiles → Classification Assignment → Behavioral Simulation → Security Analysis → Export
+     ↓                       ↓                        ↓                    ↓             ↓
   [Realistic            [6 Behavioral        [Daily           [Security  [CSV/Excel
    Employees]            Groups]              Activities]      Analysis]   + Reports]
 ```
+
+### 🔐 **Classification-Aware Pipeline**
+Each step incorporates security clearance levels and classification handling:
+- **Employee Profiles** include security clearance levels (1-4)
+- **Activity Generation** respects clearance-based access restrictions
+- **Document Operations** track classification levels of handled materials
+- **Risk Assessment** evaluates classification violations and unauthorized access
 
 ## 🎯 Core Components
 

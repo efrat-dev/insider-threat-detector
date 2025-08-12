@@ -8,7 +8,13 @@
 
 ## 🎯 What This Tool Does
 
-This generator creates **realistic employee activity datasets** for cybersecurity research and security testing. It simulates how employees behave in organizations - their work patterns, document handling, travel, and building access - including both normal and potentially malicious behaviors.
+This generator creates **classified environment employee datasets** specifically for insider threat research in secure organizations. Unlike standard HR data, it focuses on **security clearance levels, classified document handling, and security protocol compliance** - essential elements for understanding insider threats in government, defense, and high-security environments.
+
+### 🔐 **Unique Security Features**
+- **Multi-Level Security Clearances** (Levels 1-4) assigned to employees
+- **Classified Document Operations** with classification level tracking
+- **Security Protocol Modeling** including clearance-based access restrictions
+- **Cross-Classification Risk Detection** identifying potential security violations
 
 ## ⚡ Quick Start Commands
 
@@ -42,10 +48,17 @@ python main.py --analysis-only --input-file data.csv --validate-data
 - **`data_dictionary_TIMESTAMP.txt`** - Complete documentation of all data fields
 
 ### Key Data Fields
-- **Employee Info**: ID, department, behavioral group, security classification
-- **Daily Activities**: Building access, printing volume, document burning, travel status
-- **Risk Indicators**: Off-hours activity, multi-campus access, hostile country travel
-- **Security Flags**: Malicious employee indicator, classification levels, risk scores
+- **Employee Info**: ID, department, **security clearance level**, behavioral group
+- **Daily Activities**: Building access, printing volume, **classified document burning**, travel status
+- **Security Metrics**: **Classification levels handled**, clearance violations, unauthorized access attempts
+- **Risk Indicators**: Off-hours classified activity, **cross-classification operations**, hostile country travel
+
+### 🔐 **Classification-Specific Fields**
+- **`employee_classification`** - Employee security clearance level (1-4)
+- **`avg_request_classification`** - Average classification of documents handled
+- **`max_request_classification`** - Highest classification level accessed
+- **`classification_violation_flag`** - Indicates potential clearance violations
+- **`cross_classification_activity`** - Activities spanning multiple classification levels
 
 ## 🎛️ Configuration Options
 
@@ -79,11 +92,17 @@ python main.py --analysis-only --input-file data.csv --validate-data
 3. **Export to your preferred format** (CSV for ML, Excel for presentations)
 4. **Use data dictionary** to understand all fields and their meanings
 
-### For Security Testing
-1. **Generate dataset with higher malicious ratio** (0.08-0.12)
-2. **Enable noise injection** for more realistic scenarios
-3. **Focus on security analysis outputs** in the Excel sheets
-4. **Use risk indicators** to test detection algorithms
+### For Classified Environment Research
+1. **Configure security clearance distributions** in the configuration files
+2. **Generate dataset with realistic classification patterns** 
+3. **Analyze clearance-based behavioral differences** using security analysis features
+4. **Export classified-aware reports** focusing on security protocol compliance
+
+### For Security Clearance Studies
+1. **Set appropriate classification levels** for your organization (1-4 scale)
+2. **Model cross-classification activities** to detect potential violations
+3. **Use hostile country travel features** for comprehensive risk assessment
+4. **Leverage classification violation detection** in the analysis outputs
 
 ### For System Development
 1. **Start with small datasets** for initial testing (50-100 employees)
