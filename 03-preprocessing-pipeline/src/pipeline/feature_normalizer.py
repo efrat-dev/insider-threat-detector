@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 
-class DataTransformer:
-    """מחלקה לטרנספורמציות נתונים"""
+class FeatureNormalizer:
+    """מחלקה לנורמליזציה של פיצ'רים"""
     
     def __init__(self):
         self.scaler = None        
