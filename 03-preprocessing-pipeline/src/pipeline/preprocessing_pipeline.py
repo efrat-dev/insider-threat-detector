@@ -1,8 +1,9 @@
 from pipeline.data_cleaning import DataCleaner
-from pipeline.feature_normalizer import DataTransformer
+from pipeline.variance_correlation_filter import VarianceCorrelationFilter
+from pipeline.feature_normalizer import FeatureNormalizer
 from .feature_engineer import FeatureEngineer
 from .feature_creator import FeatureCreator
-from pipeline.data_type_converter import DataTypeConverter  # הוספה חדשה
+from pipeline.data_type_converter import DataTypeConverter
 
 import pandas as pd
 
@@ -14,10 +15,11 @@ class PreprocessingPipeline:
         
         # Initialize all pipeline components
         self.data_cleaner = DataCleaner()
-        self.data_transformer = DataTransformer()
+        self.variance_correlation_filter = VarianceCorrelationFilter()
+        self.feature_normalizer = FeatureNormalizer()
         self.feature_engineer = FeatureEngineer(model_type=model_type)
         self.feature_creator = FeatureCreator()
-        self.data_type_converter = DataTypeConverter()  # הוספה חדשה
+        self.data_type_converter = DataTypeConverter()
 
         # Initialize fitted_params dictionary for the pipeline
         self.fitted_params = {}
@@ -37,17 +39,17 @@ class PreprocessingPipeline:
         
         df_train = self.data_cleaner.fit_handle_missing_values(df_train)
         
-        df_train = self.data_type_converter.convert_data_types(df_train)  # שינוי כאן
+        df_train = self.data_type_converter.convert_data_types(df_train)
 
         df_train = self.feature_engineer.fit_apply_all_feature_engineering(df_train)
 
         df_train = self.data_cleaner.fit_handle_outliers(df_train, method='cap')
         
-        df_train = self.data_transformer.fit_variance_filtering(df_train)
+        df_train = self.variance_correlation_filter.fit_variance_filtering(df_train)
         
-        df_train = self.data_transformer.fit_correlation_filtering(df_train)
+        df_train = self.variance_correlation_filter.fit_correlation_filtering(df_train)
 
-        self.data_transformer.fit_normalize_features(df_train)
+        self.feature_normalizer.fit_normalize_features(df_train)
         
         self.is_fitted = True
         print("Pipeline fitting completed!")
@@ -63,17 +65,17 @@ class PreprocessingPipeline:
         
         df = self.data_cleaner.transform_handle_missing_values(df)
         
-        df = self.data_type_converter.convert_data_types(df)  # שינוי כאן
+        df = self.data_type_converter.convert_data_types(df)
         
         df = self.feature_engineer.transform_apply_all_feature_engineering(df)
 
         df = self.data_cleaner.transform_handle_outliers(df)
         
-        df = self.data_transformer.transform_variance_filtering(df)
+        df = self.variance_correlation_filter.transform_variance_filtering(df)
         
-        df = self.data_transformer.transform_correlation_filtering(df)
+        df = self.variance_correlation_filter.transform_correlation_filtering(df)
 
-        df = self.data_transformer.transform_normalize_features(df)
+        df = self.feature_normalizer.transform_normalize_features(df)
         
         print(f"Transform completed! Shape: {df.shape}")
         return df
