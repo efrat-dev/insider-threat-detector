@@ -24,7 +24,7 @@ The analyzer suite is designed to process employee activity datasets containing 
 
 ## Core Components
 
-### [base_analyzer.py](analyzers/base_analyzer.py)
+### [base_analyzer.py](./base_analyzer.py)
 
 **BaseAnalyzer** - Foundation class providing:
 
@@ -39,7 +39,7 @@ The analyzer suite is designed to process employee activity datasets containing 
 - Off-hours activity ratio calculations
 - Classification level analysis
 
-### [behavioral_analyzer.py](analyzers/behavioral_analyzer.py)
+### [behavioral_analyzer.py](./behavioral_analyzer.py)
 
 **BehavioralAnalyzer** - Specialized analysis by behavioral groups:
 
@@ -54,7 +54,7 @@ The analyzer suite is designed to process employee activity datasets containing 
 - Cross-campus behavior analysis
 - Temporal activity patterns
 
-### [security_analyzer.py](analyzers/security_analyzer.py)
+### [security_analyzer.py](./security_analyzer.py)
 
 **SecurityAnalyzer** - Security-focused threat detection:
 
@@ -69,7 +69,7 @@ The analyzer suite is designed to process employee activity datasets containing 
 - Risk scoring and assessment
 - Security pattern identification
 
-### [comprehensive_analyzer.py](analyzers/comprehensive_analyzer.py)
+### [comprehensive_analyzer.py](./comprehensive_analyzer.py)
 
 **ComprehensiveAnalyzer** - Integrated analysis orchestrator:
 
