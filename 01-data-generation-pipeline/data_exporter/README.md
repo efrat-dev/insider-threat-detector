@@ -23,7 +23,7 @@ data_exporter/
 
 ## Files Description
 
-### [data_dictionary_generator.py](data_exporter/data_dictionary_generator.py)
+### [data_dictionary_generator.py](./data_dictionary_generator.py)
 Creates comprehensive data dictionaries explaining all dataset columns, behavioral groups, and data structure.
 
 **Key Features:**
@@ -32,7 +32,7 @@ Creates comprehensive data dictionaries explaining all dataset columns, behavior
 - Data format specifications
 - Risk indicator explanations
 
-### [report_generator.py](data_exporter/report_generator.py)
+### [report_generator.py](./report_generator.py)
 Generates detailed analysis reports with statistics and insights.
 
 **Key Features:**
@@ -42,7 +42,7 @@ Generates detailed analysis reports with statistics and insights.
 - Activity statistics and off-hours monitoring
 - Data quality checks and recommendations
 
-### [data_exporter_base.py](data_exporter/data_exporter_base.py)
+### [data_exporter_base.py](./data_exporter_base.py)
 Main export functionality for converting datasets to various formats.
 
 **Key Features:**
@@ -52,7 +52,7 @@ Main export functionality for converting datasets to various formats.
 - Configurable output paths
 - Integration with analysis components
 
-### [summary_analyzer.py](data_exporter/summary_analyzer.py)
+### [summary_analyzer.py](./summary_analyzer.py)
 Provides statistical analysis and summary creation capabilities.
 
 **Key Features:**
