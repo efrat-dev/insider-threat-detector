@@ -4,7 +4,7 @@ This directory contains all configuration modules used for synthetic employee da
 
 ## Files Overview
 
-### [`config.py`](config/config.py)
+### [`config.py`](./config.py)
 Main configuration aggregator module that serves as the central access point for all configuration components. This module consolidates organizational structure, behavioral patterns, employee attributes, and geographic data into a single unified configuration class.
 
 **Key Features:**
@@ -12,7 +12,7 @@ Main configuration aggregator module that serves as the central access point for
 - Default dataset parameters (employee count, time range, malicious ratio)
 - Central import point for all configuration modules
 
-### [`behavioral_patterns.py`](config/behavioral_patterns.py)
+### [`behavioral_patterns.py`](./behavioral_patterns.py)
 Defines behavioral characteristics and patterns for different employee groups used in synthetic data generation and behavioral analysis.
 
 **Employee Groups:**
@@ -31,7 +31,7 @@ Defines behavioral characteristics and patterns for different employee groups us
 - Off-hours and weekend work tendencies
 - Classification level flags for sensitive activities
 
-### [`organizational_structure.py`](config/organizational_structure.py)
+### [`organizational_structure.py`](./organizational_structure.py)
 Contains organizational hierarchy definitions, department structures, position titles, and behavioral group mappings.
 
 **Key Components:**
@@ -52,7 +52,7 @@ Contains organizational hierarchy definitions, department structures, position t
 - Marketing and Business Development
 - Information Technology
 
-### [`employee_attributes.py`](config/employee_attributes.py)
+### [`employee_attributes.py`](./employee_attributes.py)
 Defines probabilistic distributions for employee characteristics, security classifications, and seniority ranges.
 
 **Configuration Areas:**
@@ -64,7 +64,7 @@ Defines probabilistic distributions for employee characteristics, security class
   - Criminal record
   - Medical history
 
-### [`geographic_data.py`](config/geographic_data.py)
+### [`geographic_data.py`](./geographic_data.py)
 Contains geographic information for employee origins, campus locations, travel patterns, and security threat assessments.
 
 **Geographic Components:**
