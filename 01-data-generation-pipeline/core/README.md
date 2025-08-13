@@ -9,24 +9,24 @@ This module handles system-wide configuration, logging setup, workflow managemen
 ## Module Components
 
 ### Configuration Management
-- **[config_manager.py](./core/config_manager.py)** - System configuration and setup utilities
+- **[config_manager.py](./config_manager.py)** - System configuration and setup utilities
   - Logging configuration with multiple verbosity levels
   - Random seed initialization for reproducible results
   - Output directory creation and management
 
 ### Workflow Orchestration
-- **[workflow_manager.py](./core/workflow_manager.py)** - Main business logic coordination
+- **[workflow_manager.py](./workflow_manager.py)** - Main business logic coordination
   - Analysis-only mode execution for existing datasets
   - Full dataset generation process orchestration
   - Data validation and export coordination
 
 ### Data Processing
-- **[daily_label_creator.py](./core/daily_label_creator.py)** - Daily-level suspicious activity labeling
+- **[daily_label_creator.py](./daily_label_creator.py)** - Daily-level suspicious activity labeling
   - Transforms employee-level malicious labels to daily-level labels
   - Multi-stage anomaly detection with threshold calculation
   - False positive simulation for realistic evaluation scenarios
 
-- **[data_noise_injector.py](./core/data_noise_injector.py)** - Synthetic noise injection
+- **[data_noise_injector.py](./data_noise_injector.py)** - Synthetic noise injection
   - Controlled noise addition to numeric, binary, and temporal fields
   - Maintains consistency between dependent fields
   - Configurable noise rates and distribution types

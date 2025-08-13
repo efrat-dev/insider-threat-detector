@@ -2,17 +2,6 @@
 
 A sophisticated command-line tool for generating realistic insider threat datasets for cybersecurity research and analysis.
 
-## 📋 Table of Contents
-
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Command Line Arguments](#command-line-arguments)
-- [Examples](#examples)
-- [Output Formats](#output-formats)
-- [Technical Details](#technical-details)
-- [Code Documentation](#code-documentation)
-
 ## 📁 Project Structure
 
 ```
@@ -157,14 +146,14 @@ Robust error handling with:
 
 ### Core Modules
 
-#### [`argument_parser.py`](cli/argument_parser.py)
+#### [`argument_parser.py`](./argument_parser.py)
 Handles command-line interface functionality:
 - **`parse_arguments()`**: Configures and parses CLI arguments using argparse
 - **`validate_arguments()`**: Performs comprehensive argument validation
 - Organized argument groups for better UX
 - Extensive help text and usage examples
 
-#### [`display_utils.py`](cli/display_utils.py)  
+#### [`display_utils.py`](./display_utils.py)  
 Manages user interface and output display:
 - **`print_configuration()`**: Displays current generation settings
 - **`print_final_statistics()`**: Shows dataset statistics and distributions
