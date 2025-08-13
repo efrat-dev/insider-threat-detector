@@ -15,7 +15,7 @@ Each generator incorporates behavioral patterns that differentiate between regul
 
 ## Module Structure
 
-### [access_activity_generator.py](activity_generators/access_activity_generator.py)
+### [access_activity_generator.py](./access_activity_generator.py)
 
 **Purpose**: Generates building access activity data for employees
 
@@ -33,7 +33,7 @@ Each generator incorporates behavioral patterns that differentiate between regul
 - Early entry and late exit indicators
 - Multi-campus activity metrics
 
-### [burn_activity_generator.py](activity_generators/burn_activity_generator.py)
+### [burn_activity_generator.py](./burn_activity_generator.py)
 
 **Purpose**: Generates data destruction (burn) activity patterns
 
@@ -52,7 +52,7 @@ Each generator incorporates behavioral patterns that differentiate between regul
 - Off-hours activity indicators
 - Cross-campus burning flags
 
-### [print_activity_generator.py](activity_generators/print_activity_generator.py)
+### [print_activity_generator.py](./print_activity_generator.py)
 
 **Purpose**: Generates employee printing activity data
 
@@ -70,7 +70,7 @@ Each generator incorporates behavioral patterns that differentiate between regul
 - Cross-campus printing indicators
 - Command-to-page relationships
 
-### [travel_activity_generator.py](activity_generators/travel_activity_generator.py)
+### [travel_activity_generator.py](./travel_activity_generator.py)
 
 **Purpose**: Generates employee travel activity and trip data
 
@@ -88,7 +88,7 @@ Each generator incorporates behavioral patterns that differentiate between regul
 - Official vs. unofficial trip indicators
 - Origin country relationship flags
 
-### [risk_indicators.py](activity_generators/risk_indicators.py)
+### [risk_indicators.py](./risk_indicators.py)
 
 **Purpose**: Calculates composite risk indicators based on activity data
 
