@@ -42,6 +42,7 @@ Each step incorporates security clearance levels and classification handling:
   - **Travel** - Business trips and location tracking
 - **Key Files**: 
   - [`data_generator.py`](data_generator/data_generator.py) - Main generation engine
+  - [`data_generator_core.py`](data_generator/data_generator_core.py) - Core orchestrator that combines all activity generators
   - [`access_activity_generator.py`](activity_generators/access_activity_generator.py) - Building access
   - [`print_activity_generator.py`](activity_generators/print_activity_generator.py) - Printing behavior
   - [`burn_activity_generator.py`](activity_generators/burn_activity_generator.py) - Document destruction
