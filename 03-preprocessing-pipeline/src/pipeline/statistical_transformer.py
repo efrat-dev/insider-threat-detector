@@ -6,15 +6,13 @@ warnings.filterwarnings('ignore')
 class StatisticalTransformer:
     """מחלקה מיוחדת לטרנספורמציות סטטיסטיות - Z-score ורבעונים בהתאם לסוג המודל"""
     
-    def __init__(self, model_type='isolation-forest'):
-        self.model_type = model_type
+    def __init__(self):
         self.scalers = {}
         self.fitted_params = {}
         self.is_fitted = False
         
     def fit(self, df):
         """אימון פרמטרי הטרנספורמציות הסטטיסטיות על נתוני הטריין"""
-        print(f"Fitting statistical transformations parameters for {self.model_type} model...")
         
         # איפוס פרמטרים
         self.fitted_params = {}
@@ -28,9 +26,7 @@ class StatisticalTransformer:
         transform_columns = [col for col in numeric_columns if col not in exclude_cols]
         
         self.fitted_params['transform_columns'] = transform_columns
-        
-        print(f"Fitting statistical parameters for {len(transform_columns)} numeric columns")
-        
+                
         successful_fits = 0
         
         for col in transform_columns:
@@ -64,10 +60,7 @@ class StatisticalTransformer:
                     continue
         
         self.is_fitted = True
-        
-        print(f"Statistical fitting completed for {successful_fits} columns")
-        print(f"  - Z-score transformations: {len(self.scalers)}")
-        
+            
         return df  
     
     def transform(self, df):
@@ -75,7 +68,6 @@ class StatisticalTransformer:
         if not self.is_fitted:
             raise ValueError("StatisticalTransformer must be fitted before transform")
         
-        print(f"Transforming data using fitted statistical parameters for {self.model_type} model...")
         df_processed = df.copy()
         
         transform_columns = self.fitted_params.get('transform_columns', [])
@@ -101,9 +93,7 @@ class StatisticalTransformer:
             except Exception as e:
                 print(f"Error transforming column {col}: {str(e)}")
                 continue
-        
-        print(f"Statistical transformations completed - Z-score: {zscore_successes} columns")
-        
+                
         return df_processed
     
     def fit_transform(self, df):

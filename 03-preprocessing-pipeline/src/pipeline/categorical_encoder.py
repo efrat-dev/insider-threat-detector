@@ -67,7 +67,6 @@ class CategoricalEncoder:
     
     def fit_encode(self, df, target_col='is_malicious'):
         """למידת פרמטרי הקידוד מנתוני האימון - גרסה מותאמת"""
-        print("Fitting categorical encoder...")
         
         self.categorical_columns = self.identify_all_categorical_columns(df)
         
@@ -119,10 +118,7 @@ class CategoricalEncoder:
                     freq_map = col_data.value_counts().to_dict()
                     self.frequency_encodings[col] = freq_map
                     
-                else:
-                    # עמודות עם cardinality גבוה - קיבוץ קטגוריות
-                    print(f"  High cardinality column {col} ({unique_values} unique values) - applying grouping")
-                    
+                else:                    
                     # ניסיון קיבוץ חכם
                     # אם עדיין יותר מדי קטגוריות, קבץ נדירות
                     if unique_values > self.max_categories_for_detailed_encoding:
@@ -135,7 +131,6 @@ class CategoricalEncoder:
                             df_work[col] = df_work[col].map(rare_grouping).fillna(df_work[col])
                             col_data = df_work[col].astype(str)
                             unique_values = col_data.nunique()
-                            print(f"    Applied rare category grouping, reduced to {unique_values} categories")
                     
                     # קידוד לאחר הקיבוץ
                     if unique_values <= self.max_categories_for_detailed_encoding:
@@ -162,7 +157,6 @@ class CategoricalEncoder:
                 self.encoding_strategies[col] = 'skip'
         
         self.is_fitted = True
-        print("Categorical encoder fitting completed!")
         
         return self.transform_encode(df)
     
@@ -171,7 +165,6 @@ class CategoricalEncoder:
         if not self.is_fitted:
             raise ValueError("Encoder must be fitted before transform")
         
-        print("Transforming categorical variables...")
         df_processed = df.copy()
         
         encoded_features = []
@@ -236,14 +229,11 @@ class CategoricalEncoder:
                     columns_to_drop.append(col)
                                 
             except Exception as e:
-                print(f"  Error transforming column {col}: {str(e)}")
                 columns_to_drop.append(col)
         
         # מחיקת העמודות המקוריות
         existing_columns_to_drop = [col for col in columns_to_drop if col in df_processed.columns]
         if existing_columns_to_drop:
             df_processed = df_processed.drop(columns=existing_columns_to_drop)
-            print(f"Dropped {len(existing_columns_to_drop)} original categorical columns")
         
-        print(f"Categorical encoding completed! Created {len(encoded_features)} new encoded features")
         return df_processed

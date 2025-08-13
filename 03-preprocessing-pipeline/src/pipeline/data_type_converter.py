@@ -35,5 +35,4 @@ class DataTypeConverter:
             if col in df_processed.columns:
                 df_processed[col] = df_processed[col].astype('category')
         
-        print("Data types converted successfully")
         return df_processed

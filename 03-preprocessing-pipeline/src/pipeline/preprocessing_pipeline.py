@@ -11,15 +11,14 @@ import pandas as pd
 class PreprocessingPipeline:
     """Pipeline מלא לעיבוד מקדים ללא זליגת מידע"""
     
-    def __init__(self, model_type='isolation-forest'):
-        self.model_type = model_type
+    def __init__(self):
         
         # Initialize all pipeline components
         self.data_cleaner = DataCleaner()
         self.data_type_converter = DataTypeConverter()
         self.feature_creator = FeatureCreator()
         self.categorical_encoder = CategoricalEncoder()
-        self.statistical_transformer = StatisticalTransformer(model_type=model_type)
+        self.statistical_transformer = StatisticalTransformer()
         self.variance_correlation_filter = VarianceCorrelationFilter()
         self.feature_normalizer = FeatureNormalizer()
 
@@ -31,7 +30,6 @@ class PreprocessingPipeline:
     
     def fit(self, X_train, y_train=None):
         """אימון הפייפליין על נתוני הטריין בלבד"""
-        print(f"Fitting preprocessing pipeline on training data for {self.model_type} model...")
         
         df_train = X_train.copy()
         if y_train is not None:
@@ -60,7 +58,7 @@ class PreprocessingPipeline:
         self.feature_normalizer.fit_normalize_features(df_train)
         
         self.is_fitted = True
-        print("Pipeline fitting completed!")
+
         return self
     
     def transform(self, X):
@@ -68,7 +66,6 @@ class PreprocessingPipeline:
         if not self.is_fitted:
             raise ValueError("Pipeline must be fitted before transform")
         
-        print(f"Transforming data using fitted pipeline for {self.model_type} model...")
         df = X.copy()
         
         df = self.data_cleaner.transform_handle_missing_values(df)
@@ -93,7 +90,6 @@ class PreprocessingPipeline:
 
         df = self.feature_normalizer.transform_normalize_features(df)
         
-        print(f"Transform completed! Shape: {df.shape}")
         return df
     
     def fit_transform(self, X_train, y_train=None):
@@ -110,9 +106,6 @@ class PreprocessingPipeline:
         
         if existing_columns:
             df_processed = df_processed.drop(columns=existing_columns)
-            print(f"Removed original columns before encoding: {existing_columns}")
-        else:
-            print("No original columns found to remove")
         
         return df_processed
     

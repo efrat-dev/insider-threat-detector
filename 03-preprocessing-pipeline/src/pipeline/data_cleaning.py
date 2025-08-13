@@ -11,7 +11,6 @@ class DataCleaner:
     
     def fit_handle_missing_values(self, df):
         """אימון פרמטרי הטיפול בערכים חסרים על נתוני הטריין"""
-        print("Fitting missing values handling parameters...")
         
         # שמירת פרמטרים לטיפול בערכים חסרים
         self.fitted_params['missing_values'] = {}
@@ -65,7 +64,6 @@ class DataCleaner:
                 self.fitted_params['missing_values'][col] = {'method': 'fill_mode', 'value': mode_val}
         
         self.is_fitted = True
-        print(f"Missing values parameters fitted for {len(self.fitted_params['missing_values'])} columns")
         
         # החזרת הדאטה לאחר הטיפול
         return self.transform_handle_missing_values(df)
@@ -75,7 +73,6 @@ class DataCleaner:
         if not self.is_fitted:
             raise ValueError("DataCleaner must be fitted before transform")
         
-        print("Transforming missing values using fitted parameters...")
         df_processed = df.copy()
         
         # החלת הפרמטרים השמורים
@@ -98,12 +95,10 @@ class DataCleaner:
                     default_date = pd.Timestamp('1900-01-01')  # תאריך שמייצג "לא קיים"
                     df_processed[col] = df_processed[col].fillna(default_date)
         
-        print("Missing values transformed successfully")
         return df_processed
     
     def fit_handle_outliers(self, df, method='cap', threshold=0.05):
         """אימון פרמטרי הטיפול בחריגים על נתוני הטריין"""
-        print(f"Fitting outliers handling parameters with method: {method}...")
         
         if 'outliers' not in self.fitted_params:
             self.fitted_params['outliers'] = {}
@@ -128,16 +123,13 @@ class DataCleaner:
                 'upper_bound': upper_bound
             }
         
-        print(f"Outliers parameters fitted for {len(self.fitted_params['outliers']['bounds'])} columns")
         return df  # בפיט רק שומרים פרמטרים, לא מבצעים שינויים
     
     def transform_handle_outliers(self, df):
         """החלת פרמטרי הטיפול בחריגים על דאטה חדש"""
         if not self.is_fitted or 'outliers' not in self.fitted_params:
-            print("Warning: Outliers parameters not fitted, skipping outliers handling")
             return df
 
-        print("Transforming outliers using fitted parameters...")
         df_processed = df.copy()
         method = self.fitted_params['outliers']['method']
         exclude_cols = {'first_entry_time', 'last_exit_time', 'date'}
@@ -157,6 +149,5 @@ class DataCleaner:
                         np.nan, df_processed[col]
                     )
 
-        print(f"Outliers transformed using {method} method")
         return df_processed
     

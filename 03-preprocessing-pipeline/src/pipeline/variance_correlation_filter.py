@@ -17,7 +17,6 @@ class VarianceCorrelationFilter:
         
     def fit_variance_filtering(self, df, threshold=0.01):
         """פילטרינג פיצ'רים עם וריאנס נמוך"""
-        print(f"Fitting variance filtering with threshold {threshold}...")
         
         # הפרדת פיצ'רים נומריים
         numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
@@ -25,7 +24,6 @@ class VarianceCorrelationFilter:
             numeric_cols.remove('target')
         
         if len(numeric_cols) == 0:
-            print("No numeric columns found for variance filtering")
             self.variance_filtered_features_ = df.columns.tolist()
             return df
         
@@ -33,10 +31,8 @@ class VarianceCorrelationFilter:
         protected_cols = [col for col in numeric_cols if self._is_protected_column(col)]
         regular_cols = [col for col in numeric_cols if not self._is_protected_column(col)]
         
-        print(f"Protected columns (will not be filtered): {protected_cols}")
         
         if len(regular_cols) == 0:
-            print("No regular numeric columns for variance filtering (all are protected)")
             self.variance_filtered_features_ = df.columns.tolist()
             return df
         
@@ -56,8 +52,6 @@ class VarianceCorrelationFilter:
         self.variance_filtered_features_ = selected_regular + protected_cols + non_numeric_cols
         
         removed_count = len(regular_cols) - len(selected_regular)
-        print(f"Variance filtering: removed {removed_count} features with low variance")
-        print(f"Kept {len(protected_cols)} protected features regardless of variance")
         
         return df[self.variance_filtered_features_]
     
@@ -71,13 +65,11 @@ class VarianceCorrelationFilter:
         
         if len(available_features) != len(self.variance_filtered_features_):
             missing_features = set(self.variance_filtered_features_) - set(available_features)
-            print(f"Warning: {len(missing_features)} features from variance filtering not found in transform data: {missing_features}")
         
         return df[available_features]
     
     def fit_correlation_filtering(self, df, threshold=0.95):
         """פילטרינג פיצ'רים עם קורלציה גבוהה"""
-        print(f"Fitting correlation filtering with threshold {threshold}...")
         
         self.correlation_threshold = threshold
         
@@ -87,7 +79,6 @@ class VarianceCorrelationFilter:
             numeric_cols.remove('target')
         
         if len(numeric_cols) <= 1:
-            print("Not enough numeric columns for correlation filtering")
             self.correlation_filtered_features_ = df.columns.tolist()
             return df
         
@@ -95,10 +86,8 @@ class VarianceCorrelationFilter:
         protected_cols = [col for col in numeric_cols if self._is_protected_column(col)]
         regular_cols = [col for col in numeric_cols if not self._is_protected_column(col)]
         
-        print(f"Protected columns (will not be filtered): {protected_cols}")
         
         if len(regular_cols) <= 1:
-            print("Not enough regular numeric columns for correlation filtering")
             self.correlation_filtered_features_ = df.columns.tolist()
             return df
         
@@ -118,12 +107,7 @@ class VarianceCorrelationFilter:
         remaining_regular = [col for col in regular_cols if col not in to_drop]
         non_numeric_cols = [col for col in df.columns if col not in numeric_cols]
         self.correlation_filtered_features_ = remaining_regular + protected_cols + non_numeric_cols
-        
-        print(f"Correlation filtering: removed {len(to_drop)} highly correlated features")
-        print(f"Kept {len(protected_cols)} protected features regardless of correlation")
-        if to_drop:
-            print(f"Removed features: {to_drop}")
-        
+                
         return df[self.correlation_filtered_features_]
     
     def transform_correlation_filtering(self, df):
@@ -136,6 +120,5 @@ class VarianceCorrelationFilter:
         
         if len(available_features) != len(self.correlation_filtered_features_):
             missing_features = set(self.correlation_filtered_features_) - set(available_features)
-            print(f"Warning: {len(missing_features)} features from correlation filtering not found in transform data: {missing_features}")
         
         return df[available_features]

@@ -12,7 +12,6 @@ class FeatureNormalizer:
     
     def fit_normalize_features(self, df, method='standard'):
         """אfימון פרמטרי הנורמליזציה על נתוני הטריין"""
-        print(f"Fitting normalization parameters with method: {method}")
         
         # שמירת פרמטרי הנורמליזציה
         self.fitted_params['normalization'] = {
@@ -48,16 +47,13 @@ class FeatureNormalizer:
             scaler.fit(df[numeric_columns])
             self.scalers['robust'] = scaler
         
-        print(f"Normalization fitted for {len(numeric_columns)} columns using {method} method")
         return df  # בפיט לא משנים את הדאטה
     
     def transform_normalize_features(self, df):
         """החלת הנורמליזציה עם פרמטרים מהטריין"""
         if not self.fitted_params.get('normalization'):
             raise ValueError("Normalization must be fitted before transform")
-        
-        print("Transforming features using fitted normalization parameters...")
-        
+                
         df_processed = df.copy()
         method = self.fitted_params['normalization']['method']
         columns_to_normalize = self.fitted_params['normalization']['columns_to_normalize']
@@ -66,7 +62,6 @@ class FeatureNormalizer:
         available_columns = [col for col in columns_to_normalize if col in df_processed.columns]
         
         if len(available_columns) == 0:
-            print("No columns available for normalization")
             return df_processed
         
         if len(available_columns) != len(columns_to_normalize):
@@ -80,7 +75,6 @@ class FeatureNormalizer:
         
         try:
             df_processed[available_columns] = scaler.transform(df_processed[available_columns])
-            print(f"Features normalized using {method} method for {len(available_columns)} columns")
         except Exception as e:
             print(f"Error in normalization: {str(e)}")
             
