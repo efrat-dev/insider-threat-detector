@@ -26,7 +26,7 @@ This module handles system-wide configuration, logging setup, workflow managemen
   - Multi-stage anomaly detection with threshold calculation
   - False positive simulation for realistic evaluation scenarios
 
-- **[data_noise_injector.py](./date_noise_injector.py)** - Synthetic noise injection
+- **[data_noise_injector.py](./data_noise_injector.py)** - Synthetic noise injection
   - Controlled noise addition to numeric, binary, and temporal fields
   - Maintains consistency between dependent fields
   - Configurable noise rates and distribution types
