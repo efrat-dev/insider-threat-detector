@@ -1,195 +1,172 @@
-# Insider Threat Detection Data Processing Pipeline
-
-A comprehensive data preprocessing and feature engineering pipeline for insider threat detection in organizational security systems.
+# Insider Threat Detection Data Preprocessing Pipeline
 
 ## Overview
 
-This project provides a complete data processing pipeline specifically designed for insider threat detection datasets. It includes advanced data cleaning, feature engineering, transformation, and quality validation capabilities to prepare security data for machine learning models.
+This project provides a comprehensive data preprocessing pipeline for insider threat detection datasets. The pipeline handles various data quality issues, creates meaningful features, and prepares data for machine learning models through a series of modular, reusable components.
 
-## Features
+## 🚀 Quick Start
 
-### 🔧 Data Processing Pipeline
-- **Automated Data Cleaning**: Handles missing values, outliers, and data type conversions
-- **Data Quality Validation**: Comprehensive validation including completeness, consistency, and data type checks
-- **Feature Engineering**: Both basic and advanced feature creation from raw security data
-- **Data Transformation**: Normalization, standardization, and dimensionality reduction
-
-### 📊 Data Quality Validation
-- **Completeness Analysis**: Identifies and reports missing values
-- **Consistency Checks**: Validates logical relationships between data fields
-- **Data Type Validation**: Ensures proper data types for all columns
-- **Range Validation**: Detects outliers and invalid value ranges
-- **Duplicate Detection**: Identifies duplicate records and inconsistencies
-
-### 🚀 Feature Engineering
-- **Basic Features**: Time-based, printing behavior, access patterns, employee characteristics
-- **Advanced Features**: Behavioral risk profiles, temporal patterns, anomaly detection
-- **Interaction Features**: Complex feature interactions and polynomial transformations
-- **Statistical Features**: Z-scores, ratios, and derived statistical measures
-
-### 🔍 Data Transformation
-- **Feature Filtering**: Correlation-based and variance-based feature selection
-- **Normalization**: Standard, MinMax, and Robust scaling methods
-- **Dimensionality Reduction**: PCA and other reduction techniques
-- **Outlier Handling**: Capping and removal methods
-
-## Installation
-
-1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd insider-threat-detection
+python src/main.py
 ```
 
-2. Install required dependencies:
-```bash
-pip install pandas numpy scikit-learn scipy
+This will process your `insider_threat_dataset.csv` and generate three output files:
+- `train_processed.csv` (60% of data)
+- `val_processed.csv` (20% of data) 
+- `test_processed.csv` (20% of data)
+
+## 📁 Project Structure
+
+```
+src/
+├── main.py                          # Main execution script
+└── pipeline/
+    ├── preprocessing_pipeline.py    # Main pipeline orchestrator
+    ├── data_cleaning.py            # Missing values and outlier handling
+    ├── categorical_encoder.py      # Advanced categorical encoding
+    ├── feature_creator.py          # Domain-specific feature engineering
+    ├── statistical_transformer.py  # Statistical transformations
+    ├── variance_correlation_filter.py # Feature selection
+    ├── feature_normalizer.py       # Data normalization
+    └── data_type_converter.py      # Data type optimization
 ```
 
-## Usage
+## 📚 Documentation
 
-### Basic Usage
+- **[Pipeline Architecture](./docs/PIPELINE_ARCHITECTURE.md)** - Detailed overview of the preprocessing pipeline structure and workflow
+- **[Feature Engineering Guide](./docs/FEATURE_ENGINEERING.md)** - Comprehensive guide to feature creation and transformation strategies  
+- **[Data Processing Components](./docs/DATA_PROCESSING.md)** - Deep dive into individual pipeline components and their functionality
+- **[API Reference](./docs/API_REFERENCE.md)** - Complete API documentation for all classes and methods
+
+## 🔧 Key Features
+
+### Advanced Data Cleaning
+- **Missing Value Handling**: Intelligent imputation strategies based on data types and domain knowledge
+- **Outlier Detection**: IQR-based outlier detection with configurable handling methods
+- **Data Type Optimization**: Automatic conversion to appropriate data types for memory efficiency
+
+### Smart Categorical Encoding
+- **Adaptive Strategy Selection**: Different encoding methods based on cardinality
+- **Rare Category Grouping**: Automatic grouping of infrequent categories to reduce dimensionality
+- **Target Encoding**: Mean target encoding for high-cardinality categorical variables
+
+### Domain-Specific Feature Engineering
+- **Temporal Features**: Time-based features including entry/exit patterns, weekday/weekend indicators
+- **Media/Security Features**: Burn request analysis, classification patterns, off-hours activity
+- **Employee Behavior Features**: Seniority patterns, location analysis, travel behavior
+
+### Statistical Transformations
+- **Z-score Normalization**: Standardization of numerical features
+- **Robust Scaling**: Outlier-resistant normalization methods
+- **Feature Selection**: Variance and correlation-based feature filtering
+
+## 🎯 Pipeline Workflow
+
+1. **Data Loading** ([`src/main.py`](src/main.py))
+   - Load dataset and perform initial memory optimization
+   - Handle irrelevant columns
+
+2. **Data Cleaning** ([`src/pipeline/data_cleaning.py`](src/pipeline/data_cleaning.py))
+   - Missing value imputation
+   - Outlier detection and handling
+
+3. **Data Type Conversion** ([`src/pipeline/data_type_converter.py`](src/pipeline/data_type_converter.py))
+   - Optimize data types for memory efficiency
+   - Convert datetime and categorical columns
+
+4. **Feature Engineering** ([`src/pipeline/feature_creator.py`](src/pipeline/feature_creator.py))
+   - Create temporal, media, and employee-specific features
+   - Generate domain-relevant derived features
+
+5. **Categorical Encoding** ([`src/pipeline/categorical_encoder.py`](src/pipeline/categorical_encoder.py))
+   - Apply adaptive encoding strategies
+   - Handle high-cardinality categorical variables
+
+6. **Statistical Transformations** ([`src/pipeline/statistical_transformer.py`](src/pipeline/statistical_transformer.py))
+   - Apply z-score transformations
+   - Generate statistical features
+
+7. **Feature Selection** ([`src/pipeline/variance_correlation_filter.py`](src/pipeline/variance_correlation_filter.py))
+   - Remove low-variance features
+   - Handle highly correlated features
+
+8. **Normalization** ([`src/pipeline/feature_normalizer.py`](src/pipeline/feature_normalizer.py))
+   - Apply final scaling transformations
+   - Ensure features are on similar scales
+
+## 🔬 Core Components
+
+### PreprocessingPipeline ([`src/pipeline/preprocessing_pipeline.py`](src/pipeline/preprocessing_pipeline.py))
+The main orchestrator that coordinates all preprocessing steps. Supports fit/transform paradigm for proper train/test separation.
+
+### CategoricalEncoder ([`src/pipeline/categorical_encoder.py`](src/pipeline/categorical_encoder.py))
+Advanced categorical encoding with automatic strategy selection:
+- Binary encoding for 2-category variables
+- One-hot encoding for low-cardinality (≤3 categories)
+- Target + frequency encoding for medium cardinality (4-10 categories)
+- Minimal encoding for high-cardinality variables
+
+### FeatureCreator ([`src/pipeline/feature_creator.py`](src/pipeline/feature_creator.py))
+Domain-specific feature engineering for insider threat detection:
+- **Temporal features**: Entry/exit patterns, time-based indicators
+- **Media features**: Burn request analysis, printing behavior
+- **Employee features**: Seniority analysis, location patterns
+
+## 📊 Input Data Requirements
+
+The pipeline expects a CSV file with insider threat data containing columns such as:
+- Employee information (ID, department, seniority, etc.)
+- Temporal data (dates, entry/exit times)
+- Behavioral data (burn requests, print commands, etc.)
+- Target variable (`is_malicious`)
+
+## 📈 Output
+
+The pipeline generates three processed datasets:
+- **Training set** (60%): For model training
+- **Validation set** (20%): For hyperparameter tuning
+- **Test set** (20%): For final model evaluation
+
+Data is sorted by employee ID and date to ensure temporal consistency within the splits.
+
+## 🛠️ Configuration
+
+The pipeline uses sensible defaults but can be customized:
 
 ```python
-import pandas as pd
 from pipeline.preprocessing_pipeline import PreprocessingPipeline
 
-# Load your data
-df = pd.read_csv('insider_threat_dataset.csv')
-
-# Create and run the pipeline
+# Create and configure pipeline
 pipeline = PreprocessingPipeline()
-full_pipeline = pipeline.create_full_pipeline()
-df_processed = full_pipeline(df)
 
-# Save processed data
-df_processed.to_csv('processed_data.csv', index=False)
+# Fit on training data
+pipeline.fit(X_train, y_train)
+
+# Transform new data
+X_processed = pipeline.transform(X_test)
 ```
 
-### Advanced Usage
+## 🔍 Monitoring and Logging
 
-#### Data Quality Validation
-```python
-from pipeline.data_cleaning import DataQualityValidator
+The pipeline includes comprehensive logging to track:
+- Data shape changes at each step
+- Feature creation and selection
+- Encoding strategy decisions
+- Error handling and warnings
 
-validator = DataQualityValidator()
-quality_results = validator.run_full_validation(df)
-print(f"Data Quality Score: {quality_results['quality_score']['overall_quality_score']}")
-```
+## 🚨 Error Handling
 
-#### Custom Feature Engineering
-```python
-from pipeline.feature_engineering.feature_engineer_manager.complete_feature_engineer import CompleteFeatureEngineer
+Robust error handling ensures the pipeline continues processing even when individual components encounter issues:
+- Graceful handling of missing columns
+- Fallback strategies for encoding failures
+- Detailed error logging for debugging
 
-engineer = CompleteFeatureEngineer()
+## 📋 Requirements
 
-# Create basic features
-df = engineer.create_all_basic_features(df)
+- pandas >= 1.3.0
+- numpy >= 1.21.0
+- scikit-learn >= 1.0.0
 
-# Create advanced features
-df = engineer.create_all_advanced_features(df)
+## 📄 License
 
-# Apply complete feature engineering
-df = engineer.apply_complete_feature_engineering(df)
-```
-
-#### Data Transformation
-```python
-from pipeline.data_transformation import DataTransformer
-
-transformer = DataTransformer()
-
-# Feature filtering
-df = transformer.feature_filtering(df, method='correlation', threshold=0.95)
-
-# Normalization
-df = transformer.normalize_features(df, method='standard')
-
-# Dimensionality reduction
-df = transformer.dimensionality_reduction(df, method='pca', n_components=0.95)
-```
-
-## Data Requirements
-
-The pipeline expects a CSV file with the following key columns:
-- `employee_id`: Unique identifier for employees
-- `date`: Date of the recorded activity
-- `is_malicious`: Binary target variable (0/1)
-- Employee characteristics: `employee_seniority_years`, `is_contractor`, etc.
-- Activity data: printing, burning, access patterns, etc.
-
-## Pipeline Components
-
-### 1. Data Cleaning (`DataCleaner`)
-- Handles missing values using appropriate imputation strategies
-- Converts data types to proper formats
-- Detects and handles outliers
-- Performs consistency checks
-
-### 2. Data Quality Validation (`DataQualityValidator`)
-- Comprehensive data quality assessment
-- Generates quality scores and recommendations
-- Identifies critical issues and warnings
-
-### 3. Feature Engineering (`CompleteFeatureEngineer`)
-- **Basic Features**: Time patterns, printing behavior, access patterns
-- **Advanced Features**: Behavioral risk assessment, anomaly detection
-- **Interaction Features**: Complex feature combinations
-- **Statistical Features**: Derived statistical measures
-
-### 4. Data Transformation (`DataTransformer`)
-- Feature selection and filtering
-- Multiple normalization methods
-- Dimensionality reduction techniques
-
-## Output
-
-The pipeline generates:
-- **Processed Dataset**: Clean, transformed data ready for ML models
-- **Quality Reports**: Comprehensive data quality assessment
-- **Feature Summary**: Details about created features
-- **Processing Logs**: Step-by-step pipeline execution information
-
-## Key Features
-
-- **Modular Design**: Each component can be used independently
-- **Comprehensive Validation**: Multi-level data quality checks
-- **Advanced Feature Engineering**: State-of-the-art feature creation methods
-- **Scalable Architecture**: Designed for large-scale security datasets
-- **Error Handling**: Robust error handling and logging
-- **Customizable**: Easy to modify and extend for specific use cases
-
-## Error Handling
-
-The pipeline includes comprehensive error handling:
-- Graceful fallbacks for missing components
-- Detailed error logging and reporting
-- Safe execution with try-catch blocks
-- Validation of input data and parameters
-
-## Performance Considerations
-
-- Memory-efficient processing for large datasets
-- Optimized feature engineering algorithms
-- Parallel processing capabilities where applicable
-- Progress tracking and logging
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For questions, issues, or contributions, please open an issue in the repository or contact the development team.
-
----
-
-**Note**: This pipeline is specifically designed for insider threat detection use cases but can be adapted for other security and behavioral analysis scenarios.
+This project is licensed under the MIT License.
