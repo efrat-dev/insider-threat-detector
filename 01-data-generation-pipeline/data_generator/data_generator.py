@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, Optional
 
 from .data_generator_core import DataGeneratorCore
-from core.date_noise_injector import DataNoiseInjector
+from core.data_noise_injector import DataNoiseInjector
 
 
 class DataGenerator(DataGeneratorCore):
