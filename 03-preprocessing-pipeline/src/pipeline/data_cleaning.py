@@ -2,26 +2,31 @@ import pandas as pd
 import numpy as np
 
 class DataCleaner:
-    """מחלקה לניקוי נתונים"""
+    """Class for data cleaning"""
     
     def __init__(self):
-        # פרמטרים שנשמרים מהטריין
         self.fitted_params = {}
         self.is_fitted = False
     
     def fit_handle_missing_values(self, df):
-        """אימון פרמטרי הטיפול בערכים חסרים על נתוני הטריין"""
+        """
+        Fit missing value handling parameters on training data.
         
-        # שמירת פרמטרים לטיפול בערכים חסרים
+        Args:
+            df (DataFrame): Training dataframe to fit parameters on
+            
+        Returns:
+            DataFrame: Cleaned dataframe with missing values handled
+        """
+        
         self.fitted_params['missing_values'] = {}
         
-        # עמודות עם ערכים חסרים רבים (לפי הנתונים שלך)
+        # Columns with many missing values (based on data)
         travel_columns = ['trip_day_number', 'country_name']
         time_columns = ['first_entry_time', 'last_exit_time']
         derived_time_columns = ['entry_time_numeric', 'exit_time_numeric', 
                                'entry_time_numeric_zscore', 'exit_time_numeric_zscore']
         
-        # שמירת פרמטרים לעמודות נסיעות
         for col in travel_columns:
             if col in df.columns:
                 if col == 'trip_day_number':
@@ -29,22 +34,17 @@ class DataCleaner:
                 elif col == 'country_name':
                     self.fitted_params['missing_values'][col] = {'method': 'fill_constant', 'value': 'No_Travel'}
         
-        # שמירת פרמטרים לעמודות זמן - מילוי עם ערכים שמתאימים לטיפוס
         for col in time_columns:
             if col in df.columns:
-                # עבור datetime columns - נמלא עם תאריך default או NaT
                 self.fitted_params['missing_values'][col] = {'method': 'fill_datetime', 'value': pd.NaT}
         
-        # שמירת פרמטרים לעמודות זמן נגזרות (שייווצרו בהמשך)
         for col in derived_time_columns:
-            # עבור עמודות נומריות שנגזרות מזמן - נמלא עם 0 או median
             self.fitted_params['missing_values'][col] = {'method': 'fill_zero', 'value': 0}
         
-        # התמודדות עם total_presence_minutes
         if 'total_presence_minutes' in df.columns:
             self.fitted_params['missing_values']['total_presence_minutes'] = {'method': 'fill_zero', 'value': 0}
         
-        # חישוב פרמטרים לעמודות נומריות אחרות
+        # Calculate parameters for other numeric columns
         numeric_columns = df.select_dtypes(include=[np.number]).columns
         for col in numeric_columns:
             if (col not in self.fitted_params['missing_values'] and 
@@ -54,7 +54,7 @@ class DataCleaner:
                 median_val = df[col].median()
                 self.fitted_params['missing_values'][col] = {'method': 'fill_median', 'value': median_val}
         
-        # חישוב פרמטרים לעמודות קטגוריות
+        # Calculate parameters for categorical columns
         categorical_columns = df.select_dtypes(include=['object', 'category']).columns
         for col in categorical_columns:
             if (col not in self.fitted_params['missing_values'] and 
@@ -65,17 +65,27 @@ class DataCleaner:
         
         self.is_fitted = True
         
-        # החזרת הדאטה לאחר הטיפול
         return self.transform_handle_missing_values(df)
     
     def transform_handle_missing_values(self, df):
-        """החלת פרמטרי הטיפול בערכים חסרים על דאטה חדש"""
+        """
+        Apply missing value handling parameters to new data.
+        
+        Args:
+            df (DataFrame): Dataframe to clean
+            
+        Returns:
+            DataFrame: Cleaned dataframe
+            
+        Raises:
+            ValueError: If DataCleaner hasn't been fitted yet
+        """
         if not self.is_fitted:
             raise ValueError("DataCleaner must be fitted before transform")
         
         df_processed = df.copy()
         
-        # החלת הפרמטרים השמורים
+        # Apply stored parameters
         for col, params in self.fitted_params['missing_values'].items():
             if col in df_processed.columns and df_processed[col].isnull().sum() > 0:
                 method = params['method']
@@ -90,15 +100,24 @@ class DataCleaner:
                 elif method == 'fill_mode':
                     df_processed[col] = df_processed[col].fillna(value)
                 elif method == 'fill_datetime':
-                    # עבור datetime columns - אפשר למלא עם תאריך ברירת מחדל או להשאיר NaT
-                    # או להמיר לזמן "לא קיים" כמו 1900-01-01
-                    default_date = pd.Timestamp('1900-01-01')  # תאריך שמייצג "לא קיים"
+                    # For datetime columns - use default date representing "non-existent"
+                    default_date = pd.Timestamp('1900-01-01')  # Date representing "non-existent"
                     df_processed[col] = df_processed[col].fillna(default_date)
         
         return df_processed
     
     def fit_handle_outliers(self, df, method='cap', threshold=0.05):
-        """אימון פרמטרי הטיפול בחריגים על נתוני הטריין"""
+        """
+        Fit outlier handling parameters on training data.
+        
+        Args:
+            df (DataFrame): Training dataframe to fit parameters on
+            method (str): Method for handling outliers ('cap' or 'remove')
+            threshold (float): Threshold parameter (not used in current implementation)
+            
+        Returns:
+            DataFrame: Original dataframe (parameters only stored during fit)
+        """
         
         if 'outliers' not in self.fitted_params:
             self.fitted_params['outliers'] = {}
@@ -109,9 +128,10 @@ class DataCleaner:
         numeric_columns = df.select_dtypes(include=[np.number]).columns
         
         for col in numeric_columns:
-            if col in ['employee_id', 'is_malicious', 'is_emp_malicios', 'target']:  # לא לטפל בעמודות מזהות ותווית
+            if col in ['employee_id', 'is_malicious', 'is_emp_malicios', 'target']:  # Skip ID and label columns
                 continue
             
+            # Calculate IQR bounds for outlier detection
             Q1 = df[col].quantile(0.25)
             Q3 = df[col].quantile(0.75)
             IQR = Q3 - Q1
@@ -123,10 +143,18 @@ class DataCleaner:
                 'upper_bound': upper_bound
             }
         
-        return df  # בפיט רק שומרים פרמטרים, לא מבצעים שינויים
+        return df  # Only store parameters during fit, don't make changes
     
     def transform_handle_outliers(self, df):
-        """החלת פרמטרי הטיפול בחריגים על דאטה חדש"""
+        """
+        Apply outlier handling parameters to new data.
+        
+        Args:
+            df (DataFrame): Dataframe to process
+            
+        Returns:
+            DataFrame: Dataframe with outliers handled
+        """
         if not self.is_fitted or 'outliers' not in self.fitted_params:
             return df
 
@@ -140,14 +168,14 @@ class DataCleaner:
                 upper_bound = bounds['upper_bound']
 
                 if method == 'cap':
+                    # Cap values to bounds
                     df_processed[col] = np.where(df_processed[col] < lower_bound, lower_bound, df_processed[col])
                     df_processed[col] = np.where(df_processed[col] > upper_bound, upper_bound, df_processed[col])
                 elif method == 'remove':
-                    # בטרנספורם לא מוחקים שורות, רק מסמנים או מחליפים
+                    # In transform, don't delete rows, just mark outliers as NaN
                     df_processed[col] = np.where(
                         (df_processed[col] < lower_bound) | (df_processed[col] > upper_bound),
                         np.nan, df_processed[col]
                     )
 
         return df_processed
-    

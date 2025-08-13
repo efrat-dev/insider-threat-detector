@@ -4,7 +4,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 class StatisticalTransformer:
-    """מחלקה מיוחדת לטרנספורמציות סטטיסטיות - Z-score ורבעונים בהתאם לסוג המודל"""
+    """Special class for statistical transformations - Z-score and quartiles according to model type"""
     
     def __init__(self):
         self.scalers = {}
@@ -12,16 +12,22 @@ class StatisticalTransformer:
         self.is_fitted = False
         
     def fit(self, df):
-        """אימון פרמטרי הטרנספורמציות הסטטיסטיות על נתוני הטריין"""
+        """
+        Fit statistical transformation parameters on training data.
         
-        # איפוס פרמטרים
+        Args:
+            df (DataFrame): Training dataframe to fit parameters on
+            
+        Returns:
+            DataFrame: Original dataframe (unchanged)
+        """
+        
+        # Reset parameters
         self.fitted_params = {}
         self.scalers = {}
         
-        # זיהוי עמודות מספריות לטרנספורמציה
         numeric_columns = df.select_dtypes(include=[np.number]).columns
         
-        # הסרת עמודות מיוחדות
         exclude_cols = ['is_malicious', 'is_emp_malicious', 'target', 'date', 'timestamp', 'employee_id']
         transform_columns = [col for col in numeric_columns if col not in exclude_cols]
         
@@ -31,16 +37,15 @@ class StatisticalTransformer:
         
         for col in transform_columns:
             if col in df.columns:
-                # בדיקת תקינות הנתונים
+                # Data validity check
                 if df[col].isna().all():
                     print(f"Skipping column {col} - all values are NaN")
                     continue
                 
-                # שמירת פרמטרים לכל עמודה
+                # Store parameters for each column
                 col_params = {}
                 
                 try:
-                    # פרמטרים בסיסיים
                     col_params['std'] = df[col].std()
                     col_params['has_variance'] = col_params['std'] > 0
                     col_params['unique_values'] = df[col].nunique()
@@ -64,7 +69,18 @@ class StatisticalTransformer:
         return df  
     
     def transform(self, df):
-        """החלת הטרנספורמציות הסטטיסטיות עם פרמטרים מהטריין"""
+        """
+        Apply statistical transformations using fitted parameters.
+        
+        Args:
+            df (DataFrame): Dataframe to transform
+            
+        Returns:
+            DataFrame: Transformed dataframe with new statistical features
+            
+        Raises:
+            ValueError: If transformer hasn't been fitted yet
+        """
         if not self.is_fitted:
             raise ValueError("StatisticalTransformer must be fitted before transform")
         
@@ -80,6 +96,7 @@ class StatisticalTransformer:
             col_params = self.fitted_params[col]
             
             try:
+                # Apply Z-score transformation only if column has variance and scaler exists
                 if col_params.get('has_variance', False) and col in self.scalers:
                     try:
                         df_processed[f'{col}_zscore'] = self.scalers[col].transform(
@@ -97,6 +114,14 @@ class StatisticalTransformer:
         return df_processed
     
     def fit_transform(self, df):
-        """fit + transform במקום אחד"""
+        """
+        Fit and transform in one step.
+        
+        Args:
+            df (DataFrame): Dataframe to fit and transform
+            
+        Returns:
+            DataFrame: Transformed dataframe
+        """
         self.fit(df)
         return self.transform(df)

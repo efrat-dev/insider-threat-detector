@@ -9,7 +9,7 @@ from pipeline.data_type_converter import DataTypeConverter
 import pandas as pd
 
 class PreprocessingPipeline:
-    """Pipeline מלא לעיבוד מקדים ללא זליגת מידע"""
+    """Complete preprocessing pipeline"""
     
     def __init__(self):
         
@@ -29,9 +29,19 @@ class PreprocessingPipeline:
         self.scaler = None
     
     def fit(self, X_train, y_train=None):
-        """אימון הפייפליין על נתוני הטריין בלבד"""
+        """
+        Fit the pipeline on training data only.
+        
+        Args:
+            X_train (DataFrame): Training features
+            y_train (Series, optional): Training target variable
+            
+        Returns:
+            self: Returns the fitted pipeline instance
+        """
         
         df_train = X_train.copy()
+        # Add target to dataframe if provided to maintain alignment during transformations
         if y_train is not None:
             df_train['target'] = y_train
         
@@ -62,7 +72,18 @@ class PreprocessingPipeline:
         return self
     
     def transform(self, X):
-        """החלת הפייפליין על דאטה חדש (טריין או טסט)"""
+        """
+        Apply the fitted pipeline to new data (train or test).
+        
+        Args:
+            X (DataFrame): Data to transform
+            
+        Returns:
+            DataFrame: Transformed data
+            
+        Raises:
+            ValueError: If pipeline hasn't been fitted yet
+        """
         if not self.is_fitted:
             raise ValueError("Pipeline must be fitted before transform")
         
@@ -93,15 +114,35 @@ class PreprocessingPipeline:
         return df
     
     def fit_transform(self, X_train, y_train=None):
-        """fit + transform במקום אחד לנתוני הטריין"""
+        """
+        Fit and transform training data in one step.
+        
+        Args:
+            X_train (DataFrame): Training features
+            y_train (Series, optional): Training target variable
+            
+        Returns:
+            DataFrame: Fitted and transformed training data
+        """
         return self.fit(X_train, y_train).transform(X_train)
     
     def _remove_original_columns(self, df: pd.DataFrame, columns_to_remove=None) -> pd.DataFrame:
-        """הסרת עמודות מקוריות לפני הקידוד"""
+        """
+        Remove original columns after feature creation - these columns are no longer needed 
+        since desired features have already been derived from them.
+        
+        Args:
+            df (DataFrame): Input dataframe
+            columns_to_remove (list, optional): List of columns to remove
+            
+        Returns:
+            DataFrame: Dataframe with specified columns removed
+        """
         if columns_to_remove is None:
             columns_to_remove = ['employee_origin_country', 'country_name',  'modification_details', 'row_modified']
         
         df_processed = df.copy()
+        # Only remove columns that actually exist to avoid KeyError
         existing_columns = [col for col in columns_to_remove if col in df_processed.columns]
         
         if existing_columns:
@@ -110,18 +151,26 @@ class PreprocessingPipeline:
         return df_processed
     
     def _standardize_data_types(self, df: pd.DataFrame) -> pd.DataFrame:
-        """סטנדרטיזציה של טיפוסי נתונים"""
+        """
+        Standardize data types across the dataframe.
+        
+        Args:
+            df (DataFrame): Input dataframe
+            
+        Returns:
+            DataFrame: Dataframe with standardized data types
+        """
         exclude_cols = {'first_entry_time', 'last_exit_time', 'date'}
 
-        # זיהוי אוטומטי של עמודת המטרה
+        # Automatic identification of target column
         possible_targets = ['target', 'is_malicious', 'is_emp_malicious']
         target_col = next((col for col in possible_targets if col in df.columns), None)
         
-        # המרת עמודות boolean לנומריות
+        # Convert boolean columns to numeric
         bool_cols = df.select_dtypes(include=['bool']).columns
         df[bool_cols] = df[bool_cols].astype(int)
         
-        # המרת עמודות object שהן למעשה נומריות, מלבד עמודות מוחרגות
+        # Convert object columns that are actually numeric, excluding special columns
         for col in df.select_dtypes(include=['object']).columns:
             if col not in exclude_cols and (target_col is None or col != target_col):
                 try:
