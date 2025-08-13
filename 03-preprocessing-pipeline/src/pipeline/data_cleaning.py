@@ -101,32 +101,6 @@ class DataCleaner:
         print("Missing values transformed successfully")
         return df_processed
     
-    def handle_missing_after_feature_engineering(self, df):
-        """טיפול נוסף בערכים חסרים אחרי יצירת פיצ'רים"""
-        print("Handling missing values after feature engineering...")
-        df_processed = df.copy()
-        
-        # טיפול בעמודות שנוצרו במהלך feature engineering
-        derived_numeric_cols = [col for col in df_processed.columns 
-                               if any(suffix in col for suffix in ['_zscore', '_numeric', '_freq', '_binary'])]
-        
-        for col in derived_numeric_cols:
-            if df_processed[col].isnull().sum() > 0:
-                print(f"  Filling {col} with 0 (derived feature)")
-                df_processed[col] = df_processed[col].fillna(0)
-        
-        # טיפול בעמודות זמן שנוצרו
-        time_numeric_cols = [col for col in df_processed.columns 
-                           if 'time_numeric' in col]
-        
-        for col in time_numeric_cols:
-            if df_processed[col].isnull().sum() > 0:
-                print(f"  Filling {col} with 0 (time feature)")
-                df_processed[col] = df_processed[col].fillna(0)
-        
-        print("Post-feature-engineering missing values handled")
-        return df_processed
-    
     def fit_handle_outliers(self, df, method='cap', threshold=0.05):
         """אימון פרמטרי הטיפול בחריגים על נתוני הטריין"""
         print(f"Fitting outliers handling parameters with method: {method}...")
