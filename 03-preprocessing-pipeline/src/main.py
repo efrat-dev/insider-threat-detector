@@ -3,26 +3,8 @@ import sys
 from sklearn.model_selection import train_test_split
 from pipeline.preprocessing_pipeline import PreprocessingPipeline
 
-def split_data_for_isolation_forest(X, y):
-    """חלוקה רנדומלית עבור Isolation Forest"""
-    print("Using random split for Isolation Forest...")
-    
-    # ראשית: חלק ל-Train (60%) ו-Temp (40%)
-    X_train, X_temp, y_train, y_temp = train_test_split(
-        X, y, test_size=0.4, random_state=42, stratify=y
-    )
-    
-    # שנית: חלק את Temp ל-Validation (20%) ו-Test (20%)
-    X_val, X_test, y_val, y_test = train_test_split(
-        X_temp, y_temp, test_size=0.5, random_state=42, stratify=y_temp
-    )
-    
-    return X_train, X_val, X_test, y_train, y_val, y_test
-
-def split_data_for_lstm(X, y, employee_col='employee_id', date_col='date'):
-    """חלוקה עם מיון לפי עובד ותאריך עבור LSTM"""
-    print("Using employee-ordered split for LSTM...")
-    
+def split_data(X, y, employee_col='employee_id', date_col='date'):
+    """חלוקה עם מיון לפי עובד ותאריך עבור """    
     # צור DataFrame מאוחד למיון
     combined_df = pd.concat([X, y], axis=1)
     
@@ -57,21 +39,7 @@ def split_data_for_lstm(X, y, employee_col='employee_id', date_col='date'):
     return X_train, X_val, X_test, y_train, y_val, y_test
 
 def main():
-    # בדוק אם צוין פרמטר עבור סוג המודל
-    if len(sys.argv) < 2:
-        print("Usage: python main.py <model_type>")
-        print("Available model types: isolation-forest, lstm")
-        sys.exit(1)
-    
-    model_type = sys.argv[1].lower()
-    
-    if model_type not in ['isolation-forest', 'lstm']:
-        print("Error: Invalid model type. Use 'isolation-forest' or 'lstm'")
-        sys.exit(1)
-    
-    print(f"Processing data for {model_type} model...")
-    
-    # טען את הדאטה
+            
     df = pd.read_csv('insider_threat_dataset.csv')
     print(f"Original dataset size: {len(df)} records")
         
@@ -79,16 +47,10 @@ def main():
     df = df.astype({col: 'float32' for col in df.select_dtypes(include=['float64']).columns})
         
     # הסר עמודות שלא רלוונטיות
-    columns_to_drop = []
-    if 'is_emp_malicious' in df.columns:
-        columns_to_drop.append('is_emp_malicious')
-        
-    if 'modification_details' in df.columns:
-        columns_to_drop.append('modification_details')
-
+    columns_to_drop = [col for col in ['is_emp_malicious', 'modification_details'] if col in df.columns]
     if columns_to_drop:
         df = df.drop(columns=columns_to_drop)
-        print(f"Dropped columns: {columns_to_drop}")    
+        print(f"Dropped columns: {columns_to_drop}")
     
     # הכן את הדאטה לעיבוד
     target_col = 'is_malicious'
@@ -99,9 +61,7 @@ def main():
     print(f"X shape: {X.shape}")
     print(f"y shape: {y.shape}")
         
-    # צור את הפייפליין עם סוג המודל
-    print(f"\nCreating preprocessing pipeline for {model_type}...")
-    pipeline = PreprocessingPipeline(model_type=model_type)
+    pipeline = PreprocessingPipeline()
     
     # אמן את הפייפליין על כל הדאטה (רק fit, לא transform עדיין)
     print("\n🔧 FITTING pipeline...")
@@ -122,13 +82,9 @@ def main():
     y_clean = y[mask]
     removed_count = len(X_processed) - len(X_clean)
     if removed_count > 0:
-        print(f"\n⚠️ ATTENTION: {removed_count} records were removed due to missing values!")
+        print(f"\n⚠️ ##################################################ATTENTION: {removed_count} records were removed due to missing values!")
                 
-    # עכשיו חלק את הדאטה הנקיה לפי סוג המודל
-    if model_type == 'isolation-forest':
-        X_train, X_val, X_test, y_train, y_val, y_test = split_data_for_isolation_forest(X_clean, y_clean)
-    elif model_type == 'lstm':
-        X_train, X_val, X_test, y_train, y_val, y_test = split_data_for_lstm(X_clean, y_clean)
+    X_train, X_val, X_test, y_train, y_val, y_test = split_data(X_clean, y_clean)
     
     print(f"\nDataset split sizes after preprocessing and cleaning:")
     print(f"Train: {len(X_train)} samples ({len(X_train)/len(X_clean)*100:.1f}%)")
@@ -152,9 +108,9 @@ def main():
     ], axis=1)
     
     # שמור קבצי CSV
-    train_filename = f'train_processed_{model_type.replace("-", "_")}.csv'
-    val_filename = f'val_processed_{model_type.replace("-", "_")}.csv'
-    test_filename = f'test_processed_{model_type.replace("-", "_")}.csv'
+    train_filename = 'train_processed.csv'
+    val_filename = 'val_processed.csv'
+    test_filename = 'test_processed.csv'
     
     train_df.to_csv(train_filename, index=False)
     val_df.to_csv(val_filename, index=False)
