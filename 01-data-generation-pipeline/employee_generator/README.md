@@ -47,7 +47,7 @@ employee_generator/
 
 ### Core Components
 
-#### 1. EmployeeManager ([`employee_manager.py`](employee_generator/employee_manager.py))
+#### 1. EmployeeManager ([`employee_manager.py`](./employee_manager.py))
 The main orchestrator that:
 - Manages collections of employee profiles
 - Generates multiple employees with realistic distributions
@@ -59,7 +59,7 @@ The main orchestrator that:
 - `select_malicious_employees(ratio)`: Selects random employees for testing
 - `_print_generation_summary()`: Displays generation statistics
 
-#### 2. EmployeeProfileCreator ([`employee_profile_creator.py`](employee_generator/employee_profile_creator.py))
+#### 2. EmployeeProfileCreator ([`employee_profile_creator.py`](./employee_profile_creator.py))
 Handles individual profile creation with:
 - Realistic job position assignment within departments
 - Behavioral group mapping
