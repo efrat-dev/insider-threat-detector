@@ -72,24 +72,13 @@ def main():
     print("\n🔄 TRANSFORMING data...")
     X_processed = pipeline.transform(X)
     print("✅ Pipeline transform completed!")
-    
-    print(f"\nChecking for missing values after preprocessing...")
-    print(f"Records before cleaning: {len(X_processed)}")
-    
-    # וידוא שאין שורות בעלות ערכים חסרים
-    mask = ~X_processed.isnull().any(axis=1)
-    X_clean = X_processed[mask]
-    y_clean = y[mask]
-    removed_count = len(X_processed) - len(X_clean)
-    if removed_count > 0:
-        print(f"\n⚠️ ##################################################ATTENTION: {removed_count} records were removed due to missing values!")
-                
-    X_train, X_val, X_test, y_train, y_val, y_test = split_data(X_clean, y_clean)
+                    
+    X_train, X_val, X_test, y_train, y_val, y_test = split_data(X_processed, y)
     
     print(f"\nDataset split sizes after preprocessing and cleaning:")
-    print(f"Train: {len(X_train)} samples ({len(X_train)/len(X_clean)*100:.1f}%)")
-    print(f"Validation: {len(X_val)} samples ({len(X_val)/len(X_clean)*100:.1f}%)")
-    print(f"Test: {len(X_test)} samples ({len(X_test)/len(X_clean)*100:.1f}%)")
+    print(f"Train: {len(X_train)} samples ({len(X_train)/len(X_processed)*100:.1f}%)")
+    print(f"Validation: {len(X_val)} samples ({len(X_val)/len(X_processed)*100:.1f}%)")
+    print(f"Test: {len(X_test)} samples ({len(X_test)/len(X_processed)*100:.1f}%)")
     
     # הכן DataFrames עם הטרגט
     train_df = pd.concat([
