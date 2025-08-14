@@ -1,4 +1,4 @@
-# 🛡️ Advanced Insider Threat Dataset Generator
+# 🛡️ Insider Threat Dataset Generator for Classified Environments
 
 > Professional-grade synthetic dataset generator for cybersecurity research and security testing
 
