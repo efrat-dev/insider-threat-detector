@@ -83,6 +83,7 @@ employee_id,date,employee_classification,is_malicious,avg_request_classification
 ### 📖 **Getting Started Guides**
 - **[🏗️ Technical Architecture Overview](TECHNICAL_OVERVIEW.md)** - System design and data flow
 - **[📖 User Guide & Quick Reference](USER_GUIDE.md)** - Practical usage guide with examples
+- **[📊 Dataset Schema & Field Definitions](DATA_SCHEMA.md)** - Complete dataset structure documentation
 
 ### 🔧 **Module Documentation**
 - **[Complete Usage Guide](cli/README.md)** - Detailed command-line options and examples
