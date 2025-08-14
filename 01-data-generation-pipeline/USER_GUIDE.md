@@ -2,7 +2,9 @@
 
 > Everything you need to know to use the Advanced Insider Threat Dataset Generator effectively
 
+
 📖 **Navigation**: [← Technical Overview](TECHNICAL_OVERVIEW.md) | [Main README](README.md) | [Dataset Schema](DATA_SCHEMA.md)
+
 ---
 
 ## 🎯 What This Tool Does
