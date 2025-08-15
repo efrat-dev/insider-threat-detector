@@ -1,6 +1,0 @@
-**/__pycache__/
-output/
-*.log
-"__pycache__/"
-*.pyc
-dataset_generation.log
