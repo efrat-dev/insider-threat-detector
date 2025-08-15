@@ -1,12 +1,30 @@
 import pandas as pd
 import logging
+import os
 from pipeline.preprocessing_pipeline import PreprocessingPipeline
+
+# Import the employee data mapper
+from employee_data_mapper import EmployeeDataMapper
 
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+def create_employee_mapping():
+    """Create employee mapping (one-time operation)."""
+    employee_data_file = "mapping_emp_dep_pos.csv"
+    source_file = "insider_threat_dataset.csv"
+    
+    try:
+        mapper = EmployeeDataMapper()
+        employee_df = mapper.extract_employee_data(source_file)
+        mapper.save_to_csv(employee_df, employee_data_file)
+        logger.info(f"Employee data created: {employee_data_file} ({len(employee_df)} employees)")
+    except Exception as e:
+        logger.error(f"Failed to create employee data: {str(e)}")
+
 
 def split_data(X, y, employee_col='employee_id', date_col='date'):
     """Sorts the dataset by employee and date, then splits it into training, validation, and test sets."""
@@ -42,6 +60,9 @@ def main():
     """Main function to execute the production data processing pipeline."""
     try:
         logger.info("Starting data processing pipeline")
+        
+        # Create employee data file if needed (one-time operation)
+        create_employee_mapping()
         
         df = pd.read_csv('insider_threat_dataset.csv')
         logger.info(f"Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
