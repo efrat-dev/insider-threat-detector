@@ -1,6 +1,6 @@
 # Insider Threat Dataset for Classified Environments
 
-📖 **Navigation**: [← Main README](README.md) | [Technical Overview](TECHNICAL_OVERVIEW.md) | [User Guide](USER_GUIDE.md)
+📖 **Navigation**: [← Main README](../README.md) | [Technical Overview](TECHNICAL_OVERVIEW.md) | [User Guide](USER_GUIDE.md)
 
 ## Overview
 This dataset contains comprehensive employee activity monitoring data designed for behavioral analysis and anomaly detection in organizational security contexts. The dataset tracks multiple dimensions of employee behavior including printing activities, file burning operations, travel patterns, and access control events.

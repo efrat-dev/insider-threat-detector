@@ -2,7 +2,7 @@
 
 > System design and data flow for the Advanced Insider Threat Dataset Generator
 
-📖 **Navigation**: [← Main README](README.md) | [Dataset Schema](DATA_SCHEMA.md) | [User Guide →](USER_GUIDE.md)
+📖 **Navigation**: [← Main README](../README.md) | [Dataset Schema](DATA_SCHEMA.md) | [User Guide →](USER_GUIDE.md)
 
 ---
 

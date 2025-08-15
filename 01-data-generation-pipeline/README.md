@@ -81,9 +81,9 @@ employee_id,date,employee_classification,is_malicious,avg_request_classification
 ## 📚 Documentation
 
 ### 📖 **Getting Started Guides**
-- **[🏗️ Technical Architecture Overview](TECHNICAL_OVERVIEW.md)** - System design and data flow
-- **[📖 User Guide & Quick Reference](USER_GUIDE.md)** - Practical usage guide with examples
-- **[📊 Dataset Schema & Field Definitions](DATA_SCHEMA.md)** - Complete dataset structure documentation
+- **[🏗️ Technical Architecture Overview](./docs/TECHNICAL_OVERVIEW.md)** - System design and data flow
+- **[📖 User Guide & Quick Reference](./docs/USER_GUIDE.md)** - Practical usage guide with examples
+- **[📊 Dataset Schema & Field Definitions](./docs/DATA_SCHEMA.md)** - Complete dataset structure documentation
 
 ### 🔧 **Module Documentation**
 - **[Complete Usage Guide](cli/README.md)** - Detailed command-line options and examples
