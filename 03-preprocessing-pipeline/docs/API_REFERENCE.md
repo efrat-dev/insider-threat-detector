@@ -4,20 +4,6 @@
 
 This document provides complete API documentation for all classes and methods in the preprocessing pipeline. Each component follows consistent patterns and interfaces for easy integration and extension.
 
-## 📋 Table of Contents
-
-- [PreprocessingPipeline](#preprocessing-pipeline)
-- [DataCleaner](#data-cleaner)
-- [DataTypeConverter](#data-type-converter)
-- [FeatureCreator](#feature-creator)
-- [CategoricalEncoder](#categorical-encoder)
-- [StatisticalTransformer](#statistical-transformer)
-- [VarianceCorrelationFilter](#variance-correlation-filter)
-- [FeatureNormalizer](#feature-normalizer)
-- [Utility Functions](#utility-functions)
-
----
-
 ## PreprocessingPipeline
 
 **File**: [`src/pipeline/preprocessing_pipeline.py`](../src/pipeline/preprocessing_pipeline.py)
