@@ -139,28 +139,28 @@ The system models **6 distinct employee types**:
 ## 🛠️ Customization
 
 ### Modify Behavioral Patterns
-See [`config/README.md`](config/README.md) for detailed customization guide covering:
+See [`config/README.md`](../src/config/README.md) for detailed customization guide covering:
 - Employee behavioral group patterns
 - Organizational structure and departments
 - Geographic locations and travel destinations
 - Security classification levels
 
 ### Add New Activity Types
-See [`activity_generators/README.md`](activity_generators/README.md) for extending the system with new activity generators.
+See [`activity_generators/README.md`](../src/activity_generators/README.md) for extending the system with new activity generators.
 
 ## 📚 Detailed Documentation
 
 ### Core Functionality
-- **[CLI Reference](cli/README.md)** - Complete command-line guide with examples
-- **[Configuration System](config/README.md)** - Behavioral patterns and organizational setup
-- **[Activity Generation](activity_generators/README.md)** - How employee activities are simulated
-- **[Analysis Suite](analyzers/README.md)** - Understanding analysis outputs and metrics
+- **[CLI Reference](../src/cli/README.md)** - Complete command-line guide with examples
+- **[Configuration System](../src/config/README.md)** - Behavioral patterns and organizational setup
+- **[Activity Generation](../src/activity_generators/README.md)** - How employee activities are simulated
+- **[Analysis Suite](../src/analyzers/README.md)** - Understanding analysis outputs and metrics
 
 ### Technical Details  
-- **[Core Infrastructure](core/README.md)** - Workflow management and system utilities
-- **[Employee Generation](employee_generator/README.md)** - Employee profile creation process
-- **[Data Export](data_exporter/README.md)** - Export formats and documentation generation
-- **[Utils and Constants](utils/README.md)** - System constants and utility functions
+- **[Core Infrastructure](../src/core/README.md)** - Workflow management and system utilities
+- **[Employee Generation](../src/employee_generator/README.md)** - Employee profile creation process
+- **[Data Export](../src/data_exporter/README.md)** - Export formats and documentation generation
+- **[Utils and Constants](../src/utils/README.md)** - System constants and utility functions
 
 ## 🆘 Common Issues & Solutions
 
@@ -184,18 +184,18 @@ See [`activity_generators/README.md`](activity_generators/README.md) for extendi
 ## 📚 Complete Documentation Suite
 
 ### 📖 **Main Documentation**
-- **[🏠 Main Project README](README.md)** - Project overview and introduction
+- **[🏠 Main Project README](../README.md)** - Project overview and introduction
 - **[🏗️ Technical Architecture Overview](TECHNICAL_OVERVIEW.md)** - System design and data flow
 
 ### 🔧 **Module-Specific Guides**
-- **[CLI Complete Reference](cli/README.md)** - All command-line options and advanced examples
-- **[Configuration Deep Dive](config/README.md)** - Customizing behavioral patterns and organizational structure
-- **[Activity Generation Details](activity_generators/README.md)** - Understanding activity simulation
-- **[Analysis Suite Guide](analyzers/README.md)** - Complete analysis capabilities and interpretation
-- **[Export & Documentation](data_exporter/README.md)** - Export formats and report generation
-- **[Core Infrastructure](core/README.md)** - Workflow management and advanced features
-- **[Employee Generation](employee_generator/README.md)** - Employee profile creation process
-- **[Utils & Constants](utils/README.md)** - System constants and configuration values
+- **[CLI Complete Reference](../src/cli/README.md)** - All command-line options and advanced examples
+- **[Configuration Deep Dive](../src/config/README.md)** - Customizing behavioral patterns and organizational structure
+- **[Activity Generation Details](../src/activity_generators/README.md)** - Understanding activity simulation
+- **[Analysis Suite Guide](../src/analyzers/README.md)** - Complete analysis capabilities and interpretation
+- **[Export & Documentation](../src/data_exporter/README.md)** - Export formats and report generation
+- **[Core Infrastructure](../src/core/README.md)** - Workflow management and advanced features
+- **[Employee Generation](../src/employee_generator/README.md)** - Employee profile creation process
+- **[Utils & Constants](../src/utils/README.md)** - System constants and configuration values
 
 ## 🆘 Troubleshooting
 
@@ -205,7 +205,7 @@ See [`activity_generators/README.md`](activity_generators/README.md) for extendi
 - **Memory errors**: Split large datasets into multiple smaller runs
 
 ### Common Errors
-- **Missing columns in analysis mode**: Check that your CSV has required fields (see [analyzers documentation](analyzers/README.md))
+- **Missing columns in analysis mode**: Check that your CSV has required fields (see [analyzers documentation](../src/analyzers/README.md))
 - **Invalid parameters**: Use `--help` to see valid ranges for all parameters
 - **File permissions**: Ensure write access to output directory
 

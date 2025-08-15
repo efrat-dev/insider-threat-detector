@@ -25,15 +25,15 @@ Each step incorporates security clearance levels and classification handling:
 ## 🎯 Core Components
 
 ### 1. Employee Generation Layer
-**Location**: [`employee_generator/`](employee_generator/)
+**Location**: [`employee_generator/`](../src/employee_generator/)
 - **Purpose**: Creates realistic employee profiles with departments, roles, and characteristics
 - **Key Files**: 
-  - [`employee_manager.py`](employee_generator/employee_manager.py) - Manages employee collections
-  - [`employee_profile_creator.py`](employee_generator/employee_profile_creator.py) - Individual profile creation
+  - [`employee_manager.py`](../src/employee_generator/employee_manager.py) - Manages employee collections
+  - [`employee_profile_creator.py`](../src/employee_generator/employee_profile_creator.py) - Individual profile creation
 - **Output**: Employee profiles with behavioral group assignments
 
 ### 2. Activity Simulation Layer
-**Location**: [`activity_generators/`](activity_generators/) + [`data_generator/`](data_generator/)
+**Location**: [`activity_generators/`](../src/activity_generators/) + [`data_generator/`](../src/data_generator/)
 - **Purpose**: Generates daily employee activities based on behavioral patterns
 - **Activity Types**:
   - **Building Access** - Entry/exit patterns, multi-campus access
@@ -41,40 +41,40 @@ Each step incorporates security clearance levels and classification handling:
   - **Document Burning** - Secure data destruction activities
   - **Travel** - Business trips and location tracking
 - **Key Files**: 
-  - [`data_generator.py`](data_generator/data_generator.py) - Main generation engine
-  - [`data_generator_core.py`](data_generator/data_generator_core.py) - Core orchestrator that combines all activity generators
-  - [`access_activity_generator.py`](activity_generators/access_activity_generator.py) - Building access
-  - [`print_activity_generator.py`](activity_generators/print_activity_generator.py) - Printing behavior
-  - [`burn_activity_generator.py`](activity_generators/burn_activity_generator.py) - Document destruction
-  - [`travel_activity_generator.py`](activity_generators/travel_activity_generator.py) - Travel patterns
+  - [`data_generator.py`](../src/data_generator/data_generator.py) - Main generation engine
+  - [`data_generator_core.py`](../src/data_generator/data_generator_core.py) - Core orchestrator that combines all activity generators
+  - [`access_activity_generator.py`](../src/activity_generators/access_activity_generator.py) - Building access
+  - [`print_activity_generator.py`](../src/activity_generators/print_activity_generator.py) - Printing behavior
+  - [`burn_activity_generator.py`](../src/activity_generators/burn_activity_generator.py) - Document destruction
+  - [`travel_activity_generator.py`](../src/activity_generators/travel_activity_generator.py) - Travel patterns
 
 ### 3. Analysis Layer
-**Location**: [`analyzers/`](analyzers/)
+**Location**: [`analyzers/`](../src/analyzers/)
 - **Purpose**: Analyzes generated data for behavioral patterns and security insights
 - **Analysis Types**:
   - **Behavioral Analysis** - Group-specific patterns and comparisons
   - **Security Analysis** - Threat detection and risk assessment
   - **Statistical Analysis** - Data quality and trend analysis
 - **Key Files**:
-  - [`comprehensive_analyzer.py`](analyzers/comprehensive_analyzer.py) - Complete analysis orchestration
-  - [`behavioral_analyzer.py`](analyzers/behavioral_analyzer.py) - Behavioral pattern analysis
-  - [`security_analyzer.py`](analyzers/security_analyzer.py) - Security threat analysis
+  - [`comprehensive_analyzer.py`](../src/analyzers/comprehensive_analyzer.py) - Complete analysis orchestration
+  - [`behavioral_analyzer.py`](../src/analyzers/behavioral_analyzer.py) - Behavioral pattern analysis
+  - [`security_analyzer.py`](../src/analyzers/security_analyzer.py) - Security threat analysis
 
 ### 4. Export and Documentation Layer
-**Location**: [`data_exporter/`](data_exporter/)
+**Location**: [`data_exporter/`](../src/data_exporter/)
 - **Purpose**: Exports datasets with comprehensive documentation and reports
 - **Features**:
   - Multi-format export (CSV, Excel)
   - Automated data dictionaries
   - Analysis reports and summaries
 - **Key Files**:
-  - [`data_exporter_base.py`](data_exporter/data_exporter_base.py) - Main export functionality
-  - [`data_dictionary_generator.py`](data_exporter/data_dictionary_generator.py) - Documentation creation
-  - [`report_generator.py`](data_exporter/report_generator.py) - Analysis reporting
+  - [`data_exporter_base.py`](../src/data_exporter/data_exporter_base.py) - Main export functionality
+  - [`data_dictionary_generator.py`](../src/data_exporter/data_dictionary_generator.py) - Documentation creation
+  - [`report_generator.py`](../src/data_exporter/report_generator.py) - Analysis reporting
 
 ## ⚙️ Configuration System
 
-**Location**: [`config/`](config/)
+**Location**: [`config/`](../src/config/)
 
 The system uses a hierarchical configuration approach:
 
@@ -86,29 +86,29 @@ Config (Unified) ← behavioral_patterns.py (6 Groups)
 ```
 
 **Key Configuration Files**:
-- [`config.py`](config/config.py) - Unified configuration class
-- [`behavioral_patterns.py`](config/behavioral_patterns.py) - Employee behavioral groups A-F
-- [`organizational_structure.py`](config/organizational_structure.py) - Departments and positions
-- [`employee_attributes.py`](config/employee_attributes.py) - Security classifications and demographics
-- [`geographic_data.py`](config/geographic_data.py) - Campus locations and travel data
+- [`config.py`](../src/config/config.py) - Unified configuration class
+- [`behavioral_patterns.py`](../src/config/behavioral_patterns.py) - Employee behavioral groups A-F
+- [`organizational_structure.py`](../src/config/organizational_structure.py) - Departments and positions
+- [`employee_attributes.py`](../src/config/employee_attributes.py) - Security classifications and demographics
+- [`geographic_data.py`](../src/config/geographic_data.py) - Campus locations and travel data
 
 ## 🔧 Supporting Infrastructure
 
 ### Core Services
-**Location**: [`core/`](core/)
-- [`workflow_manager.py`](core/workflow_manager.py) - Orchestrates generation and analysis workflows
-- [`config_manager.py`](core/config_manager.py) - System setup and logging configuration
-- [`daily_label_creator.py`](core/daily_label_creator.py) - Transforms employee-level to daily-level labels
-- [`data_noise_injector.py`](core/data_noise_injector.py) - Adds synthetic noise for realism
+**Location**: [`core/`](../src/core/)
+- [`workflow_manager.py`](../src/core/workflow_manager.py) - Orchestrates generation and analysis workflows
+- [`config_manager.py`](../src/core/config_manager.py) - System setup and logging configuration
+- [`daily_label_creator.py`](../src/core/daily_label_creator.py) - Transforms employee-level to daily-level labels
+- [`data_noise_injector.py`](../src/core/data_noise_injector.py) - Adds synthetic noise for realism
 
 ### Command-Line Interface
-**Location**: [`cli/`](cli/)
-- [`argument_parser.py`](cli/argument_parser.py) - Command-line argument parsing and validation
-- [`display_utils.py`](cli/display_utils.py) - User interface and output formatting
+**Location**: [`cli/`](../src/cli/)
+- [`argument_parser.py`](../src/cli/argument_parser.py) - Command-line argument parsing and validation
+- [`display_utils.py`](../src/cli/display_utils.py) - User interface and output formatting
 
 ### Utilities
-**Location**: [`utils/`](utils/)
-- [`constants.py`](utils/constants.py) - System-wide constants and configuration values
+**Location**: [`utils/`](../src/utils/)
+- [`constants.py`](../src/utils/constants.py) - System-wide constants and configuration values
 
 ## 📈 Data Pipeline
 
@@ -134,13 +134,13 @@ The system models six distinct behavioral groups:
 
 ## 📚 Detailed Documentation
 
-- **[Main Project Overview](README.md)** - Project introduction and quick start
-- **[CLI Usage Guide](cli/README.md)** - Complete command-line reference
-- **[Configuration Guide](config/README.md)** - Behavioral patterns and customization
-- **[Activity Generation](activity_generators/README.md)** - Activity simulation details
-- **[Analysis Features](analyzers/README.md)** - Analysis capabilities and metrics
-- **[Export Documentation](data_exporter/README.md)** - Export formats and reports
-- **[Core Infrastructure](core/README.md)** - System architecture and utilities
+- **[Main Project Overview](../README.md)** - Project introduction and quick start
+- **[CLI Usage Guide](../src/cli/README.md)** - Complete command-line reference
+- **[Configuration Guide](../src/config/README.md)** - Behavioral patterns and customization
+- **[Activity Generation](../src/activity_generators/README.md)** - Activity simulation details
+- **[Analysis Features](../src/analyzers/README.md)** - Analysis capabilities and metrics
+- **[Export Documentation](../src/data_exporter/README.md)** - Export formats and reports
+- **[Core Infrastructure](../src/core/README.md)** - System architecture and utilities
 
 ## 🤝 Getting Started
 
@@ -150,4 +150,4 @@ The system models six distinct behavioral groups:
 4. **Customize** - Modify configuration files for specific research needs
 5. **Analyze** - Use built-in analyzers or export data for external analysis
 
-**Next Steps**: Check the [CLI Usage Guide](cli/README.md) for detailed examples and options.
+**Next Steps**: Check the [CLI Usage Guide](../src/cli/README.md) for detailed examples and options.
