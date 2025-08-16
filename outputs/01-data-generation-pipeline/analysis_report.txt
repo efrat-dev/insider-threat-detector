@@ -1,0 +1,77 @@
+
+=== INSIDER THREAT DATASET - ANALYSIS REPORT ===
+Generated on: 2025-08-01 18:14:49
+
+=== DATASET OVERVIEW ===
+Total Records: 299,880
+Total Employees: 1,666
+Date Range: 2025-02-02 00:00:00 to 2025-07-31 00:00:00
+Total Days: 180
+
+=== MALICIOUS EMPLOYEE ANALYSIS ===
+Malicious Employees: 162
+Malicious Records: 7,521 (2.5%)
+Malicious Employee Rate: 9.7%
+
+=== DEPARTMENT DISTRIBUTION ===
+R&D Department: 420 employees (38 malicious, 9.0%)
+Engineering Department: 314 employees (38 malicious, 12.1%)
+Operations and Manufacturing: 254 employees (22 malicious, 8.7%)
+Information Technology: 215 employees (20 malicious, 9.3%)
+Project Management: 137 employees (11 malicious, 8.0%)
+Marketing and Business Development: 133 employees (11 malicious, 8.3%)
+Finance: 70 employees (6 malicious, 8.6%)
+Human Resources: 61 employees (4 malicious, 6.6%)
+Security and Information Security: 45 employees (10 malicious, 22.2%)
+Legal and Regulation: 12 employees (2 malicious, 16.7%)
+Executive Management: 5 employees (0 malicious, 0.0%)
+
+=== BEHAVIORAL GROUP ANALYSIS ===
+Group A (Executive Management): 5 employees (0 malicious, 0.0%)
+Group B (Engineering Department): 734 employees (76 malicious, 10.4%)
+Group C (Operations and Manufacturing): 534 employees (45 malicious, 8.4%)
+Group D (Marketing and Business Development): 133 employees (11 malicious, 8.3%)
+Group E (Security and Information Security): 45 employees (10 malicious, 22.2%)
+Group F (Information Technology): 215 employees (20 malicious, 9.3%)
+
+=== ACTIVITY STATISTICS ===
+Total Print Commands: 486,950
+Total Pages Printed: 1,864,597
+Total Burn Requests: 125,243
+Total Files Burned: 1,214,317
+Total Days Abroad: 6,109
+Hostile Country Visits: 372
+Risk Travel Incidents: 3
+
+=== OFF-HOURS ACTIVITY ===
+Off-Hours Print Commands: 10,886 (2.2%)
+Off-Hours Burn Requests: 8,178 (6.5%)
+Early Entries: 1,327
+Late Exits: 0
+Weekend Entries: 9,079
+
+=== DATA QUALITY CHECKS ===
+Missing Values:
+  trip_day_number: 293771 (98.0%)
+  country_name: 293771 (98.0%)
+  first_entry_time: 129506 (43.2%)
+  last_exit_time: 129506 (43.2%)
+
+Logical Consistency:
+  Employees abroad with no building access: 6096 / 6109
+  Color prints vs total prints: 507856 / 1864597
+  BW prints vs total prints: 1333010 / 1864597
+
+=== RISK INDICATORS ===
+High Classification Burning (Level 4): 1077 incidents
+Multi-Campus Access: 1479 incidents
+Unofficial Travel: 1954 days
+Combined Risk Indicators: 3 incidents
+
+=== RECOMMENDATIONS ===
+1. Focus monitoring on employees with multiple risk indicators
+2. Pay special attention to off-hours activities
+3. Monitor travel patterns, especially to hostile countries
+4. Track high-classification document access and burning
+5. Investigate multi-campus access patterns
+6. Review unofficial travel combined with sensitive activities
