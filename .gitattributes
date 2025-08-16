@@ -7,3 +7,4 @@ outputs/02-preprocessing-pipeline/train_data_processed.csv filter=lfs diff=lfs m
 outputs/03-modeling-pipeline/03-xgboost/xgboost_test.csv filter=lfs diff=lfs merge=lfs -text
 outputs/03-modeling-pipeline/03-xgboost/xgboost_train.csv filter=lfs diff=lfs merge=lfs -text
 outputs/03-modeling-pipeline/03-xgboost/xgboost_val.csv filter=lfs diff=lfs merge=lfs -text
+data/raw/insider_threat_dataset.csv filter=lfs diff=lfs merge=lfs -text
