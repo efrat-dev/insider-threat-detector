@@ -10,3 +10,8 @@ outputs/03-modeling-pipeline/03-xgboost/xgboost_val.csv filter=lfs diff=lfs merg
 data/processed/val_processed.csv filter=lfs diff=lfs merge=lfs -text
 data/processed/test_processed.csv filter=lfs diff=lfs merge=lfs -text
 data/processed/train_processed.csv filter=lfs diff=lfs merge=lfs -text
+outputs/** linguist-generated=true
+data/** linguist-generated=true
+01-data-generation-pipeline/** linguist-generated=true
+03-preprocessing-pipeline/** linguist-generated=true
+02-exploratory-data-analysis/insider_threat_dataset_analysis.xlsx linguist-generated=true
