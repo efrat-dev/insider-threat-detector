@@ -1,6 +1,6 @@
 # Sample Record Analysis - Insider Threat Dataset
 
-📖 **Navigation**: [← Main README](../README.md) | [Technical Overview](./docs/TECHNICAL_OVERVIEW.md) | [User Guide](./docs/USER_GUIDE.md)
+📖 **Navigation**: [← Main README](../README.md) | [Technical Overview](./TECHNICAL_OVERVIEW.md) | [User Guide](./USER_GUIDE.md)
 
 This document demonstrates how to interpret individual records from the insider threat dataset through detailed analysis of a sample employee record.
 
