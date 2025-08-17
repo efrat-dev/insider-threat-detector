@@ -36,7 +36,7 @@ Raw Employee Data
                 └─────────────────┘
                         ↓
                 Employee Risk Scores
-
+```
 
 ## 🤖 Models Overview
 
